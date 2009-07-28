@@ -13,19 +13,7 @@
  * $Id$
  */
 
-/**
- * The validator interface.
- */
-interface Opf_Validator_Interface
+class Opf_Leaf extends Opf_Item
 {
-	public function validate($value);
-} // end Opf_Validator_Interface;
-
-/**
- * The main Open Power Forms class that manages the configuration, plugins, etc.
- */
-class Opf_Class extends Opl_Class
-{
-
-
-} // end Opf_Class;
+	
+} // end Opf_Leaf;

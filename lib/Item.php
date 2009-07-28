@@ -24,11 +24,36 @@
 abstract class Opf_Item
 {
 	/**
+	 * The item name.
+	 * @var String
+	 */
+	protected $_name = null;
+
+	/**
 	 * The list of listeners.
 	 *
 	 * @var SplDoublyLinkedList
 	 */
 	protected $_listeners = null;
+
+	/**
+	 * Sets the item name.
+	 *
+	 * @param String $name
+	 */
+	public function setName($name)
+	{
+		$this->_name = $name;
+	} // end setName();
+
+	/**
+	 * Returns the item name.
+	 * @return String
+	 */
+	public function getName()
+	{
+		return $this->_name;
+	} // end getName();
 
 	/**
 	 * Appends the new listener to the list of item listeners.
