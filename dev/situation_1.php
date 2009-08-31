@@ -14,20 +14,22 @@ class My_Form extends Opf_Form
 	{
 		$item = $this->itemFactory('title');
 		$item->setRequired(true);
-		$item->addValidator(new Opf_Validator_Length(3, 100), 'The length is invalid');
-		$item->setWidget(new Opf_Component_Input);
+		$item->addValidator(new Opf_Validator_Length(5), 'The length is invalid');
+		$item->setWidget(new Opf_Widget_Input);
 
 		$item = $this->itemFactory('countries');
 		$item->setRequired(true);
 		$item->addValidator(new Opf_Validator_Type(Opf_Validator_Type::INTEGER), 'The field type is invalid.');
-		$item->setWidget(new Opf_Component_Select);
+		$item->setWidget(new Opf_Widget_Select);
 	} // end onInit();
 
 	// An event
 	public function onRender()
 	{
+		$view = $this->getView();
+		$view->setFormat('default', 'Form/Form');
 		$item = $this->itemFactory('countries');
-		$item->setOptions(array(0 =>
+		$item->getWidget()->setOptions(array(0 =>
 			'China',
 			'France',
 			'Germany',
@@ -42,7 +44,7 @@ class My_Form extends Opf_Form
 	// An event
 	public function onValidate()
 	{
-
+		return true;
 	} // end onValidate();
 
 	// An event
@@ -50,18 +52,23 @@ class My_Form extends Opf_Form
 	{
 		$view = $this->getView();
 		$view->setTemplate('results.tpl');
-		$view->data = $form->getValues();
+		$results = array();
+		foreach($this->getValues() as $name => $value)
+		{
+			$results[] = array('name' => $name, 'value' => $value);
+		}
+		$view->results = $results;
 	} // end onAccept();
 } // end MyForm;
 
 try
 {
 	$tpl = new Opt_Class;
+	$opf = new Opf_Class;
 	$tpl->sourceDir = './templates/';
 	$tpl->compileDir = './templates_c/';
-	$tpl->setup();
-
-	$opf = new Opf_Class;
+	$tpl->compileMode = Opt_Class::CM_REBUILD;
+	$tpl->setup();	
 
 	$view = new Opt_View('situation_1.tpl');
 	$view->devFile = 'situation_1.php';

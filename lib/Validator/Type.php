@@ -88,6 +88,13 @@ class Opf_Validator_Type implements Opf_Validator_Interface
 					return true;
 				}
 				return false;
+			case self::BOOLEAN:
+				if(is_bool($value) || $value == 'true' || $value == 'false' || $value == 'yes' || $value == 'no')
+				{
+					return true;
+				}
+				return false;
 		}
+		return false;
 	} // end validate();
 } // end Opf_Validator_Type;

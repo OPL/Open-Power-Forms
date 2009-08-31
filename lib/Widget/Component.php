@@ -25,10 +25,62 @@ abstract class Opf_Widget_Component implements Opt_Component_Interface
 	 */
 	protected $_view;
 
+	/**
+	 * The form the widget is assigned to.
+	 * @var Opf_Form
+	 */
+	protected $_form;
+
+	/**
+	 * The item the widget is assigned to.
+	 * @var Opf_Item
+	 */
+	protected $_item;
+
+	/**
+	 * The name of the widget used to find the form item.
+	 * @var string
+	 */
+	protected $_name = null;
+
+	/**
+	 * The component constructor.
+	 *
+	 * @param string $name The widget name.
+	 */
 	public function __construct($name = '')
 	{
-
+		$this->_name = $name;
 	} // end __construct();
+
+	/**
+	 * Assigns the widget to a form item.
+	 * @param Opf_Item $item The item the widget is assigned to.
+	 */
+	public function setItem(Opf_Item $item)
+	{
+		// TODO: How about assigning forms here?
+		$this->_item = $item;
+		$this->_name = $item->getName();
+	} // end setItem();
+
+	/**
+	 * Releases the widget, so that it can be used again.
+	 */
+	public function unsetItem()
+	{
+		$this->_form = null;
+		$this->_item = null;
+	} // end unsetItem();
+
+	/**
+	 * Returns true, if the widget is already assigned to an item.
+	 * @return boolean
+	 */
+	public function isBound()
+	{
+		return $this->_item !== null;
+	} // end isBound();
 
 	/**
 	 * Passes the OPT view to the widget.
@@ -38,6 +90,19 @@ abstract class Opf_Widget_Component implements Opt_Component_Interface
 	public function setView(Opt_View $view)
 	{
 		$this->_view = $view;
+
+		if($this->_form === null)
+		{
+			$this->_form = $view->getTemplateVar('form');
+			if($this->_form === null)
+			{
+				throw new Opf_ItemNotExists_Exception('form');
+			}
+		}
+		if($this->_item === null)
+		{
+			$this->_item = $this->_form->findItem($this->_name);
+		}
 	} // end setView();
 
 	/**
@@ -65,14 +130,24 @@ abstract class Opf_Widget_Component implements Opt_Component_Interface
 
 	} // end defined();
 
-	public function display($attributes = array())
-	{
-
-	} // end display();
-
+	/**
+	 * Processes the widget events. Returns true, if the event template code
+	 * should be shown.
+	 * @param string $name The event name.
+	 * @return boolean
+	 */
 	public function processEvent($name)
 	{
-
+		switch($name)
+		{
+			case 'error':
+				if(!$this->_item->isValid())
+				{
+					// TODO: Add error messages here!
+					return true;
+				}
+				return false;
+		}
 	} // end processEvent();
 
 	public function manageAttributes($tagName, Array $attributes)

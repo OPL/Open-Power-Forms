@@ -1,0 +1,47 @@
+<?php
+/*
+ *  OPEN POWER LIBS <http://www.invenzzia.org>
+ *  ------------------------------------------
+ *
+ * This file is subject to the new BSD license that is bundled
+ * with this package in the file LICENSE. It is also available through
+ * WWW at this URL: <http://www.invenzzia.org/license/new-bsd>
+ *
+ * Copyright (c) Invenzzia Group <http://www.invenzzia.org>
+ * and other contributors. See website for details.
+ *
+ * $Id$
+ */
+
+/**
+ * The class represents the string length applied as a rule to a
+ * form field.
+ */
+class Opf_Validator_Length implements Opf_Validator_Interface
+{
+	/**
+	 * The length represented by the validator.
+	 * @var integer
+	 */
+	private $_length = 0;
+
+	/**
+	 * Constructs the length constraint object.
+	 *
+	 * @param integer $length The string length
+	 */
+	public function __construct($length)
+	{
+		$this->_length = (int)$length;
+	} // end __construct();
+
+	/**
+	 * Validates the value length.
+	 * @param mixed $value The value to validate.
+	 * @return boolean
+	 */
+	public function validate($value)
+	{
+		return (strlen($value) == $this->_length);
+	} // end validate();
+} // end Opf_Validator_Length;

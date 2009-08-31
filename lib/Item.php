@@ -31,10 +31,33 @@ abstract class Opf_Item
 
 	/**
 	 * The list of listeners.
-	 *
 	 * @var SplDoublyLinkedList
 	 */
 	protected $_listeners = null;
+
+	/**
+	 * The list of validators.
+	 * @var array
+	 */
+	protected $_validators = array();
+
+	/**
+	 * Is the item required to fill?
+	 * @var boolean
+	 */
+	protected $_required = true;
+
+	/**
+	 * Is the item valid?
+	 * @var boolean
+	 */
+	protected $_valid = false;
+
+	/**
+	 * The validator list.
+	 *
+	 * @var Array
+	 */
 
 	/**
 	 * Sets the item name.
@@ -54,6 +77,33 @@ abstract class Opf_Item
 	{
 		return $this->_name;
 	} // end getName();
+
+	/**
+	 * Sets the required state.
+	 * @param boolean $required The new state.
+	 */
+	public function setRequired($required)
+	{
+		$this->_required = (bool)$required;
+	} // end setRequired();
+
+	/**
+	 * Returns the required state.
+	 * @return boolean
+	 */
+	public function getRequired()
+	{
+		return $this->_required;
+	} // end getRequired();
+
+	/**
+	 * Returns true, if the item is valid.
+	 * @return boolean
+	 */
+	public function isValid()
+	{
+		return $this->_valid;
+	} // end isValid();
 
 	/**
 	 * Appends the new listener to the list of item listeners.
@@ -116,4 +166,84 @@ abstract class Opf_Item
 		return $this->_listeners->count() > 0;
 	} // end hasListeners();
 
+	/**
+	 * Adds a new validator to the item.
+	 * @param Opf_Validator_Interface $validator The new validator to add.
+	 */
+	public function addValidator(Opf_Validator_Interface $validator)
+	{
+		$this->_validators[] = $validator;
+	} // end addValidator();
+
+	/**
+	 * Removes an existing validator from an item. The validator can be determined
+	 * either by its index number or the object.
+	 *
+	 * @param integer|Opf_Validator_Interface $validator The validator to remove.
+	 */
+	public function removeValidator($validator)
+	{
+		if(is_integer($validator))
+		{
+			if(isset($this->_validators[$validator]))
+			{
+				unset($this->_validators[$validator]);
+			}
+		}
+		elseif($validator instanceof Opf_Validator_Interface)
+		{
+			foreach($this->_validators as $id => $obj)
+			{
+				if($obj === $validator)
+				{
+					unset($this->_validators[$id]);
+				}
+			}
+		}
+	} // end removeValidator();
+
+	/**
+	 * Returns true, if the specified validator is registered in the item.
+	 * The validator can be determined either by its index number or the
+	 * object.
+	 *
+	 * @param integer|Opf_Validator_Interface $validator The validator to check.
+	 * @return boolean
+	 */
+	public function hasValidator($validator)
+	{
+		if(is_integer($validator))
+		{
+			return (isset($this->_validators[$validator]));
+		}
+		elseif($validator instanceof Opf_Validator_Interface)
+		{
+			foreach($this->_validators as $id => $obj)
+			{
+				if($obj === $validator)
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+	} // end hasValidator();
+
+	/**
+	 * Validates the field against the registered validators.
+	 * @param mixed $data The data to validate.
+	 */
+	protected function _validate(&$data)
+	{
+		foreach($this->_validators as $validator)
+		{
+			if(!$validator->validate($data))
+			{
+				$this->_valid = false;
+				return false;
+			}
+		}
+		$this->_valid = true;
+		return true;
+	} // end _validate();
 } // end Opf_Item;

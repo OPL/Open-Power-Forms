@@ -19,34 +19,101 @@
  */
 abstract class Opf_Collection extends Opf_Item
 {
+	/**
+	 * The item list.
+	 * @var array
+	 */
+	protected $_items = array();
 
-	public function appendItem(Opf_Item $item)
+	/**
+	 * The alternative collection of items without the placeholders.
+	 * @var array
+	 */
+	protected $_collection = array();
+
+	/**
+	 * Appends a new item to a collection.
+	 *
+	 * @param Opf_Item $item The item to append.
+	 * @param string $placeholder The placeholder name.
+	 */
+	public function appendItem(Opf_Item $item, $placeholder = 'default')
 	{
+		if(!$this->_isItemAllowed($item, $placeholder))
+		{
+			throw new Opf_ItemNotAllowed_Exception($item->getName(), $this->getName());
+		}
 
+		if(!isset($this->_items[$placeholder]))
+		{
+			$this->_items[$placeholder] = array();
+		}
+		$this->_collection[$item->getName()] = $item;
+		$this->_items[$placeholder][] = $item;
 	} // end appendItem();
 
-	public function prependItem(Opf_Item $item)
+	/**
+	 * Prepends a new item to a collection.
+	 *
+	 * @param Opf_Item $item The item to append.
+	 * @param string $placeholder The placeholder name.
+	 */
+	public function prependItem(Opf_Item $item, $placeholder = 'default')
 	{
-		
+		if(!$this->_isItemAllowed($item, $placeholder))
+		{
+			throw new Opf_ItemNotAllowed_Exception($item->getName(), $this->getName());
+		}
+
+		if(!isset($this->_items[$placeholder]))
+		{
+			$this->_items[$placeholder] = array();
+		}
+		$this->_collection[$item->getName()] = $item;
+		array_unshift($this->_items[$placeholder], $item);
 	} // end prependItem();
 
+	/**
+	 * Returns the item from a collection.
+	 *
+	 * @param string $item The item name
+	 * @return Opf_Item
+	 */
 	public function getItem($item)
 	{
-
+		if(!isset($this->_collection[$item]))
+		{
+			return null;
+		}
+		return $this->_collection[$item];
 	} // end getItem();
 
-	public function removeItem($item)
+	public function removeItem($item, $placeholder = 'default')
 	{
 
 	} // end removeItem();
 
-	public function replaceItem($newItem, $oldItem)
+	public function replaceItem($newItem, $oldItem, $placeholder = 'default')
 	{
 
 	} // end replaceItem();
 
-	protected function _isItemAllowed(Opf_Item $item)
+	public function getItems($placeholder = 'default')
 	{
+		$result = array();
+		if(!isset($this->_items[$placeholder]))
+		{
+			return $result;
+		}
+		foreach($this->_items[$placeholder] as $item)
+		{
+			$result[] = $item;
+		}
+		return $result;
+	} // end getItems();
 
+	protected function _isItemAllowed(Opf_Item $item, $placeholder = 'default')
+	{
+		return true;
 	} // end _isItemAllowed();
 } // end Opf_Collection;

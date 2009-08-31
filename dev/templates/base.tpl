@@ -17,7 +17,7 @@
     <h1><opt:insert snippet="title" /></h1>
 
     <opt:insert snippet="content">
-	<p>No form loaded.
+	<p>No form loaded.</p>
 
     </opt:insert>
   </body>

@@ -3,10 +3,12 @@
   <opt:snippet name="title">Situation 1</opt:snippet>
   <opt:snippet name="content">
     <opf:form name="form1">
-     <opt:section name="content" datasource="$system.form.content">
-      <opt:component from="$content.component" template="widget">
+	 <p opt:if="not $system.form.valid">The form is invalid.</p>
+     <opt:section name="default">
+      <opt:component from="$default.component" template="widget">
       </opt:component>
      </opt:section>
+	 <input type="submit" value="Submit" />
     </opf:form>
   </opt:snippet>
 </opt:extend>
