@@ -27,7 +27,7 @@ class My_Form extends Opf_Form
 	public function onRender()
 	{
 		$view = $this->getView();
-		$view->setFormat('default', 'Form/Form');
+		
 		$item = $this->itemFactory('countries');
 		$item->getWidget()->setOptions(array(0 =>
 			'China',
@@ -42,18 +42,12 @@ class My_Form extends Opf_Form
 	} // end onRender();
 
 	// An event
-	public function onValidate()
-	{
-		return true;
-	} // end onValidate();
-
-	// An event
 	public function onAccept()
 	{
 		$view = $this->getView();
 		$view->setTemplate('results.tpl');
 		$results = array();
-		foreach($this->getValues() as $name => $value)
+		foreach($this->getValue() as $name => $value)
 		{
 			$results[] = array('name' => $name, 'value' => $value);
 		}

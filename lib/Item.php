@@ -42,6 +42,12 @@ abstract class Opf_Item
 	protected $_validators = array();
 
 	/**
+	 * The list of errors.
+	 * @var array
+	 */
+	protected $_errors = array();
+
+	/**
 	 * Is the item required to fill?
 	 * @var boolean
 	 */
@@ -169,8 +175,9 @@ abstract class Opf_Item
 	/**
 	 * Adds a new validator to the item.
 	 * @param Opf_Validator_Interface $validator The new validator to add.
+	 * @param string
 	 */
-	public function addValidator(Opf_Validator_Interface $validator)
+	public function addValidator(Opf_Validator_Interface $validator, $customError = null)
 	{
 		$this->_validators[] = $validator;
 	} // end addValidator();
@@ -230,16 +237,85 @@ abstract class Opf_Item
 	} // end hasValidator();
 
 	/**
+	 * Adds a new error message to the error list.
+	 * @param string $error The new error message
+	 */
+	public function addErrorMessage($error)
+	{
+		$this->_errors[] = $error;
+	} // end addErrorMessage();
+
+	/**
+	 * Adds a group of the error messages to the error list.
+	 * @param array $errors The error list.
+	 */
+	public function addErrorMessages(array $errors)
+	{
+		$this->_errors = array_merge($this->_errors, $errors);
+	} // end addErrorMessages();
+
+	/**
+	 * Sets the new error message list.
+	 * @param array $errors The error list.
+	 */
+	public function setErrorMessages(array $errors)
+	{
+		$this->_errors = $errors;
+	} // end setErrorMessages();
+
+	/**
+	 * Returns true, if there are error messages assigned
+	 * to the item.
+	 * @return boolean
+	 */
+	public function hasErrors()
+	{
+		return sizeof($this->_errors) > 0;
+	} // end hasErrors();
+
+	/**
+	 * Returns the list of error messages assigned to the item.
+	 * @return array
+	 */
+	public function getErrorMessages()
+	{
+		return $this->_errors;
+	} // end getErrorMessages();
+
+	/**
+	 * Sets the item value.
+	 * @param mixed $value The new value.
+	 */
+	abstract public function setValue($value);
+
+	/**
+	 * Returns the item value.
+	 * @return mixed
+	 */
+	abstract public function getValue();
+
+	/**
 	 * Validates the field against the registered validators.
 	 * @param mixed $data The data to validate.
 	 */
 	protected function _validate(&$data)
 	{
+		$opf = Opl_Registry::get('opf');
+		$tf = $opf->getTranslationInterface();
 		foreach($this->_validators as $validator)
 		{
-			if(!$validator->validate($data))
+			if(!$validator->validate($this, $data))
 			{
 				$this->_valid = false;
+				if($tf === null)
+				{
+					$this->addErrorMessage(vsprintf($validator->getError(), $validator->getErrorData()));
+				}
+				else
+				{
+					$tf->assign($opf->translationGroup, $validator->getError(), $validator->getErrorData());
+					$this->addErrorMessage($tf->_($opf->translationGroup, $validator->getError()));
+				}
 				return false;
 			}
 		}

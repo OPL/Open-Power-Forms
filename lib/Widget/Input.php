@@ -27,7 +27,7 @@ class Opf_Widget_Input extends Opf_Widget_Component
 	{
 		$attributes = array(
 			'name' => $this->_name,
-			'value' => $this->_value
+			'value' => $this->_item->getValue()
 		);
 		echo '<input type="text" '.Opt_Function::buildAttributes($attributes).' />';
 	} // end display();

@@ -122,7 +122,11 @@ abstract class Opf_Widget_Component implements Opt_Component_Interface
 
 	public function get($name)
 	{
-
+		switch($name)
+		{
+			case 'errors':
+				return $this->_item->getErrorMessages();
+		}
 	} // end get();
 
 	public function defined($name)

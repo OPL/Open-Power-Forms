@@ -18,7 +18,9 @@
  */
 interface Opf_Validator_Interface
 {
-	public function validate($value);
+	public function getError();
+	public function getErrorData();
+	public function validate(Opf_Item $item, $value);
 } // end Opf_Validator_Interface;
 
 /**
@@ -26,6 +28,15 @@ interface Opf_Validator_Interface
  */
 class Opf_Class extends Opl_Class
 {
+	// The configuration
+	public $translationGroup = 'form';
+
+	/**
+	 * Translation interface
+	 * @var Opl_Translation_Interface
+	 */
+	protected $_tf;
+
 	/**
 	 * Creates a new instance of OPF.
 	 * @throws Opf_OptNotInitialized_Exception
@@ -43,6 +54,26 @@ class Opf_Class extends Opl_Class
 		$tpl->register(Opt_Class::OPT_INSTRUCTION, 'Form', 'Opf_View_Instruction_Form');
 		$tpl->register(Opt_Class::OPT_FORMAT, 'Form', 'Opf_View_Format_Form');
 	} // end __construct();
+
+	/**
+	 * Sets the translation interface. When called without arguments,
+	 * it resets the existing interface.
+	 *
+	 * @param Opl_Translation_Interface $tf The new translation interface.
+	 */
+	public function setTranslationInterface(Opl_Translation_Interface $tf = null)
+	{
+		$this->_tf = $tf;
+	} // end setTranslationInterface();
+
+	/**
+	 * Returns the current translation interface registered in OPF.
+	 * @return Opl_Translation_Interface
+	 */
+	public function getTranslationInterface()
+	{
+		return $this->_tf;
+	} // end getTranslationInterface();
 
 
 	/**

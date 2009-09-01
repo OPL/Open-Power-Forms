@@ -18,11 +18,13 @@
  */
 class Opf_Leaf extends Opf_Item
 {
+
 	/**
 	 * The leaf initial value.
 	 * @var mixed
 	 */
 	protected $_value = null;
+
 	/**
 	 * The widget associated with the element.
 	 * @var Opf_Widget_Component
@@ -82,8 +84,30 @@ class Opf_Leaf extends Opf_Item
 		return ($this->_widget === null);
 	} // end hasWidget();
 
+	/**
+	 * Populates the item with the data.
+	 * @param mixed &$data The data used to populate the item
+	 */
 	public function populate(&$data)
 	{
 		$this->_value = $data;
 	} // end populate();
+
+	/**
+	 * Sets the item value.
+	 * @param mixed $value The new value.
+	 */
+	public function setValue($value)
+	{
+		$this->_value = $value;
+	} // end setValue();
+
+	/**
+	 * Returns the item value.
+	 * @return mixed
+	 */
+	public function getValue()
+	{
+		return $this->_value;
+	} // end getValue();
 } // end Opf_Leaf;

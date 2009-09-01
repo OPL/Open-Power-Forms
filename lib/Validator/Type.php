@@ -51,12 +51,42 @@ class Opf_Validator_Type implements Opf_Validator_Interface
 	} // end getType();
 
 	/**
+	 * Returns the error message used, if the validator fails.
+	 * @return string
+	 */
+	public function getError()
+	{
+		return 'failed_validation_type';
+	} // end getError();
+
+	/**
+	 * Returns the data for the error message.
+	 * @return array
+	 */
+	public function getErrorData()
+	{
+		switch($this->_type)
+		{
+			case self::STRING:
+				return array(0 => 'string');
+			case self::INTEGER:
+				return array(0 => 'integer');
+			case self::FLOAT:
+				return array(0 => 'float');
+			case self::BOOLEAN:
+				return array(0 => 'boolean');
+			case self::NUMBER:
+				return array(0 => 'number');
+		}
+	} // end getErrorData();
+
+	/**
 	 * Validates the value in a specified type.
 	 *
 	 * @param Mixed $value The value to validate.
 	 * @return Boolean
 	 */
-	public function validate($value)
+	public function validate(Opf_Item $item, $value)
 	{
 		if(!is_scalar($value))
 		{

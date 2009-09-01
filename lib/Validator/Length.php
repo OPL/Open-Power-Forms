@@ -36,11 +36,29 @@ class Opf_Validator_Length implements Opf_Validator_Interface
 	} // end __construct();
 
 	/**
+	 * Returns the error message used, if the validator fails.
+	 * @return string
+	 */
+	public function getError()
+	{
+		return 'failed_validation_length';
+	} // end getError();
+
+	/**
+	 * Returns the data for the error message.
+	 * @return array
+	 */
+	public function getErrorData()
+	{
+		return array(0 => $this->_length);
+	} // end getErrorData();
+
+	/**
 	 * Validates the value length.
 	 * @param mixed $value The value to validate.
 	 * @return boolean
 	 */
-	public function validate($value)
+	public function validate(Opf_Item $item, $value)
 	{
 		return (strlen($value) == $this->_length);
 	} // end validate();

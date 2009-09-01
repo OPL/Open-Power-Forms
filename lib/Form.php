@@ -51,12 +51,6 @@ class Opf_Form extends Opf_Collection
 	protected $_state = 0;
 
 	/**
-	 * The form data.
-	 * @var array
-	 */
-	protected $_data = array();
-
-	/**
 	 * Initializes the form processor.
 	 *
 	 * @param String $name The form name.
@@ -147,10 +141,40 @@ class Opf_Form extends Opf_Collection
 	 *
 	 * @return array
 	 */
-	public function getValues()
+	public function getValue()
 	{
-		return $this->_data;
-	} // end getValues();
+		$data = array();
+		foreach($this->_collection as $name => $item)
+		{
+			$data[$name] = $item->getValue();
+		}
+		return $data;
+	} // end getValue();
+
+	/**
+	 * Sets the form value - populates the form.
+	 * @param array $data The form value.
+	 */
+	public function setValue($data)
+	{
+		$this->populate($data);
+	} // end setValue();
+
+	/**
+	 * Populates the form with the initial data.
+	 *
+	 * @param Array $data The reference to the data array.
+	 */
+	public function populate(&$data)
+	{
+		foreach($this->_collection as $name => $item)
+		{
+			if(isset($data[$name]))
+			{
+				$item->populate($data[$name]);
+			}
+		}
+	} // end populate();
 
 	/**
 	 * The method for user implementation called at the beginning of execution.
@@ -189,22 +213,6 @@ class Opf_Form extends Opf_Collection
 	} // end onAccept();
 
 	/**
-	 * Populates the form with the initial data.
-	 *
-	 * @param Array $data The reference to the data array.
-	 */
-	public function populate(&$data)
-	{
-		foreach($this->_items as $id => $value)
-		{
-			if(isset($data[$value->_name]))
-			{
-				$item->populate($data[$value->_name]);
-			}
-		}
-	} // end populate();
-
-	/**
 	 * Executes the form. The result is the overall result of the
 	 * form processing process.
 	 *
@@ -232,6 +240,8 @@ class Opf_Form extends Opf_Collection
 			if(!$state)
 			{
 				$this->_state = self::ERROR;
+				$this->populate($data);
+				$this->_onRender();
 				$this->onRender();
 				return $this->_state;
 			}
@@ -241,6 +251,7 @@ class Opf_Form extends Opf_Collection
 		}
 		
 		$this->_state = self::RENDER;
+		$this->_onRender();
 		$this->onRender();
 		return $this->_state;
 	} // end execute();
@@ -285,7 +296,7 @@ class Opf_Form extends Opf_Collection
 				}
 				else
 				{
-					$this->_data[$name] = null;
+					$item->setValue(null);
 				}
 			}
 			if(!$item->_validate($data[$name]))
@@ -294,10 +305,25 @@ class Opf_Form extends Opf_Collection
 			}
 			else
 			{
-				$this->_data[$name] = &$data[$name];
+				$item->populate($data[$name]);
 			}
 
 		}
 		return $this->_valid = $state && $this->onValidate();
 	} // end _validate();
+
+	/**
+	 * The private rendering utility that performs all the basic
+	 * rendering tasks, such as registering the data formats for
+	 * the placeholders.
+	 *
+	 * @internal
+	 */
+	private function _onRender()
+	{
+		foreach($this->_items as $placeholder => &$void)
+		{
+			$this->_view->setFormat($placeholder, 'Form/Form');
+		}
+	} // end _onRender();
 } // end Opf_Form;

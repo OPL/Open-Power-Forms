@@ -2,10 +2,12 @@
 <opt:root>
 <opt:snippet name="widget">
   <com:div>
-    <p>{$system.component.title}</p>
+    <p>{$system.component.label}</p>
     <opt:display />
     <opt:onEvent name="error">
-      <p class="error">{$system.component.error}</p>
+	  <opt:section name="errors" datasource="$system.component.errors">
+      <p class="error">{$errors}</p>
+	  </opt:section>
     </opt:onEvent>
   </com:div>
 </opt:snippet>

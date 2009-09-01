@@ -46,7 +46,14 @@ class Opf_Widget_Select extends Opf_Widget_Component
 		$code = '<select '.Opt_Function::buildAttributes($attributes).'>';
 		foreach($this->_options as $id => $option)
 		{
-			$code .= '<option value="'.$id.'">'.$option.'</option>';
+			if($id == $this->_item->getValue())
+			{
+				$code .= '<option value="'.$id.'" selected="selected">'.$option.'</option>';
+			}
+			else
+			{
+				$code .= '<option value="'.$id.'">'.$option.'</option>';
+			}
 		}
 		echo $code.'</select>';
 	} // end display();
