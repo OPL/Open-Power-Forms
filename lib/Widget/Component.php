@@ -44,6 +44,12 @@ abstract class Opf_Widget_Component implements Opt_Component_Interface
 	protected $_name = null;
 
 	/**
+	 * The widget label.
+	 * @var string
+	 */
+	protected $_label = '';
+
+	/**
 	 * The component constructor.
 	 *
 	 * @param string $name The widget name.
@@ -52,6 +58,29 @@ abstract class Opf_Widget_Component implements Opt_Component_Interface
 	{
 		$this->_name = $name;
 	} // end __construct();
+
+	/**
+	 * Sets the widget label. Implements the fluent interface.
+	 *
+	 * @param string $label The new label
+	 * @return Opf_Widget_Component
+	 */
+	public function setLabel($label)
+	{
+		$this->_label = $label;
+		return $this;
+	} // end setLabel();
+
+	/**
+	 * Allows to set the options. By default, it does nothing but
+	 * implementing the fluent interface.
+	 * @param array $options The option list.
+	 * @return Opf_Widget_Component
+	 */
+	public function setOptions($options)
+	{
+		return $this;
+	} // end setOptions();
 
 	/**
 	 * Assigns the widget to a form item.
@@ -115,20 +144,43 @@ abstract class Opf_Widget_Component implements Opt_Component_Interface
 
 	} // end setDatasource();
 
+	/**
+	 * Allows to set various component properties.
+	 * @param string $name The property name
+	 * @param mixed $value The property value
+	 */
 	public function set($name, $value)
 	{
-
+		switch($name)
+		{
+			case 'label':
+				$this->_label = $value;
+				break;
+		}
 	} // end set();
 
+	/**
+	 * Returns the component properties.
+	 *
+	 * @param string $name The property name.
+	 * @return mixed
+	 */
 	public function get($name)
 	{
 		switch($name)
 		{
 			case 'errors':
 				return $this->_item->getErrorMessages();
+			case 'label':
+				return $this->_label;
 		}
+		return '';
 	} // end get();
 
+	/**
+	 * Returns true, if the specified property exists and is set.
+	 * @param string $name The property name.
+	 */
 	public function defined($name)
 	{
 

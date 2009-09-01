@@ -62,6 +62,14 @@ class Opf_UnknownMethod_Exception extends Opf_Exception
 } // end Opf_UnknownMethod_Exception;
 
 /**
+ * Unknown event exception
+ */
+class Opf_UnknownEvent_Exception extends Opf_Exception
+{
+	protected $_message = 'Unknown item event: %s';
+} // end Opf_UnknownEvent_Exception;
+
+/**
  * "Item already exists" exception
  */
 class Opf_ItemAlreadyExists_Exception extends Opf_Exception

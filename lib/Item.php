@@ -173,6 +173,31 @@ abstract class Opf_Item
 	} // end hasListeners();
 
 	/**
+	 * Invokes the event on the registered event handlers.
+	 * @param string $eventName The event name
+	 * @throws Opf_UnknownEvent_Exception
+	 */
+	public function invokeEvent($eventName)
+	{
+		if($this->_listeners !== null)
+		{
+			$event = new Opf_Event($this, $eventName);
+
+			foreach($this->_listeners as $listener)
+			{
+				if(method_exists($listener, $eventName))
+				{
+					$listener->$eventName($event);
+				}
+				else
+				{
+					throw new Opf_UnknownEvent_Exception($eventName);
+				}
+			}
+		}
+	} // end invokeEvent();
+
+	/**
 	 * Adds a new validator to the item.
 	 * @param Opf_Validator_Interface $validator The new validator to add.
 	 * @param string

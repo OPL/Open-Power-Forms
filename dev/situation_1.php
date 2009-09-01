@@ -15,12 +15,14 @@ class My_Form extends Opf_Form
 		$item = $this->itemFactory('title');
 		$item->setRequired(true);
 		$item->addValidator(new Opf_Validator_Length(5), 'The length is invalid');
-		$item->setWidget(new Opf_Widget_Input);
+		$item->setWidget(new Opf_Widget_Input)
+			->setLabel('Title');
 
 		$item = $this->itemFactory('countries');
 		$item->setRequired(true);
 		$item->addValidator(new Opf_Validator_Type(Opf_Validator_Type::INTEGER), 'The field type is invalid.');
-		$item->setWidget(new Opf_Widget_Select);
+		$item->setWidget(new Opf_Widget_Select)
+			->setLabel('Countries');
 	} // end onInit();
 
 	// An event

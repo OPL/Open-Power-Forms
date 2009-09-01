@@ -41,9 +41,11 @@ class Opf_Leaf extends Opf_Item
 	} // end __construct();
 
 	/**
-	 * Sets the widget associated with the item.
+	 * Sets the widget associated with the item. Returns the
+	 * assigned widget for the fluent interface purposes.
 	 *
 	 * @param Opf_Widget_Component $widget The new widget.
+	 * @return Opf_Item
 	 */
 	public function setWidget(Opf_Widget_Component $widget)
 	{
@@ -59,6 +61,8 @@ class Opf_Leaf extends Opf_Item
 		}
 
 		$this->_widget = $widget;
+
+		return $widget;
 	} // end setWidget();
 
 	/**

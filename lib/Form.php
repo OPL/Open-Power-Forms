@@ -220,7 +220,9 @@ class Opf_Form extends Opf_Collection
 	 */
 	public function execute()
 	{
+		$this->invokeEvent('preInit');
 		$this->onInit();
+		$this->invokeEvent('postInit');
 
 		// Validate the input data.
 		switch($this->_method)
@@ -242,17 +244,23 @@ class Opf_Form extends Opf_Collection
 				$this->_state = self::ERROR;
 				$this->populate($data);
 				$this->_onRender();
+				$this->invokeEvent('preRender');
 				$this->onRender();
+				$this->invokeEvent('postRender');
 				return $this->_state;
 			}
 			$this->_state = self::ACCEPTED;
+			$this->invokeEvent('preAccept');
 			$this->onAccept();
+			$this->invokeEvent('postAccept');
 			return $this->_state;
 		}
 		
 		$this->_state = self::RENDER;
 		$this->_onRender();
+		$this->invokeEvent('preRender');
 		$this->onRender();
+		$this->invokeEvent('postRender');
 		return $this->_state;
 	} // end execute();
 
@@ -309,7 +317,11 @@ class Opf_Form extends Opf_Collection
 			}
 
 		}
-		return $this->_valid = $state && $this->onValidate();
+		$this->invokeEvent('preValidate');
+		$state = $this->_valid = $state && $this->onValidate();
+		$this->invokeEvent('postValidate');
+
+		return $state;
 	} // end _validate();
 
 	/**

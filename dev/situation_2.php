@@ -9,13 +9,16 @@ require('./init.php');
 
 class My_EventListener extends Opf_EventListener
 {
-	public function postInit(Opf_Form $form)
+	public function postInit(Opf_Event $event)
 	{
-		$item = $this->itemFactory('age');
+		$form = $event->getItem();
+
+		$item = $form->itemFactory('age');
 		$item->setRequired(true);
 		$item->addValidator(new Opf_Validator_Type(Opf_Validator_Type::INTEGER));
 		$item->addValidator(new Opf_Validator_Scope(16, 100));
-		$item->setWidget(new Opf_Component_Input);
+		$item->setWidget(new Opf_Widget_Input)
+			->setLabel('Age');
 	} // end postInit();
 } // end Opf_EventListener;
 
@@ -26,20 +29,22 @@ class My_Form extends Opf_Form
 	{
 		$item = $this->itemFactory('title');
 		$item->setRequired(true);
-		$item->addValidator(new Opf_Validator_Length(3, 100), 'The length is invalid');
-		$item->setWidget(new Opf_Component_Input);
+		$item->addValidator(new Opf_Validator_Length(5), 'The length is invalid');
+		$item->setWidget(new Opf_Widget_Input)
+			->setLabel('Title');
 
 		$item = $this->itemFactory('countries');
 		$item->setRequired(true);
 		$item->addValidator(new Opf_Validator_Type(Opf_Validator_Type::INTEGER), 'The field type is invalid.');
-		$item->setWidget(new Opf_Component_Select);
+		$item->setWidget(new Opf_Widget_Select)
+			->setLabel('Countries');
 	} // end onInit();
 
 	// An event
 	public function onRender()
 	{
 		$item = $this->itemFactory('countries');
-		$item->setOptions(array(0 =>
+		$item->getWidget()->setOptions(array(0 =>
 			'China',
 			'France',
 			'Germany',
@@ -52,28 +57,27 @@ class My_Form extends Opf_Form
 	} // end onRender();
 
 	// An event
-	public function onValidate()
-	{
-
-	} // end onValidate();
-
-	// An event
 	public function onAccept()
 	{
 		$view = $this->getView();
 		$view->setTemplate('results.tpl');
-		$view->data = $form->getValues();
+		$results = array();
+		foreach($this->getValue() as $name => $value)
+		{
+			$results[] = array('name' => $name, 'value' => $value);
+		}
+		$view->results = $results;
 	} // end onAccept();
 } // end MyForm;
 
 try
 {
 	$tpl = new Opt_Class;
+	$opf = new Opf_Class;
 	$tpl->sourceDir = './templates/';
 	$tpl->compileDir = './templates_c/';
 	$tpl->setup();
-
-	$opf = new Opf_Class;
+	
 
 	$view = new Opt_View('situation_2.tpl');
 	$view->devFile = 'situation_2.php';

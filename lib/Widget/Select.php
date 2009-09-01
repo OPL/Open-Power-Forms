@@ -25,12 +25,14 @@ class Opf_Widget_Select extends Opf_Widget_Component
 	protected $_options = array();
 
 	/**
-	 * Sets the "select" field options.
+	 * Allows to set the options. Implements the fluent interface.
 	 * @param array $options The option list.
+	 * @return Opf_Widget_Component
 	 */
 	public function setOptions($options)
 	{
 		$this->_options = $options;
+		return $this;
 	} // end setOptions();
 
 	/**

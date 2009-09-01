@@ -130,3 +130,50 @@ class Opf_Class extends Opl_Class
 		return self::$_forms[(string)$name];
 	} // end getForm();
 } // end Opf_Class;
+
+/**
+ * Represents an event in the event handling.
+ */
+class Opf_Event
+{
+	/**
+	 * The item the event is called for.
+	 * @var Opf_Item
+	 */
+	private $_item;
+
+	/**
+	 * The event name
+	 * @var string
+	 */
+	private $_name;
+
+	/**
+	 * Constructs an event object.
+	 * @param Opf_Item $item The item the event is called for.
+	 * @param string $eventName The event name
+	 */
+	public function __construct(Opf_Item $item, $eventName)
+	{
+		$this->_item = $item;
+		$this->_eventName = $eventName;
+	} // end __construct();
+
+	/**
+	 * Returns the item the event is called for.
+	 * @return Opf_Item
+	 */
+	public function getItem()
+	{
+		return $this->_item;
+	} // end getItem();
+
+	/**
+	 * Returns the event name.
+	 * @return string
+	 */
+	public function getEvent()
+	{
+		return $this->_name;
+	} // end getEvent();
+} // end Opf_Event;
