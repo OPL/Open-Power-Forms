@@ -112,6 +112,21 @@ abstract class Opf_Widget_Component implements Opt_Component_Interface
 	} // end isBound();
 
 	/**
+	 * Copies the properties from a generic widget.
+	 * @param Opf_Widget_Generic $generic The generic widget.
+	 */
+	public function importFromGeneric(Opf_Widget_Generic $generic)
+	{
+		$this->_item = $generic->_item;
+		$this->_form = $generic->_form;
+
+		// Copy the other data only if they are not already set.
+		$this->_label == '' and $this->_label = $generic->_label;
+		$this->_name == '' and $this->_name = $generic->_name;
+		isset($this->_options) and $this->_options = $generic->_options;
+	} // end importFromGeneric();
+
+	/**
 	 * Passes the OPT view to the widget.
 	 *
 	 * @param Opt_View $view The view.
@@ -128,10 +143,6 @@ abstract class Opf_Widget_Component implements Opt_Component_Interface
 				throw new Opf_ItemNotExists_Exception('form');
 			}
 		}
-		if($this->_item === null)
-		{
-			$this->_item = $this->_form->findItem($this->_name);
-		}
 	} // end setView();
 
 	/**
@@ -141,7 +152,10 @@ abstract class Opf_Widget_Component implements Opt_Component_Interface
 	 */
 	public function setDatasource($data)
 	{
-
+		if(is_array($data))
+		{
+			$this->setOptions($data);
+		}
 	} // end setDatasource();
 
 	/**
@@ -155,6 +169,18 @@ abstract class Opf_Widget_Component implements Opt_Component_Interface
 		{
 			case 'label':
 				$this->_label = $value;
+				break;
+			case 'name':
+				$this->_name = $value;
+				if($this->_item === null)
+				{
+					$item = $this->_form->findItem($this->_name);
+					$item->setWidget($this);
+					if($item === null)
+					{
+						throw new Opf_ItemNotExists_Exception('item', $this->_name);
+					}
+				}
 				break;
 		}
 	} // end set();

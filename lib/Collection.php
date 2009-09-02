@@ -112,6 +112,23 @@ abstract class Opf_Collection extends Opf_Item
 		return $result;
 	} // end getItems();
 
+	/**
+	 * Finds an item with the specified name in the entire collection.
+	 * The item is also looked for in the sub-collections.
+	 *
+	 * @param string $name The item name
+	 * @return Opf_Item
+	 */
+	public function findItem($name)
+	{
+		// TODO: Add sub-collection support.
+		if(isset($this->_collection[$name]))
+		{
+			return $this->_collection[$name];
+		}
+		return NULL;
+	} // end findItem();
+
 	protected function _isItemAllowed(Opf_Item $item, $placeholder = 'default')
 	{
 		return true;

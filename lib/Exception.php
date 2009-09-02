@@ -84,3 +84,11 @@ class Opf_ItemNotExists_Exception extends Opf_Exception
 {
 	protected $_message = 'The %s %s does not exist in OPF.';
 } // end Opf_ItemNotExists_Exception;
+
+/**
+ * "Cannot display a generic widget" exception
+ */
+class Opf_CannotDisplay_Exception extends Opf_Exception
+{
+	protected $_message = 'Cannot display a generic widget.';
+} // end Opf_CannotDisplay_Exception;

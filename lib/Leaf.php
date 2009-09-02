@@ -57,6 +57,10 @@ class Opf_Leaf extends Opf_Item
 
 		if($this->_widget !== null)
 		{
+			if($this->_widget instanceof Opf_Widget_Generic)
+			{
+				$widget->importFromGeneric($this->_widget);
+			}
 			$this->_widget->unsetItem();
 		}
 
@@ -73,7 +77,7 @@ class Opf_Leaf extends Opf_Item
 	{
 		if($this->_widget === null)
 		{
-			$this->setWidget(new Opf_Widget_Input());
+			$this->setWidget(new Opf_Widget_Generic());
 		}
 		return $this->_widget;
 	} // end getWidget();
