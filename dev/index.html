@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="author" content="" />
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <meta name="robots" content="all" />
+
+    <title></title>
+    
+    <link rel="stylesheet" type="text/css" href="design/generic.css"  />
+    <!--[if lte IE 6]><link rel="stylesheet" href="design/ie.css" type="text/css" /><![endif]-->	
+    <!--[if IE 7]><link rel="stylesheet" href="design/ie7.css" type="text/css" /><![endif]-->	
+</head>
+<body>
+<form action="" method="post" class="form">
+    <div class="row">
+        <label for="form1:login">Login:</label>
+        <input id="form1:login" type="text" name="form1[login]" value="" class="inputText" />
+    </div>
+    
+    <div class="row">
+        <label for="form1:password">Password:</label>
+        <input id="form1:password" type="password" name="form1[password]" value="" class="inputText" />
+    </div>
+    
+    <div class="row"><input type="hidden" name="form1[remember_me]" value="" /><!-- this thing is here because checkboxes are dumb :P -->
+        <fieldset>
+            <label for="form1:remember_me:yes"><input id="form1:remember_me:yes" type="checkbox" name="form1[remember_me]" class="inputCheckbox" value="yes" /> Remember me</label>
+        </fieldset>
+    </div>
+
+    <div class="row row-submit">
+        <input id="form1:submit" type="submit" value="Log in" class="inputSubmit" />
+    </div>
+</form>
+
+<form action="" method="post" class="form">
+    <fieldset><legend>Login credentials</legend>
+        <div class="row">
+            <label for="form2:username">Username: <sup>*</sup></label>
+            <input id="form2:username" type="text" name="form2[username]" value="" class="inputText" />
+            <small>May only contain letters, numbers, and underscore (_) and 8-20 characters long.</small>
+        </div>
+        
+        <div class="row">
+            <label for="form2:password">Password: <sup>*</sup></label>
+            <input id="form2:password" type="password" name="form2[password]" value="" class="inputText" />
+        </div>
+        
+        <div class="row">
+            <label for="form2:password2">Re-type password: <sup>*</sup></label>
+            <input id="form2:password2" type="password" name="form2[password2]" value="" class="inputText" />
+            <small>Must match the password you entered just above.</small>
+        </div>
+        
+        <div class="row">
+            <label for="form2:email">E-mail: <sup>*</sup></label>
+            <input id="form2:email" type="text" name="form2[email]" value="" class="inputText" />
+            <small>We do not send spam.</small>
+        </div>
+        
+        <div class="row">
+            <label for="form2:email2">Re-type e-mail: <sup>*</sup></label>
+            <input id="form2:email2" type="text" name="form2[email2]" value="" class="inputText" />
+            <small>Must match the email address you just entered above.</small>
+        </div>
+    </fieldset>
+
+    <fieldset><legend>Personal information</legend>
+        <div class="description">
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ultricies vehicula lectus, vitae commodo ante facilisis eget. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Sed magna lacus, interdum in rhoncus sed, fringilla non libero. Pellentesque vitae velit ut metus cursus dapibus in ut nunc. </p>
+        </div>
+        
+        <div class="row">
+            <label for="form2:first_name">First name: <sup>*</sup></label>
+            <input id="form2:first_name" type="text" name="form2[first_name]" value="" class="inputText" />
+        </div>
+        
+        <div class="row">
+            <label for="form2:last_name">Last name: <sup>*</sup></label>
+            <input id="form2:last_name" type="text" name="form2[last_name]" value="" class="inputText" />
+        </div>
+        <div class="row">
+            <label for="form2:country">Country:</label>
+            <select id="form2:country" name="form2[country]">
+                <option value="-1">Select a country</option>
+                <option value="-1">----------------</option>
+                <option value="pl">Poland</option>
+                <option value="uk">United Kingdom</option>
+            </select>
+        </div>
+        
+        <div class="row">
+            <label for="form2:address">Address:</label>
+            <textarea id="form2:address" name="form2[address]"></textarea>
+        </div>
+        
+        <div class="row">
+            <label for="form2:phone">Phone number:</label>
+            <input id="form2:phone" type="text" name="form2[phone]" value="" class="inputText" />
+            <small>With country prefix: +48.123456789</small>
+        </div>
+        
+        <div class="row"><input type="hidden" name="form2[interests]" value="" /><!-- this thing is here because checkboxes are dumb :P -->
+            <label>Interests:</label>
+            <fieldset>
+                <ul>
+                    <li><label for="form2:interests:it"><input id="form2:interests:it" type="checkbox" name="form2[interests]" class="inputCheckbox" value="it" /> IT</label></li>
+                    <li><label for="form2:interests:cars"><input id="form2:interests:cars" type="checkbox" name="form2[interests]" class="inputCheckbox" value="cars" /> Cars</label></li>
+                    <li><label for="form2:interests:girls"><input id="form2:interests:girls" type="checkbox" name="form2[interests]" class="inputCheckbox" value="girls" /> Girls</label></li>
+                    <li><label for="form2:interests:music"><input id="form2:interests:music" type="checkbox" name="form2[interests]" class="inputCheckbox" value="music" /> Music</label></li>
+                </ul>
+            </fieldset>
+        </div>
+
+        <div class="row row-long">
+            <label for="form2:about">About you:</label>
+            <textarea id="form2:about" name="form2[about]" rows="7"></textarea>
+        </div>
+    </fieldset>
+    
+    <fieldset>
+        <div class="row">
+            <label>Send newsletter?</label>
+            <fieldset>
+                <label for="form2:newsletter:yes"><input id="form2:newsletter:yes" type="radio" name="form2[newsletter]" class="inputRadio" value="yes" checked="checked" /> Yes</label>
+                <label for="form2:newsletter:no"><input id="form2:newsletter:no" type="radio" name="form2[newsletter]" class="inputRadio" value="no" /> No</label>
+            </fieldset>
+        </div>
+    </fieldset>
+    
+    <fieldset><legend>CAPTCHA</legend>
+        <div class="row">
+            <img src="captcha.png" alt="CAPTCHA" width="200" height="50" />
+            <small><a href="#">Refresh picture</a></small>
+        </div>
+        <div class="row">
+            <label for="form2:captcha">Captcha: <sup>*</sup></label>
+            <input id="form2:captcha" type="text" name="form2[captcha]" value="" class="inputText" />
+        </div>
+    </fieldset>
+    
+    <fieldset>
+        <div class="row"><input type="hidden" name="form2[accept]" value="" /><!-- this thing is here because checkboxes are dumb :P -->
+            <fieldset>
+                <label for="form2:accept:yes"><input id="form2:accept:yes" type="checkbox" name="form2[accept]" class="inputCheckbox" value="yes" /> Accept rules</label>
+            </fieldset>
+        </div>
+        
+        <div class="row row-submit">
+            <input id="form2:submit" type="submit" value="Submit form" class="inputSubmit" />
+        </div>
+    </fieldset>
+</form>
+
+<form action="" method="post" class="form">
+    <div class="errors">
+        <p>We encountered errors in the information you submitted. Please check the fields marked below and try again.</p>
+    </div>
+    
+    <fieldset><legend>Login credentials</legend>
+        <div class="row row-error">
+            <p class="error">Invalid characters.</p>
+            <p class="error">Value is too long (max: 20).</p>
+            <label for="form3:username">Username: <sup>*</sup></label>
+            <input id="form3:username" type="text" name="form3[username]" value="" class="inputText" />
+            <small>May only contain letters, numbers, and underscore (_) and 8-20 characters long.</small>
+        </div>
+        
+        <div class="row row-error">
+            <label for="form3:password">Password: <sup>*</sup></label>
+            <input id="form3:password" type="password" name="form3[password]" value="" class="inputText" />
+        </div>
+        
+        <div class="row row-error">
+            <p class="error">Passwords do not match.</p>
+            <label for="form3:password2">Re-type password: <sup>*</sup></label>
+            <input id="form3:password2" type="password" name="form3[password2]" value="" class="inputText" />
+            <small>Must match the password you entered just above.</small>
+        </div>
+        
+        <div class="row row-error">
+            <p class="error">E-mail address is invalid.</p>
+            <label for="form3:email">E-mail: <sup>*</sup></label>
+            <input id="form3:email" type="text" name="form3[email]" value="" class="inputText" />
+            <small>We do not send spam.</small>
+        </div>
+        
+        <div class="row">
+            <label for="form3:email2">Re-type e-mail: <sup>*</sup></label>
+            <input id="form3:email2" type="text" name="form3[email2]" value="" class="inputText" />
+            <small>Must match the email address you just entered above.</small>
+        </div>
+    </fieldset>
+
+    <fieldset><legend>Personal information</legend>
+        <div class="description">
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ultricies vehicula lectus, vitae commodo ante facilisis eget. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Sed magna lacus, interdum in rhoncus sed, fringilla non libero. Pellentesque vitae velit ut metus cursus dapibus in ut nunc. </p>
+        </div>
+        
+        <div class="row row-error">
+            <p class="error">Required.</p>
+            <label for="form3:first_name">First name: <sup>*</sup></label>
+            <input id="form3:first_name" type="text" name="form3[first_name]" value="" class="inputText" />
+        </div>
+        
+        <div class="row row-error">
+            <p class="error">Required.</p>
+            <label for="form3:last_name">Last name: <sup>*</sup></label>
+            <input id="form3:last_name" type="text" name="form3[last_name]" value="" class="inputText" />
+        </div>
+        <div class="row">
+            <label for="form3:country">Country:</label>
+            <select id="form3:country" name="form3[country]">
+                <option value="-1">Select a country</option>
+                <option value="-1">----------------</option>
+                <option value="pl">Poland</option>
+                <option value="uk">United Kingdom</option>
+            </select>
+        </div>
+        
+        <div class="row">
+            <label for="form3:address">Address:</label>
+            <textarea id="form3:address" name="form3[address]"></textarea>
+        </div>
+        
+        <div class="row">
+            <label for="form3:phone">Phone number:</label>
+            <input id="form3:phone" type="text" name="form3[phone]" value="" class="inputText" />
+            <small>With country prefix: +48.123456789</small>
+        </div>
+        
+        <div class="row"><input type="hidden" name="form3[interests]" value="" /><!-- this thing is here because checkboxes are dumb :P -->
+            <label>Interests:</label>
+            <fieldset>
+                <ul>
+                    <li><label for="form3:interests:it"><input id="form3:interests:it" type="checkbox" name="form3[interests]" class="inputCheckbox" value="it" /> IT</label></li>
+                    <li><label for="form3:interests:cars"><input id="form3:interests:cars" type="checkbox" name="form3[interests]" class="inputCheckbox" value="cars" /> Cars</label></li>
+                    <li><label for="form3:interests:girls"><input id="form3:interests:girls" type="checkbox" name="form3[interests]" class="inputCheckbox" value="girls" /> Girls</label></li>
+                    <li><label for="form3:interests:music"><input id="form3:interests:music" type="checkbox" name="form3[interests]" class="inputCheckbox" value="music" /> Music</label></li>
+                </ul>
+            </fieldset>
+        </div>
+
+        <div class="row row-long">
+            <label for="form3:about">About you:</label>
+            <textarea id="form3:about" name="form3[about]" rows="7"></textarea>
+        </div>
+    </fieldset>
+    
+    <fieldset>
+        <div class="row">
+            <label>Send newsletter?</label>
+            <fieldset>
+                <label for="form3:newsletter:yes"><input id="form3:newsletter:yes" type="radio" name="form3[newsletter]" class="inputRadio" value="yes" checked="checked" /> Yes</label>
+                <label for="form3:newsletter:no"><input id="form3:newsletter:no" type="radio" name="form3[newsletter]" class="inputRadio" value="no" /> No</label>
+            </fieldset>
+        </div>
+    </fieldset>
+    
+    <fieldset><legend>CAPTCHA</legend>
+        <div class="row">
+            <img src="captcha.png" alt="CAPTCHA" width="200" height="50" />
+            <small><a href="#">Refresh picture</a></small>
+        </div>
+        <div class="row row-error">
+            <p class="error">Captcha invalid.</p>
+            <label for="form3:captcha">Captcha: <sup>*</sup></label>
+            <input id="form3:captcha" type="text" name="form3[captcha]" value="" class="inputText" />
+        </div>
+    </fieldset>
+    
+    <fieldset>
+        <div class="row row-error"><input type="hidden" name="form3[accept]" value="" /><!-- this thing is here because checkboxes are dumb :P -->
+            <p class="error">Required.</p>
+            <fieldset>
+                <label for="form3:accept:yes"><input id="form3:accept:yes" type="checkbox" name="form3[accept]" class="inputCheckbox" value="yes" /> Accept rules</label>
+            </fieldset>
+        </div>
+        
+        <div class="row row-submit">
+            <input id="form3:submit" type="submit" value="Submit form" class="inputSubmit" />
+        </div>
+    </fieldset>
+    
+    <p class="legend"><sup>*</sup> - Fields marked like this are required.</p>
+</form>
+
+</body>
+</html>

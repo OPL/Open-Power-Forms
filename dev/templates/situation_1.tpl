@@ -2,7 +2,10 @@
 <opt:extend file="base.tpl">
   <opt:snippet name="title">Situation 1</opt:snippet>
   <opt:snippet name="content">
-    <opf:form name="form1">
+	{$design.form.valid is 'foo'}
+	{$design.field.valid is 'row'}
+	{$design.field.invalid is 'row row-error'}
+    <opf:form name="form1" class="form">
 	 <p opt:if="not $system.form.valid">The form is invalid.</p>
      <opt:section name="default">
       <opt:component from="$default.component" template="widget">

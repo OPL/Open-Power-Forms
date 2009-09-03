@@ -16,6 +16,7 @@
 /**
  * The class represents the string length applied as a rule to a
  * form field.
+ * @package Validators
  */
 class Opf_Validator_Length implements Opf_Validator_Interface
 {

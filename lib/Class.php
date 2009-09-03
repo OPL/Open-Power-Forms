@@ -53,9 +53,12 @@ class Opf_Class extends Opl_Class
 		$tpl->register(Opt_Class::OPT_NAMESPACE, 'opf');
 		$tpl->register(Opt_Class::OPT_INSTRUCTION, 'Form', 'Opf_View_Instruction_Form');
 		$tpl->register(Opt_Class::OPT_FORMAT, 'Form', 'Opf_View_Format_Form');
+		$tpl->register(Opt_Class::OPT_FORMAT, 'Design', 'Opf_View_Format_Design');
 
 		$tpl->register(Opt_Class::OPT_COMPONENT, 'opf:input', 'Opf_Widget_Input');
 		$tpl->register(Opt_Class::OPT_COMPONENT, 'opf:select', 'Opf_Widget_Select');
+
+		Opt_View::setFormatGlobal('design', 'Design', false);
 	} // end __construct();
 
 	/**

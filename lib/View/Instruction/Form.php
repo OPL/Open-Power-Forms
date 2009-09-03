@@ -65,12 +65,19 @@ class Opf_View_Instruction_Form extends Opt_Compiler_Processor
 		}
 
 		$params = array(
-			'name' => array(0 => self::REQUIRED, self::HARD_STRING)
+			'name' => array(0 => self::REQUIRED, self::HARD_STRING),
+			'__UNKNOWN__' => array(0 => self::OPTIONAL, self::STRING)
 		);
-		$this->_extractAttributes($node, $params);
+		$extra = $this->_extractAttributes($node, $params);
+
+		$attr = '';
+		foreach($extra as $name => $value)
+		{
+			$attr .= ' '.$name.'="\'.'.$value.'.\'"';
+		}
 
 		$node->addAfter(Opt_Xml_Buffer::TAG_BEFORE, 'if(Opf_Class::hasForm(\''.$params['name'].'\')){ $_form_'.$params['name'].' = Opf_Class::getForm(\''.$params['name'].'\');
-	echo \'<form method="\'.$_form_'.$params['name'].'->getMethod().\'" action="\'.$_form_'.$params['name'].'->getAction().\'"><input type="hidden" name="opf_form_info" value="'.$params['name'].'" />\';
+	echo \'<form method="\'.$_form_'.$params['name'].'->getMethod().\'" action="\'.$_form_'.$params['name'].'->getAction().\'"'.$attr.'><input type="hidden" name="opf_form_info" value="'.$params['name'].'" />\';
 	self::$_vars[\'form\'] = $_form_'.$params['name'].';
 		');
 		$node->addAfter(Opt_Xml_Buffer::TAG_BEFORE, '  ');

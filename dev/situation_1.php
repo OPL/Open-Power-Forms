@@ -64,7 +64,13 @@ try
 	$tpl->sourceDir = './templates/';
 	$tpl->compileDir = './templates_c/';
 	$tpl->compileMode = Opt_Class::CM_REBUILD;
-	$tpl->setup();	
+	$tpl->stripWhitespaces = false;
+	$tpl->setup();
+
+	$translate = new Opc_Translate(new Opc_Translate_Adapter_Ini(array('directory' => './lang/')));
+	$translate->setLanguage('en');
+
+	$opf->setTranslationInterface($translate);
 
 	$view = new Opt_View('situation_1.tpl');
 	$view->devFile = 'situation_1.php';
@@ -85,6 +91,11 @@ catch(Opf_Exception $exception)
 catch(Opt_Exception $exception)
 {
 	$handler = new Opt_ErrorHandler;
+	$handler->display($exception);
+}
+catch(Opc_Exception $exception)
+{
+	$handler = new Opc_ErrorHandler;
 	$handler->display($exception);
 }
 catch(Opl_Exception $exception)

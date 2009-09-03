@@ -15,6 +15,7 @@
 
 /**
  * The general exception class for OPF
+ * @package Exceptions
  */
 class Opf_Exception extends Opl_Exception
 {
@@ -47,6 +48,7 @@ class Opf_Exception extends Opl_Exception
 
 /**
  * "OPT is not initialized" exception.
+ * @package Exceptions
  */
 class Opf_OptNotInitialized_Exception extends Opf_Exception
 {
@@ -55,6 +57,7 @@ class Opf_OptNotInitialized_Exception extends Opf_Exception
 
 /**
  * Unknown HTTP method exception
+ * @package Exceptions
  */
 class Opf_UnknownMethod_Exception extends Opf_Exception
 {
@@ -63,6 +66,7 @@ class Opf_UnknownMethod_Exception extends Opf_Exception
 
 /**
  * Unknown event exception
+ * @package Exceptions
  */
 class Opf_UnknownEvent_Exception extends Opf_Exception
 {
@@ -71,6 +75,7 @@ class Opf_UnknownEvent_Exception extends Opf_Exception
 
 /**
  * "Item already exists" exception
+ * @package Exceptions
  */
 class Opf_ItemAlreadyExists_Exception extends Opf_Exception
 {
@@ -79,6 +84,7 @@ class Opf_ItemAlreadyExists_Exception extends Opf_Exception
 
 /**
  * "Item does not exist" exception
+ * @package Exceptions
  */
 class Opf_ItemNotExists_Exception extends Opf_Exception
 {
@@ -87,8 +93,18 @@ class Opf_ItemNotExists_Exception extends Opf_Exception
 
 /**
  * "Cannot display a generic widget" exception
+ * @package Exceptions
  */
 class Opf_CannotDisplay_Exception extends Opf_Exception
 {
 	protected $_message = 'Cannot display a generic widget.';
 } // end Opf_CannotDisplay_Exception;
+
+/**
+ * "Invalid Opf_Design call" exception
+ * @package Exceptions
+ */
+class Opf_InvalidDesignCall_Exception extends Opf_Exception
+{
+	protected $_message = 'Invalid design manager call: %s';
+} // end Opf_InvalidDesignCall_Exception;

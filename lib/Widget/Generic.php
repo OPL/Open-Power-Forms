@@ -17,6 +17,7 @@
  * The generic widget is used to collect the data about the
  * widget that are later rewritten to the proper widget.
  * It cannot be displayed.
+ * @package Widgets
  */
 class Opf_Widget_Generic extends Opf_Widget_Component
 {

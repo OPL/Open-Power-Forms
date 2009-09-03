@@ -16,6 +16,7 @@
 /**
  * The class provides the necessary logic for the widgets in templates,
  * using the OPT Component API.
+ * @package Widgets
  */
 abstract class Opf_Widget_Component implements Opt_Component_Interface
 {
@@ -234,6 +235,14 @@ abstract class Opf_Widget_Component implements Opt_Component_Interface
 
 	public function manageAttributes($tagName, Array $attributes)
 	{
-
+		if(!$this->_item->isValid())
+		{
+			$attributes['class'] = Opf_Design::getInvalidClass('field');
+		}
+		elseif(!isset($attributes['class']))
+		{
+			$attributes['class'] = Opf_Design::getValidClass('field');
+		}
+		return $attributes;
 	} // end manageAttributes();
 } // end Opf_Widget_Component;

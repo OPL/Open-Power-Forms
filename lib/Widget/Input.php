@@ -15,6 +15,7 @@
 
 /**
  * The class represents an input widget.
+ * @package Widgets
  */
 class Opf_Widget_Input extends Opf_Widget_Component
 {

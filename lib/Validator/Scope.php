@@ -15,6 +15,7 @@
 
 /**
  * The class represents the scope of the integer field.
+ * @package Validators
  */
 class Opf_Validator_Scope implements Opf_Validator_Interface
 {

@@ -15,6 +15,7 @@
 
 /**
  * The class represents the type of value.
+ * @package Validators
  */
 class Opf_Validator_Type implements Opf_Validator_Interface
 {
