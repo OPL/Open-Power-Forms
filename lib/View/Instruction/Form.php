@@ -70,14 +70,16 @@ class Opf_View_Instruction_Form extends Opt_Compiler_Processor
 		);
 		$extra = $this->_extractAttributes($node, $params);
 
-		$attr = '';
+		$attr = 'array(\'method\' => $_form_'.$params['name'].'->getMethod(), \'action\' => $_form_'.$params['name'].'->getAction(),
+			\'class\' => Opf_Design::getClass(\'form\', $_form_'.$params['name'].'->isValid()), ';
 		foreach($extra as $name => $value)
 		{
-			$attr .= ' '.$name.'="\'.'.$value.'.\'"';
+			$attr .= ' \''.$name.'\' => '.$value.',';
 		}
+		$attr .= ')';
 
 		$node->addAfter(Opt_Xml_Buffer::TAG_BEFORE, 'if(Opf_Class::hasForm(\''.$params['name'].'\')){ $_form_'.$params['name'].' = Opf_Class::getForm(\''.$params['name'].'\');
-	echo \'<form method="\'.$_form_'.$params['name'].'->getMethod().\'" action="\'.$_form_'.$params['name'].'->getAction().\'"'.$attr.'><input type="hidden" name="opf_form_info" value="'.$params['name'].'" />\';
+	echo \'<form \'.Opt_Function::buildAttributes('.$attr.').\'><input type="hidden" name="opf_form_info" value="'.$params['name'].'" />\';
 	self::$_vars[\'form\'] = $_form_'.$params['name'].';
 		');
 		$node->addAfter(Opt_Xml_Buffer::TAG_BEFORE, '  ');

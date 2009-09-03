@@ -57,7 +57,7 @@ abstract class Opf_Item
 	 * Is the item valid?
 	 * @var boolean
 	 */
-	protected $_valid = false;
+	protected $_valid = true;
 
 	/**
 	 * The validator list.

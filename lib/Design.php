@@ -87,4 +87,28 @@ class Opf_Design
 		}
 		return self::getValidClass($element);
 	} // end getInvalidClass();
+
+	/**
+	 * Returns the CSS class for the specified element. The
+	 * optional attribute controls, whether we should return
+	 * the invalid or valid name.
+	 *
+	 * @param boolean $valid Should we return valid class?
+	 * @return string|null
+	 */
+	static public function getClass($element, $valid = true)
+	{
+		if(!$valid)
+		{
+			if(isset(self::$_invalid[(string)$element]))
+			{
+				return self::$_invalid[(string)$element];
+			}
+		}
+		if(isset(self::$_valid[(string)$element]))
+		{
+			return self::$_valid[(string)$element];
+		}
+		return null;
+	} // end getClass();
 } // end Opf_Design;

@@ -48,41 +48,42 @@ class Opf_View_Format_Design extends Opt_Compiler_Format
 		{
 			case 'variable:capture':
 				$ns = $this->_getVar('items');
-				if(sizeof($ns) == 2)
+				if(sizeof($ns) < 2)
 				{
-					return 'Opf_Design::getValidClass(\''.$ns[1].'\')';
+					throw new Opf_InvalidDesignCall_Exception(implode('.', $ns));
 				}
-				elseif(sizeof($ns) == 3)
+				// Remove the unnecessary items
+				$last = end($ns);
+				array_shift($ns);
+				if($last == 'valid' || $last == 'invalid')
 				{
-					if($ns[2] == 'valid')
-					{
-						return 'Opf_Design::getValidClass(\''.$ns[1].'\')';
-					}
-					elseif($ns[2] == 'invalid')
-					{
-						return 'Opf_Design::getInvalidClass(\''.$ns[1].'\')';
-					}
+					$method = ($last == 'valid' ? 'getValidClass' : 'getInvalidClass');
+					array_pop($ns);
 				}
-				throw new Opf_InvalidDesignCall_Exception(implode('.', $ns));
-				break;
+				else
+				{
+					$method = 'getValidClass';
+				}
+				return 'Opf_Design::'.$method.'(\''.implode('.', $ns).'\')';
 			case 'variable:captureAssign':
 				$ns = $this->_getVar('items');
-				if(sizeof($ns) == 2)
+				if(sizeof($ns) < 2)
 				{
-					return 'Opf_Design::setValidClass(\''.$ns[1].'\', '.$this->_getVar('value').')';
+					throw new Opf_InvalidDesignCall_Exception(implode('.', $ns));
 				}
-				elseif(sizeof($ns) == 3)
+				// Remove the unnecessary items
+				$last = end($ns);
+				array_shift($ns);
+				if($last == 'valid' || $last == 'invalid')
 				{
-					if($ns[2] == 'valid')
-					{
-						return 'Opf_Design::setValidClass(\''.$ns[1].'\', '.$this->_getVar('value').')';
-					}
-					elseif($ns[2] == 'invalid')
-					{
-						return 'Opf_Design::setInvalidClass(\''.$ns[1].'\', '.$this->_getVar('value').')';
-					}
+					$method = ($last == 'valid' ? 'setValidClass' : 'setInvalidClass');
+					array_pop($ns);
 				}
-				throw new Opf_InvalidDesignCall_Exception(implode('.', $ns));
+				else
+				{
+					$method = 'setValidClass';
+				}
+				return 'Opf_Design::'.$method.'(\''.implode('.', $ns).'\', '.$this->_getVar('value').')';
 		}
 	} // end _build();
 } // end Opf_View_Format_Design;

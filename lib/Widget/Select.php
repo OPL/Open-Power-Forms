@@ -26,6 +26,15 @@ class Opf_Widget_Select extends Opf_Widget_Component
 	protected $_options = array();
 
 	/**
+	 * Returns the unique component type name.
+	 * @return string
+	 */
+	public function getComponentName()
+	{
+		return 'select';
+	} // end getComponentName();
+
+	/**
 	 * Allows to set the options. Implements the fluent interface.
 	 * @param array $options The option list.
 	 * @return Opf_Widget_Component
@@ -45,6 +54,7 @@ class Opf_Widget_Select extends Opf_Widget_Component
 	{
 		$attributes = array(
 			'name' => $this->_name,
+			'class' => Opf_Design::getClass('select', $this->_item->isValid())
 		);
 		$code = '<select '.Opt_Function::buildAttributes($attributes).'>';
 		foreach($this->_options as $id => $option)

@@ -1,0 +1,44 @@
+/* CSS RESET */
+body { color: black; background: white; }
+a {color: inherit; text-decoration: none;}
+body, div, dl, dt, dd, li, pre,
+form, fieldset, input, textarea, p, blockquote, th, td { margin: 0; padding: 0; }
+h1, h2, h3, h4, h5, h6, td { margin: 0; padding: 0; font-size: 100%; font-weight: normal; }
+address, caption, cite, code, dfn, var { font-style: normal; font-weight: normal; }
+ol, ul { list-style: none; margin: 0; padding: 0; }
+input, pre, code, td { font-size: 100%; font-family: inherit;}
+big, small { font-size: inherit;}
+table { border-collapse: collapse; border-spacing: 0; } 
+caption, th { text-align: left; font-weight: normal; font-style: normal; }
+acronym, abbr, fieldset, img { border: 0;}
+textarea {font-family: inherit; font-size: inherit;}
+:focus { outline: 0; }
+
+body {font-family: Arial, Tahoma, sans-serif; font-size: 11pt; color: #444444;}
+
+form.form {margin: 20px; width: 550px;}
+form.form div.errors {border: 1px solid #ff0000; margin: 5px 0; color: #ff0000; font-weight: bold; font-size: 10pt;}
+form.form div.errors p {margin: 5px;}
+form.form p.legend {margin: 5px 0; font-size: 10pt;}
+form.form p.legend sup {color: #ff0000; font-weight: bold; }
+form.form div.row {margin: 0; padding: 5px 1px 5px 151px; line-height: 25px; clear: both; height: 100%; overflow: hidden;}
+form.form div.row-error {padding: 4px 0px 4px 150px; margin: 5px 0; border: 1px solid #ff0000;}
+form.form div.row-error p.error {font-size: 9pt; font-weight: bold; color: #ff0000; margin-left: -22px; background: url(error.gif) no-repeat 0 5px; padding-left: 22px; line-height: 25px;}
+form.form div.row label {width: 140px; display: block; float: left; margin-left: -150px; position: relative; line-height: 25px; text-align: right;}
+form.form div.row label sup {position: absolute; top: -4px; right: -7px; font-size: 9pt; color: #ff0000; font-weight: bold}
+form.form div.row small {font-size: 8pt; display: block; line-height: 14px; margin: 2px 0;}
+form.form div.row small a {color: #444444; text-decoration: underline}
+form.form fieldset {border-top: 1px solid #000000; padding: 10px 0; margin: 10px 0 }
+form.form fieldset legend {font-size: 14pt; font-weight: bold; margin-left: 15px; padding: 0 5px;}
+form.form div.row fieldset {border: none; padding: 0; margin: 0; width: 200px;}
+form.form div.row fieldset label {display: -moz-inline-block; display: inline-block; margin: 0 10px 0 0; white-space: nowrap; width: auto; float: none; position: static; line-height: 18px; font-size: 10pt; text-align: left; }
+form.form div.row-long {padding-left: 0;}
+form.form div.row-long label {margin-left: 0; float: none;}
+form.form div.description {font-size: 10pt; margin: 5px 0 10px 0;}
+form.form input.inputText {border-width: 2px; border-style: solid; border-color: #cccccc #eeeeee #eeeeee #cccccc; padding: 2px; font-size: 10pt; width: 200px}
+form.form textarea {border-width: 2px; border-style: solid; border-color: #cccccc #eeeeee #eeeeee #cccccc; padding: 2px; font-size: 10pt; width: 200px}
+form.form div.row-long textarea {width: 350px; min-height: 100px;}
+form.form select {border: 2px solid #cccccc; padding: 2px; font-size: 10pt; width: 208px}
+form.form input.inputText:focus, form.form select:focus, form.form textarea:focus {outline: 1px solid #ffff00}
+form.form input.inputCheckbox, form.form input.inputRadio {}
+form.form input.inputSubmit {}

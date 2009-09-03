@@ -20,6 +20,14 @@
 class Opf_Widget_Input extends Opf_Widget_Component
 {
 	/**
+	 * Returns the unique component type name.
+	 * @return string
+	 */
+	public function getComponentName()
+	{
+		return 'input';
+	} // end getComponentName();
+	/**
 	 * Displays the input component.
 	 *
 	 * @param array $attributes The opt:display attribute list.
@@ -28,7 +36,8 @@ class Opf_Widget_Input extends Opf_Widget_Component
 	{
 		$attributes = array(
 			'name' => $this->_name,
-			'value' => $this->_item->getValue()
+			'value' => $this->_item->getValue(),
+			'class' => Opf_Design::getClass('input', $this->_item->isValid())
 		);
 		echo '<input type="text" '.Opt_Function::buildAttributes($attributes).' />';
 	} // end display();

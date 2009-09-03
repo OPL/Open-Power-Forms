@@ -298,9 +298,10 @@ class Opf_Form extends Opf_Collection
 			$name = $item->getName();
 			if(empty($data[$name]))
 			{
-				if(!$item->getRequired())
+				if($item->getRequired())
 				{
 					$state = false;
+					$item->addErrorMessage('failed_validation_required');
 				}
 				else
 				{

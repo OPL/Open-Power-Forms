@@ -7,7 +7,7 @@
       <p class="error">{$errors}</p>
 	  </opt:section>
     </opt:onEvent>
-    <label for="">{$system.component.label}</label>
+    <label for="">{$system.component.label} <opt:onEvent name="required"><sup>*</sup></opt:onEvent></label>
     <opt:display />
   </com:div>
 </opt:snippet>

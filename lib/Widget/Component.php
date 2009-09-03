@@ -61,6 +61,16 @@ abstract class Opf_Widget_Component implements Opt_Component_Interface
 	} // end __construct();
 
 	/**
+	 * Returns the unique component type name. The components should
+	 * overwrite this method in order to return their own names.
+	 * @return string
+	 */
+	public function getComponentName()
+	{
+		return 'default';
+	} // end getComponentName();
+
+	/**
 	 * Sets the widget label. Implements the fluent interface.
 	 *
 	 * @param string $label The new label
@@ -230,18 +240,18 @@ abstract class Opf_Widget_Component implements Opt_Component_Interface
 					return true;
 				}
 				return false;
+			case 'required':
+				return $this->_item->getRequired();
 		}
 	} // end processEvent();
 
 	public function manageAttributes($tagName, Array $attributes)
 	{
-		if(!$this->_item->isValid())
+		$valid = $this->_item->isValid();
+		$attributes['class'] = Opf_Design::getClass($this->getComponentName().'.field', $valid);
+		if($attributes['class'] === null)
 		{
-			$attributes['class'] = Opf_Design::getInvalidClass('field');
-		}
-		elseif(!isset($attributes['class']))
-		{
-			$attributes['class'] = Opf_Design::getValidClass('field');
+			$attributes['class'] = Opf_Design::getClass('field', $valid);
 		}
 		return $attributes;
 	} // end manageAttributes();
