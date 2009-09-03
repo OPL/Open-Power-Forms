@@ -96,8 +96,10 @@ class Opf_Form extends Opf_Collection
 			case self::GET:
 				$this->_method = 'GET';
 				break;
+			default:
+				throw new Opf_UnknownMethod_Exception($method);
+				break;
 		}
-		throw new Opf_UnknownMethod_Exception($method);
 	} // end setMethod();
 
 	/**

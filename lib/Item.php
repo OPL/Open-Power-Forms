@@ -259,6 +259,7 @@ abstract class Opf_Item
 			}
 			return false;
 		}
+		// TODO: Add exception, because of wrong validator type
 	} // end hasValidator();
 
 	/**

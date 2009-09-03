@@ -162,7 +162,7 @@ class Opf_Event
 	public function __construct(Opf_Item $item, $eventName)
 	{
 		$this->_item = $item;
-		$this->_eventName = $eventName;
+		$this->_name = $eventName;
 	} // end __construct();
 
 	/**
