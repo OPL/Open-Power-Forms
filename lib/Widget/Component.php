@@ -145,7 +145,6 @@ abstract class Opf_Widget_Component implements Opt_Component_Interface
 	public function setView(Opt_View $view)
 	{
 		$this->_view = $view;
-
 		if($this->_form === null)
 		{
 			$this->_form = $view->getTemplateVar('form');
@@ -181,7 +180,7 @@ abstract class Opf_Widget_Component implements Opt_Component_Interface
 			case 'label':
 				$this->_label = $value;
 				break;
-			case 'name':
+		/*	case 'name':
 				$this->_name = $value;
 				if($this->_item === null)
 				{
@@ -192,7 +191,7 @@ abstract class Opf_Widget_Component implements Opt_Component_Interface
 						throw new Opf_ItemNotExists_Exception('item', $this->_name);
 					}
 				}
-				break;
+				break; */
 		}
 	} // end set();
 

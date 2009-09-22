@@ -227,15 +227,8 @@ class Opf_Form extends Opf_Collection
 		$this->invokeEvent('postInit');
 
 		// Validate the input data.
-		switch($this->_method)
-		{
-			case 'POST':
-				$data = &$_POST;
-				break;
-			case 'GET':
-				$data = $_GET;
-				break;
-		}
+		$data = $this->_retrieveData();
+
 		// Decide, if the form has been sent to us.
 		if($_SERVER['REQUEST_METHOD'] == $this->_method && isset($data['opf_form_info']) && $data['opf_form_info'] == $this->_name)
 		{
@@ -289,7 +282,47 @@ class Opf_Form extends Opf_Collection
 	} // end itemFactory();
 
 	/**
+	 * This method is used internally by the templates to initialize
+	 * statically deployed widgets. It looks for the item that the widget
+	 * should be assigned to, creates the widget and assigns to the item.
+	 * 
+	 * @internal
+	 * @param string $className The widget class name
+	 * @param string $tagName The component tag name for debug purposes
+	 * @param array $attributes The component attribute list
+	 * @return Opf_Widget_Component
+	 * @throws Opf_AttributeNotDefined_Exception
+	 * @throws Opf_ItemNotExists_Exception
+	 * @throws Opf_InvalidWidget_Exception
+	 */
+	public function _widgetFactory($className, $tagName, Array $attributes)
+	{
+		if(!isset($attributes['name']))
+		{
+			throw new Opf_AttributeNotDefined_Exception('name', $tagName);
+		}
+		$item = $this->getItem($attributes['name']);
+		if($item === null)
+		{
+			throw new Opf_ItemNotExists_Exception('item', $attributes['name']);
+		}
+		if(!$item instanceof Opf_Leaf)
+		{
+			throw new Opf_InvalidItem_Exception($attributes['name']);
+		}
+		$widget = new $className();
+
+		if(!$widget instanceof Opf_Widget_Component)
+		{
+			throw new Opf_InvalidWidget_Exception($className);
+		}
+		$item->setWidget($widget);
+		return $widget;
+	} // end _widgetFactory();
+
+	/**
 	 * Validates the form fields.
+	 * @internal
 	 * @param array $data The form data.
 	 */
 	protected function _validate(&$data)
@@ -328,13 +361,31 @@ class Opf_Form extends Opf_Collection
 	} // end _validate();
 
 	/**
+	 * Retrieves the data from the input.
+	 * @return &boolean
+	 */
+	protected function &_retrieveData()
+	{
+		switch($this->_method)
+		{
+			case 'POST':
+				$data = &$_POST;
+				break;
+			case 'GET':
+				$data = &$_GET;
+				break;
+		}
+		return $data;
+	} // end _retrieveData();
+
+	/**
 	 * The private rendering utility that performs all the basic
 	 * rendering tasks, such as registering the data formats for
 	 * the placeholders.
 	 *
 	 * @internal
 	 */
-	private function _onRender()
+	protected function _onRender()
 	{
 		foreach($this->_items as $placeholder => &$void)
 		{

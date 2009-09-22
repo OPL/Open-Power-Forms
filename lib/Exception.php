@@ -108,3 +108,12 @@ class Opf_InvalidDesignCall_Exception extends Opf_Exception
 {
 	protected $_message = 'Invalid design manager call: %s';
 } // end Opf_InvalidDesignCall_Exception;
+
+/**
+ * "Invalid Opf_Design call" exception
+ * @package Exceptions
+ */
+class Opf_InvalidObjectType_Exception extends Opf_Exception
+{
+	protected $_message = 'Invalid object type %s: expected object of class %s';
+} // end Opf_InvalidObjectType_Exception;

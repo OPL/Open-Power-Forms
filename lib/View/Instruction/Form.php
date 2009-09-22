@@ -86,7 +86,10 @@ class Opf_View_Instruction_Form extends Opt_Compiler_Processor
 		$node->addBefore(Opt_Xml_Buffer::TAG_AFTER,' echo \'</form>\'; self::$_vars[\'form\'] = null; } ');
 	
 		self::_setProcessedForm($params['name']);
-		
+
+		$this->_compiler->setConversion('##component', '$_form_'.$params['name'].'->_widgetFactory(\'%CLASS%\', \'%TAG%\', %ATTRIBUTES%)');
+
+
 		$node->set('postprocess', true);
 		$this->_process($node);
 	} // end _processForm();
