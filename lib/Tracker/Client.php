@@ -42,9 +42,11 @@ class Opf_Tracker_Client implements Opf_Tracker_Interface
 	} // end setSequence();
 
 	/**
-	 * Tracks the data to the
-	 * @param <type> $data
-	 * @param <type> $step
+	 * Adds the new data to the tracker from the specified step
+	 * and serializes everything to the form internal data.
+	 *
+	 * @param array $data The data of the next step.
+	 * @param integer $step The step number.
 	 */
 	public function track(&$data, $step)
 	{
@@ -53,6 +55,15 @@ class Opf_Tracker_Client implements Opf_Tracker_Interface
 		$this->_sequence = null;
 	} // end track();
 
+	/**
+	 * Retrieves the data of the specified step back to the form
+	 * processor and unserializes the buffer, if it has not been
+	 * done yet.
+	 * 
+	 * @param array $data The reference to the internal data sent with the form.
+	 * @param integer $step The step number.
+	 * @return array
+	 */
 	public function retrieve(&$data, $step)
 	{
 		if($this->_data == null)

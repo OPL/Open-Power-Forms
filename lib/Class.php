@@ -40,6 +40,14 @@ class Opf_Class extends Opl_Class
 	protected $_tf;
 
 	/**
+	 * The list of forms available for the templates.
+	 * @static
+	 * @var array
+	 */
+	static private $_forms = array();
+
+
+	/**
 	 * Creates a new instance of OPF.
 	 * @throws Opf_OptNotInitialized_Exception
 	 */
@@ -83,13 +91,6 @@ class Opf_Class extends Opl_Class
 		return $this->_tf;
 	} // end getTranslationInterface();
 
-
-	/**
-	 * The list of forms available for the templates.
-	 * @var array
-	 */
-	static private $_forms = array();
-
 	/**
 	 * Adds a form to the list of forms to make it available for the
 	 * templates. You do not have to use this method manually, as the
@@ -132,7 +133,7 @@ class Opf_Class extends Opl_Class
 	{
 		if(!isset(self::$_forms[(string)$name]))
 		{
-			throw new Opf_ItemNotExists_Exception('form', $form->getName());
+			throw new Opf_ItemNotExists_Exception('form', $name);
 		}
 
 		return self::$_forms[(string)$name];
