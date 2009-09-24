@@ -29,6 +29,28 @@ class Opf_Form_Sequence extends Opf_Form
 	private $_tracker = null;
 
 	/**
+	 * The currently analyzed sub-form
+	 * @var Opf_Form
+	 */
+	private $_current = null;
+
+	/**
+	 * The current step number.
+	 * @var integer
+	 */
+	private $_step = 0;
+
+	/**
+	 * Returns the currently processed subform.
+	 *
+	 * @return Opf_Form
+	 */
+	public function fluent()
+	{
+		return $this->_current;
+	} // end fluent();
+
+	/**
 	 * Sets the new placeholder that the forms are read from
 	 * when resolving the steps.
 	 * @param string $placeholder The placeholder name
@@ -63,6 +85,23 @@ class Opf_Form_Sequence extends Opf_Form
 	} // end setTracker();
 
 	/**
+	 * Returns the concatenated values of all the sub-forms.
+	 * @return array
+	 */
+	public function getValue()
+	{
+		$data = array();
+		foreach($this->_collection as $subform)
+		{
+			foreach($subform->_collection as $name => $item)
+			{
+				$data[$name] = $item->getValue();
+			}
+		}
+		return $data;
+	} // end getValue();
+
+	/**
 	 * Returns the current tracker. If the tracker is not set yet,
 	 * it attempts to create a new default tracker.
 	 * @return Opf_Tracker_Interface
@@ -74,15 +113,35 @@ class Opf_Form_Sequence extends Opf_Form
 		{
 			$opf = Opl_Registry::get('opf');
 			$className = $opf->defaultTracker;
-			$class = new $className;
-			if(!$class instanceof Opf_Tracker_Interface)
+			$tracker = new $className;
+			if(!$tracker instanceof Opf_Tracker_Interface)
 			{
-				throw new Opf_InvalidObjectType_Exception(get_class($class), 'Opf_Tracker_Interface');
+				throw new Opf_InvalidObjectType_Exception(get_class($tracker), 'Opf_Tracker_Interface');
 			}
 			$this->_tracker = $tracker;
 		}
 		return $this->_tracker;
 	} // end getTracker();
+
+	/**
+	 * Returns the current sub-form in a sequence and advances the internal pointer.
+	 *
+	 * @return Opf_Form
+	 */
+	public function getNextSubform()
+	{
+		$this->_current = current($this->_items[$this->_placeholder]);
+		next($this->_items[$this->_placeholder]);
+
+		if(is_object($this->_current))
+		{
+			$this->_current->setView($this->_view);
+			$this->_current->invokeEvent('preInit');
+			$this->_current->onInit();
+			$this->_current->invokeEvent('postInit');
+		}
+		return $this->_current;
+	} // end getNextSubform();
 
 	/**
 	 * Recognizes the form types and does not allow to append any other item
@@ -101,6 +160,8 @@ class Opf_Form_Sequence extends Opf_Form
 	 */
 	public function execute()
 	{
+		$opf = Opl_Registry::get('opf');
+
 		$this->invokeEvent('preInit');
 		$this->onInit();
 		$this->invokeEvent('postInit');
@@ -109,55 +170,110 @@ class Opf_Form_Sequence extends Opf_Form
 		$data = $this->_retrieveData();
 
 		// Decide, if the form has been sent to us.
-		if($_SERVER['REQUEST_METHOD'] == $this->_method && isset($data['opf_form_info']) && $data['opf_form_info'] == $this->_name)
+		if($_SERVER['REQUEST_METHOD'] == $this->_method && isset($data[$opf->formInternalId]))
 		{
-			$step = 0;
-			if(isset($data['opf_step']))
+			// Get the internal data and remove them from the "official" scope.
+			$internals = $data[$opf->formInternalId];
+			unset($data[$opf->formInternalId]);
+
+			// The names must match.
+			if(isset($internals['name']) && $internals['name'] == $this->_name)
 			{
-				$step = $data['opf_step'];
+				$this->_step = 0;
+				if(isset($internals['step']))
+				{
+					$this->_step = (integer)$internals['step'];
+				}
+				$tracker = $this->getTracker();
+				$tracker->setSequence($this);
+				$current = 0;
+				while($current < $this->_step)
+				{
+					// Get the current form and advance the placeholder pointer.
+					$form = $this->getNextSubform();
+
+					// Attempt to ensure that the tracked data are still valid.
+					$formData = $tracker->retrieve($internals, $current);
+					$current++;
+
+					$state = $form->_validate($formData);
+					if(!$state)
+					{
+						$this->_step = $current;
+						$this->_state = $form->_state = self::ERROR;
+						$form->populate($data);
+						$form->_onRender();
+						$this->_onRender();
+						$this->invokeEvent('preRender');
+						$form->invokeEvent('preRender');
+						$form->onRender();
+						$form->invokeEvent('postRender');
+						$this->invokeEvent('postRender');
+						return $this->_state;
+					}
+				}
+				$form = $this->getNextSubform();
+				// Now, the currently displayed form.
+				$state = $form->_validate($data);
+				if(!$state)
+				{
+					$this->_state = $form->_state = self::ERROR;
+					$form->populate($data);
+					$form->_onRender();
+					$this->_onRender();
+					$form->invokeEvent('preRender');
+					$form->onRender();
+					$form->invokeEvent('postRender');
+					return $this->_state;
+				}
+				else
+				{
+					$tracker->track($data, $current);
+					$form->_state = self::ACCEPTED;
+				}
+				// Decide, what to do next: display another form or return
+				$this->_step++;
+				if(($form = $this->getNextSubform()) === false)
+				{
+					$this->_state = self::ACCEPTED;
+					$this->invokeEvent('preAccept');
+					$this->onAccept();
+					$this->invokeEvent('postAccept');
+					return $this->_state;
+				}
+				else
+				{
+					$this->_state = $form->_state = self::RENDER;
+					$form->_onRender();
+					$this->_onRender();
+					$form->invokeEvent('preRender');
+					$form->onRender();
+					$form->invokeEvent('postRender');
+					return $this->_state;
+				}
 			}
-			$tracker = $this->getTracker();
-			$current = 0;
-			while($current <= $step)
-			{
-				// Get the current form and advance the placeholder pointer.
-				$form = current($this->_items[$this->_placeholder]);
-				next($this->_items[$this->_placeholder]);
-
-				// Attempt to ensure that the tracked data are still valid.
-				$formData = $tracker->retrieve($data, $current);
-
-
-
-
-				$current++;
-			}
-			
-			// The form has been sent!
-			$state = $this->_validate($data);
-			if(!$state)
-			{
-				$this->_state = self::ERROR;
-				$this->populate($data);
-				$this->_onRender();
-				$this->invokeEvent('preRender');
-				$this->onRender();
-				$this->invokeEvent('postRender');
-				return $this->_state;
-			}
-			$this->_state = self::ACCEPTED;
-			$this->invokeEvent('preAccept');
-			$this->onAccept();
-			$this->invokeEvent('postAccept');
-			return $this->_state;
 		}
-
-		$this->_state = self::RENDER;
+		$form = $this->getNextSubform();
+		$this->_state = $form->_state = self::RENDER;
+		$form->_onRender();
 		$this->_onRender();
-		$this->invokeEvent('preRender');
-		$this->onRender();
-		$this->invokeEvent('postRender');
+		$form->invokeEvent('preRender');
+		$form->onRender();
+		$form->invokeEvent('postRender');
 		return $this->_state;
 	} // end execute();
+
+	/**
+	 * The private rendering utility - it does nothing.
+	 *
+	 * @internal
+	 */
+	protected function _onRender()
+	{
+		$this->setInternal('name', $this->_name);
+		$this->setInternal('step', $this->_step);
+	} // end _onRender();
+
+
 
 } // end Opf_Form_Sequence;

@@ -13,13 +13,13 @@ class MyForm1 extends Opf_Form
 	{
 		$item = $this->itemFactory('field1');
 		$item->addValidator(new Opf_Validator_Type(Opf_Validator_Type::STRING));
-		$item->setLabel('Field 1');
+		$item->getWidget()->setLabel('Field 1');
 		$item->setRequired(true);
 		$item->setWidget(new Opf_Widget_Input);
 
 		$item = $this->itemFactory('field2');
 		$item->addValidator(new Opf_Validator_Type(Opf_Validator_Type::STRING));
-		$item->setLabel('Field 2');
+		$item->getWidget()->setLabel('Field 2');
 		$item->setRequired(true);
 		$item->setWidget(new Opf_Widget_Input);
 	} // end onInit();
@@ -31,13 +31,13 @@ class MyForm2 extends Opf_Form
 	{
 		$item = $this->itemFactory('field3');
 		$item->addValidator(new Opf_Validator_Type(Opf_Validator_Type::STRING));
-		$item->setLabel('Field 3');
+		$item->getWidget()->setLabel('Field 3');
 		$item->setRequired(true);
 		$item->setWidget(new Opf_Widget_Input);
 
 		$item = $this->itemFactory('field4');
 		$item->addValidator(new Opf_Validator_Type(Opf_Validator_Type::STRING));
-		$item->setLabel('Field 4');
+		$item->getWidget()->setLabel('Field 4');
 		$item->setRequired(true);
 		$item->setWidget(new Opf_Widget_Input);
 	} // end onInit();
@@ -49,13 +49,13 @@ class MyForm3 extends Opf_Form
 	{
 		$item = $this->itemFactory('field5');
 		$item->addValidator(new Opf_Validator_Type(Opf_Validator_Type::STRING));
-		$item->setLabel('Field 5');
+		$item->getWidget()->setLabel('Field 5');
 		$item->setRequired(true);
 		$item->setWidget(new Opf_Widget_Input);
 
 		$item = $this->itemFactory('field6');
 		$item->addValidator(new Opf_Validator_Type(Opf_Validator_Type::STRING));
-		$item->setLabel('Field 6');
+		$item->getWidget()->setLabel('Field 6');
 		$item->setRequired(true);
 		$item->setWidget(new Opf_Widget_Input);
 	} // end onInit();

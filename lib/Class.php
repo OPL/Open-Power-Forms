@@ -30,6 +30,8 @@ class Opf_Class extends Opl_Class
 {
 	// The configuration
 	public $translationGroup = 'form';
+	public $defaultTracker = 'Opf_Tracker_Client';
+	public $formInternalId = 'opf';
 
 	/**
 	 * Translation interface

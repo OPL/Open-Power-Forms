@@ -51,6 +51,12 @@ class Opf_Form extends Opf_Collection
 	protected $_state = 0;
 
 	/**
+	 * The list of internal data passed as HIDDEN fields.
+	 * @var array
+	 */
+	protected $_internals = array();
+
+	/**
 	 * Initializes the form processor.
 	 *
 	 * @param String $name The form name.
@@ -61,6 +67,18 @@ class Opf_Form extends Opf_Collection
 
 		Opf_Class::addForm($this);
 	} // end __construct();
+
+	/**
+	 * Extendable fluent interface - here, it returns
+	 * THIS object, the extending classes may overwrite
+	 * it for some other purposes.
+	 *
+	 * @return Opf_Form
+	 */
+	public function fluent()
+	{
+		return $this;
+	} // end fluent();
 
 	/**
 	 * Sets the form view.
@@ -128,6 +146,47 @@ class Opf_Form extends Opf_Collection
 	{
 		return $this->_action;
 	} // end getAction();
+
+	/**
+	 * Sets the internal value. It may overwrite the existing one.
+	 *
+	 * @param string $name The name of the internal value.
+	 * @param scalar $value The value.
+	 * @throws BadMethodCallException
+	 */
+	public function setInternal($name, $value)
+	{
+		if(!is_scalar($value))
+		{
+			throw new BadMethodCallException('The second argument in Opf_Form::setInternal() must be scalar.');
+		}
+		$this->_internals[(string)$name] = $value;
+	} // end setInternal();
+
+	/**
+	 * Returns the internal value. If the value does not exist, it
+	 * returns NULL.
+	 *
+	 * @param string $name The internal value name.
+	 * @return scalar
+	 */
+	public function getInternal($name)
+	{
+		if(!isset($this->_internals[(string)$name]))
+		{
+			return NULL;
+		}
+		return $this->_internals[(string)$name];
+	} // end getInternal();
+
+	/**
+	 * Returns the list of internal values.
+	 * @return array
+	 */
+	public function getInternals()
+	{
+		return $this->_internals;
+	} // end getInternals();
 
 	/**
 	 * Returns the current form state.
@@ -222,6 +281,8 @@ class Opf_Form extends Opf_Collection
 	 */
 	public function execute()
 	{
+		$opf = Opl_Registry::get('opf');
+
 		$this->invokeEvent('preInit');
 		$this->onInit();
 		$this->invokeEvent('postInit');
@@ -230,25 +291,33 @@ class Opf_Form extends Opf_Collection
 		$data = $this->_retrieveData();
 
 		// Decide, if the form has been sent to us.
-		if($_SERVER['REQUEST_METHOD'] == $this->_method && isset($data['opf_form_info']) && $data['opf_form_info'] == $this->_name)
+		if($_SERVER['REQUEST_METHOD'] == $this->_method && isset($data[$opf->formInternalId]))
 		{
-			// The form has been sent!
-			$state = $this->_validate($data);
-			if(!$state)
+			// Get the internal data and remove them from the "official" scope.
+			$internals = $data[$opf->formInternalId];
+			unset($data[$opf->formInternalId]);
+
+			// The names must match.
+			if(isset($internals['name']) && $internals['name'] == $this->_name)
 			{
-				$this->_state = self::ERROR;
-				$this->populate($data);
-				$this->_onRender();
-				$this->invokeEvent('preRender');
-				$this->onRender();
-				$this->invokeEvent('postRender');
+				// The form has been sent!
+				$state = $this->_validate($data);
+				if(!$state)
+				{
+					$this->_state = self::ERROR;
+					$this->populate($data);
+					$this->_onRender();
+					$this->invokeEvent('preRender');
+					$this->onRender();
+					$this->invokeEvent('postRender');
+					return $this->_state;
+				}
+				$this->_state = self::ACCEPTED;
+				$this->invokeEvent('preAccept');
+				$this->onAccept();
+				$this->invokeEvent('postAccept');
 				return $this->_state;
 			}
-			$this->_state = self::ACCEPTED;
-			$this->invokeEvent('preAccept');
-			$this->onAccept();
-			$this->invokeEvent('postAccept');
-			return $this->_state;
 		}
 		
 		$this->_state = self::RENDER;
@@ -387,6 +456,7 @@ class Opf_Form extends Opf_Collection
 	 */
 	protected function _onRender()
 	{
+		$this->setInternal('name', $this->_name);
 		foreach($this->_items as $placeholder => &$void)
 		{
 			$this->_view->setFormat($placeholder, 'Form/Form');

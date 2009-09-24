@@ -20,7 +20,8 @@
  */
 interface Opf_Tracker_Interface
 {
-	public function track($data);
-	public function retrieve(&$data);
+	public function setSequence(Opf_Form_Sequence $form);
+	public function track(&$data, $step);
+	public function retrieve(&$data, $step);
 
 } // end Opf_Tracker_Interface;
