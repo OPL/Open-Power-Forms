@@ -43,6 +43,16 @@ class Opf_Validator_Scope implements Opf_Validator_Interface
 	} // end __construct();
 
 	/**
+	 * Sets a custom error message for the validator.
+	 * @param string $customError The custom error message.
+	 * @todo implement
+	 */
+	public function setCustomError($customError)
+	{
+
+	} // end setCustomError();
+
+	/**
 	 * Returns the error message used, if the validator fails.
 	 * @return string
 	 */

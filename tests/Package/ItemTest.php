@@ -102,4 +102,69 @@ class Package_ItemTest extends PHPUnit_Framework_TestCase
 		$item = new Extra_Mock_Item;
 		$this->assertEquals(array(), $item->getListeners());
 	} // end testGetListenersReturnsEmptyArray();
+
+	/**
+	 * @covers Opf_Item::invokeEvent
+	 */
+	public function testInvokeEventLaunchesEvents()
+	{
+		$l1 = $this->getMock('Extra_Mock_EventListener');
+		$l1->expects($this->once())
+			->method('testEvent');
+
+		$l2 = $this->getMock('Extra_Mock_EventListener');
+		$l2->expects($this->once())
+			->method('testEvent');
+		$item = new Extra_Mock_Item;
+		$item->appendListener($l1);
+		$item->appendListener($l2);
+
+		$item->invokeEvent('testEvent');
+	} // end testInvokeEventLaunchesEvents();
+
+	/**
+	 * @covers Opf_Item::invokeEvent
+	 * @expectedException Opf_UnknownEvent_Exception
+	 */
+	public function testInvokeEventThrowsExceptionIfEventDoesNotExist()
+	{
+		$l1 = $this->getMock('Extra_Mock_EventListener');
+
+		$l2 = $this->getMock('Extra_Mock_EventListener');
+		$item = new Extra_Mock_Item;
+		$item->appendListener($l1);
+		$item->appendListener($l2);
+
+		$item->invokeEvent('testEvent2');
+	} // end testInvokeEventThrowsExceptionIfEventDoesNotExist();
+
+	/**
+	 * @covers Opf_Item::addValidator
+	 * @covers Opf_Item::hasValidator
+	 */
+	public function testAddValidatorWithoutErrorMessage()
+	{
+		$validator1 = $this->getMock('Opf_Validator_Interface');
+		$validator2 = $this->getMock('Opf_Validator_Interface');
+
+		$item = new Extra_Mock_Item;
+		$item->addValidator($validator1);
+		$this->assertTrue($item->hasValidator($validator1));
+		$this->assertFalse($item->hasValidator($validator2));
+	} // end testAddValidatorWithoutErrorMessage();
+
+	/**
+	 * @covers Opf_Item::addValidator
+	 * @covers Opf_Item::hasValidator
+	 */
+	public function testAddValidatorWithErrorMessage()
+	{
+		$validator = $this->getMock('Opf_Validator_Interface');
+		$validator->expects($this->once())
+			->method('setCustomError');
+
+		$item = new Extra_Mock_Item;
+		$item->addValidator($validator, 'Custom error message');
+		$this->assertTrue($item->hasValidator($validator));
+	} // end testAddValidatorWithErrorMessage();
 } // end Package_ItemTest;

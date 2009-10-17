@@ -200,11 +200,16 @@ abstract class Opf_Item
 	/**
 	 * Adds a new validator to the item.
 	 * @param Opf_Validator_Interface $validator The new validator to add.
-	 * @param string
+	 * @param string $customError A custom error message used with this validator.
 	 */
 	public function addValidator(Opf_Validator_Interface $validator, $customError = null)
 	{
 		$this->_validators[] = $validator;
+
+		if($customError !== null)
+		{
+			$validator->setCustomError($customError);
+		}
 	} // end addValidator();
 
 	/**

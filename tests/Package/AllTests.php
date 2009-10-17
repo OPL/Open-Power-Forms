@@ -10,6 +10,7 @@
 require_once('ClassTest.php');
 require_once('EventTest.php');
 require_once('ItemTest.php');
+require_once('CollectionTest.php');
 
 class Package_AllTests extends PHPUnit_Framework_TestSuite
 {
@@ -27,6 +28,7 @@ class Package_AllTests extends PHPUnit_Framework_TestSuite
 		$suite->addTestSuite('Package_ClassTest');
 		$suite->addTestSuite('Package_EventTest');
 		$suite->addTestSuite('Package_ItemTest');
+		$suite->addTestSuite('Package_CollectionTest');
 
 		return $suite;
 	} // end suite();

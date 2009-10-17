@@ -10,7 +10,7 @@
  * Copyright (c) Invenzzia Group <http://www.invenzzia.org>
  * and other contributors. See website for details.
  *
- * $Id: Class.php 227 2009-09-03 20:44:43Z megawebmaster $
+ * $Id$
  */
 
 /**

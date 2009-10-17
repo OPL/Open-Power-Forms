@@ -41,7 +41,17 @@ class Opf_Validator_Type implements Opf_Validator_Interface
 	{
 		$this->_type = $type;
 	} // end __construct();
-	
+
+	/**
+	 * Sets a custom error message for the validator.
+	 * @param string $customError The custom error message.
+	 * @todo implement
+	 */
+	public function setCustomError($customError)
+	{
+
+	} // end setCustomError();
+
 	/**
 	 * Returns the type represented by the validator.
 	 * @return Integer
