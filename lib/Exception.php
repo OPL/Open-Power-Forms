@@ -117,3 +117,12 @@ class Opf_InvalidObjectType_Exception extends Opf_Exception
 {
 	protected $_message = 'Invalid object type %s: expected object of class %s';
 } // end Opf_InvalidObjectType_Exception;
+
+/**
+ * "Not supported" exception
+ * @package Exceptions
+ */
+class Opf_NotSupported_Exception extends Opf_Exception
+{
+	protected $_message = 'Not supported: %s';
+} // end Opf_NotSupported_Exception;

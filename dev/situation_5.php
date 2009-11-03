@@ -5,6 +5,8 @@
  * @author Tomasz Jędrzejewski <http://www.zyxist.com/>
  */
 
+require('./init.php');
+
 class SingleForm extends Opf_Form
 {
 	public function onInit()
@@ -23,16 +25,14 @@ class SingleForm extends Opf_Form
 	} // end onInit();
 } // end SingleForm;
 
-class GeneralForm extends Opf_Form_Repeater
+class GeneralForm extends Opf_Form
 {
 	public function onInit()
 	{
-		$this->appendItem($item = new SingleForm('singleForm'));
-		$this->setRepeat(10, 'singleForm');
+		$this->appendItem($item = new Opf_Repeater(new SingleForm('subform'), 10));
+		$item->setMinRequired(3);
 
-		$item->addValidator()
-		$this->setIteration(10);
-		$this->setMinRequired(3);
+		parent::onInit();
 	} // end onInit();
 
 	public function onAccept()
@@ -56,6 +56,7 @@ try
 	$tpl->compileDir = './templates_c/';
 	$tpl->compileMode = Opt_Class::CM_REBUILD;
 	$tpl->stripWhitespaces = false;
+	$tpl->gzipCompression = false;
 	$tpl->setup();
 
 	$translate = new Opc_Translate(new Opc_Translate_Adapter_Ini(array('directory' => './lang/')));

@@ -19,22 +19,28 @@
  * validation and display settings but differ in the values they
  * keep.
  */
-class Opf_Wrapper extends Opf_Item
+class Opf_Wrapper extends Opf_Item implements Opf_Collection_Interface
 {
 	/**
 	 * The item pattern.
 	 * @var Opf_Item
 	 */
-	private $_pattern;
+	protected $_item;
+
+	/**
+	 * The item value.
+	 * @var mixed
+	 */
+	protected $_value;
 
 	/**
 	 * Creates a new wrapper with the specified item as a pattern.
 	 *
-	 * @param Opf_Item $pattern The pattern.
+	 * @param Opf_Item $item The pattern item.
 	 */
-	public function __construct(Opf_Item $pattern)
+	public function __construct(Opf_Item $item)
 	{
-		$this->_pattern = $pattern;
+		$this->_item = $item;
 		$this->setName($item->getName());
 	} // end __construct();
 
@@ -60,23 +66,150 @@ class Opf_Wrapper extends Opf_Item
 	} // end getItem();
 
 	/**
-	 * Returns the repeater value.
+	 * From Opf_Collection_Interface - works only, if the wrapped item
+	 * supports it.
 	 *
-	 * @return array
+	 * @param string $placeholder The placeholder name
 	 */
-	public function getValue()
+	public function getItems($placeholder = 'default')
 	{
-
-	} // end getValue();
+		if(!$this->_item instanceof Opf_Collection_Interface)
+		{
+			throw new Opf_NotSupported_Exception('getItems(): the wrapped item does not support Opf_Collection_Interface');
+		}
+		return $this->_item->getItems($placeholder);
+	} // end getItems();
 
 	/**
-	 * Sets the repeater values
+	 * From Opf_Collection_Interface - works only, if the wrapped item
+	 * supports it.
 	 *
-	 * @param array $value The list of values for each repetition.
+	 * @param string $placeholder The item name to find
+	 */
+	public function findItem($name)
+	{
+		if(!$this->_item instanceof Opf_Collection_Interface)
+		{
+			throw new Opf_NotSupported_Exception('findItem(): the wrapped item does not support Opf_Collection_Interface');
+		}
+		return $this->_item->findItem($name);
+	} // end findItem();
+
+	/**
+	 * An interface for forms.
+	 * 
+	 * @param <type> $className
+	 * @param <type> $tagName
+	 * @param array $attributes 
+	 */
+	public function _widgetFactory($className, $tagName, Array $attributes)
+	{
+		if(!$this->_item instanceof Opf_Form)
+		{
+			throw new Opf_NotSupported_Exception('_widgetFactory(): the wrapped item does not support Opf_Form');
+		}
+		return $this->_item->_widgetFactory($className, $tagName, $attributes);
+	} // end _widgetFactory();
+
+	/**
+	 * Appends the new listener to the list of item listeners.
+	 *
+	 * @param Opf_EventListener $listener The listener.
+	 */
+	public function appendListener(Opf_EventListener $listener)
+	{
+		$this->_item->appendListener($listener);
+	} // end appendListener();
+
+	/**
+	 * Prepends the new listener to the list of item listeners.
+	 *
+	 * @param Opf_EventListener $listener The listener.
+	 */
+	public function prependListener(Opf_EventListener $listener)
+	{
+		$this->_item->prependListener($listener);
+	} // end prependListener();
+
+	/**
+	 * Returns the list of registered listeners.
+	 *
+	 * @return Array
+	 */
+	public function getListeners()
+	{
+		return $this->_item->getListeners();
+	} // end getListeners();
+
+	/**
+	 * Returns true, if the item has any listeners.
+	 *
+	 * @return Boolean
+	 */
+	public function hasListeners()
+	{
+		return $this->_item->hasListeners();
+	} // end hasListeners();
+
+	/**
+	 * Invokes the event on the registered event handlers.
+	 * @param string $eventName The event name
+	 * @throws Opf_UnknownEvent_Exception
+	 */
+	public function invokeEvent($eventName)
+	{
+		return $this->_item->invokeEvent($eventName);
+	} // end invokeEvent();
+
+	/**
+	 * Adds a new validator to the item.
+	 * @param Opf_Validator_Interface $validator The new validator to add.
+	 * @param string $customError A custom error message used with this validator.
+	 */
+	public function addValidator(Opf_Validator_Interface $validator, $customError = null)
+	{
+		$this->_item->addValidator($validator, $customError);
+	} // end addValidator();
+
+	/**
+	 * Removes an existing validator from an item. The validator can be determined
+	 * either by its index number or the object.
+	 *
+	 * @param integer|Opf_Validator_Interface $validator The validator to remove.
+	 */
+	public function removeValidator($validator)
+	{
+		$this->_item->removeValidator($validator);
+	} // end removeValidator();
+
+	/**
+	 * Returns true, if the specified validator is registered in the item.
+	 * The validator can be determined either by its index number or the
+	 * object.
+	 *
+	 * @param integer|Opf_Validator_Interface $validator The validator to check.
+	 * @return boolean
+	 */
+	public function hasValidator($validator)
+	{
+		return $this->_item->hasValidator($validator);
+	} // end hasValidator();
+
+	/**
+	 * Sets the item value.
+	 * @param mixed $value The new value.
 	 */
 	public function setValue($value)
 	{
-
+		$this->_value = $value;
 	} // end setValue();
 
+	/**
+	 * Returns the item value.
+	 * @return mixed
+	 */
+	public function getValue()
+	{
+		return $this->_value;
+	} // end getValue();
 } // end Opf_Pattern;

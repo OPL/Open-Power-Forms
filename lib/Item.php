@@ -329,28 +329,47 @@ abstract class Opf_Item
 	 * Validates the field against the registered validators.
 	 * @param mixed $data The data to validate.
 	 */
-	protected function _validate(&$data)
+	protected function _validate(&$data, Opf_Item $errorClass = null)
 	{
 		$opf = Opl_Registry::get('opf');
 		$tf = $opf->getTranslationInterface();
+
+		// The complex items may overwrite this setting to redirect the error
+		// messages somewhere else.
+		if($errorClass === null)
+		{
+			$errorClass = $this;
+		}
+
 		foreach($this->_validators as $validator)
 		{
-			if(!$validator->validate($this, $data))
+			if(!$validator->validate($errorClass, $data))
 			{
 				$this->_valid = false;
 				if($tf === null)
 				{
-					$this->addErrorMessage(vsprintf($validator->getError(), $validator->getErrorData()));
+					$errorClass->addErrorMessage(vsprintf($validator->getError(), $validator->getErrorData()));
 				}
 				else
 				{
 					$tf->assign($opf->translationGroup, $validator->getError(), $validator->getErrorData());
-					$this->addErrorMessage($tf->_($opf->translationGroup, $validator->getError()));
+					$errorClass->addErrorMessage($tf->_($opf->translationGroup, $validator->getError()));
 				}
 				return false;
 			}
 		}
-		$this->_valid = true;
+		$errorClass->_valid = true;
 		return true;
 	} // end _validate();
+
+	/**
+	 * This is the private rendering utility. It may be used to describe the complex
+	 * item rendering settings.
+	 *
+	 * @internal
+	 */
+	protected function _onRender(Opt_View $view)
+	{
+		/* null */
+	} // end _onRender();
 } // end Opf_Item;

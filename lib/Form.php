@@ -243,7 +243,17 @@ class Opf_Form extends Opf_Collection
 	 */
 	public function onInit()
 	{
-		/* null */
+		foreach($this->_collection as $item)
+		{
+			if($item instanceof Opf_Form)
+			{
+				$item->onInit();
+			}
+			elseif($item instanceof Opf_Repeater && $item->getItem() instanceof Opf_Form)
+			{
+				$item->getItem()->onInit();
+			}
+		}
 	} // end onInit();
 
 	/**
@@ -306,7 +316,7 @@ class Opf_Form extends Opf_Collection
 				{
 					$this->_state = self::ERROR;
 					$this->populate($data);
-					$this->_onRender();
+					$this->_onRender($this->_view);
 					$this->invokeEvent('preRender');
 					$this->onRender();
 					$this->invokeEvent('postRender');
@@ -321,7 +331,7 @@ class Opf_Form extends Opf_Collection
 		}
 		
 		$this->_state = self::RENDER;
-		$this->_onRender();
+		$this->_onRender($this->_view);
 		$this->invokeEvent('preRender');
 		$this->onRender();
 		$this->invokeEvent('postRender');
@@ -394,7 +404,7 @@ class Opf_Form extends Opf_Collection
 	 * @internal
 	 * @param array $data The form data.
 	 */
-	protected function _validate(&$data)
+	protected function _validate(&$data, Opf_Item $errorClass = null)
 	{
 		$state = true;
 		foreach($this->_collection as $item)
@@ -452,14 +462,19 @@ class Opf_Form extends Opf_Collection
 	 * rendering tasks, such as registering the data formats for
 	 * the placeholders.
 	 *
+	 * @param Opt_View $view The view the form is rendered in.
 	 * @internal
 	 */
-	protected function _onRender()
+	protected function _onRender(Opt_View $view)
 	{
 		$this->setInternal('name', $this->_name);
 		foreach($this->_items as $placeholder => &$void)
 		{
-			$this->_view->setFormat($placeholder, 'Form/Form');
+			$view->setFormat($placeholder, 'Form/Form');
+		}
+		foreach($this->_collection as $item)
+		{
+			$item->_onRender($view);
 		}
 	} // end _onRender();
 } // end Opf_Form;

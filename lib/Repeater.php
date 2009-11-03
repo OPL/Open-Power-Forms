@@ -21,16 +21,22 @@
 class Opf_Repeater extends Opf_Wrapper
 {
 	/**
-	 * The repeated item.
-	 * @var Opf_Item
-	 */
-	protected $_item;
-
-	/**
 	 * The number of repetitions.
 	 * @var integer
 	 */
 	protected $_repetitions = 0;
+
+	/**
+	 * The data wrappers.
+	 * @var array
+	 */
+	protected $_wrappers;
+
+	/**
+	 * The minimum number of required items.
+	 * @var integer
+	 */
+	protected $_minRequired = 0;
 
 	/**
 	 * Creates the repeater for the specified item.
@@ -42,12 +48,19 @@ class Opf_Repeater extends Opf_Wrapper
 	{
 		parent::__construct($item);
 		$this->_repetitions = $repetitions;
+
+		$this->_wrappers = array();
+		for($i = 0; $i < $repetitions; $i++)
+		{
+			$this->_wrappers[] = new Opf_Wrapper($item);
+		}
 	} // end __construct();
 
 	/**
 	 * Sets the number of repetitions.
 	 *
 	 * @param integer $repetitions The number of repetitions.
+	 * @todo change the number of wrapper objects
 	 */
 	public function setRepetitions($repetitions)
 	{
@@ -64,6 +77,24 @@ class Opf_Repeater extends Opf_Wrapper
 	} // end getRepetitions();
 
 	/**
+	 * Sets the minimum number of required items.
+	 * @param integer $minRequired The minimum number of required items.
+	 */
+	public function setMinRequired($minRequired)
+	{
+		$this->_minRequired = (int)$minRequired;
+	} // end setMinRequired();
+
+	/**
+	 * Returns the minimum number of required items.
+	 * @return integer
+	 */
+	public function getMinRequired()
+	{
+		return $this->_minRequired;
+	} // end setMinRequired();
+
+	/**
 	 * Sets the item to repeat.
 	 *
 	 * @param Opf_Item $item The new item to repeat.
@@ -72,17 +103,25 @@ class Opf_Repeater extends Opf_Wrapper
 	{
 		$this->_item = $item;
 		$this->setName($item->getName());
+
+		foreach($this->_wrappers as $wrapper)
+		{
+			$wrapper->setItem($item);
+		}
 	} // end setItem();
 
 	/**
-	 * Returns the repeated item.
+	 * Returns the repeated items represented by the repeater. The returned
+	 * objects are of type Opf_Wrapper and contain a reference to the wrapped
+	 * item.
 	 *
-	 * @return Opf_Item
+	 * @param string $placeholder Ignored argument - for compliance with collections
+	 * @return array
 	 */
-	public function getItem()
+	public function getItems($placeholder = 'default')
 	{
-		return $this->_item;
-	} // end getItem();
+		return $this->_wrappers;
+	} // end getItems();
 
 	/**
 	 * Returns the repeater value.
@@ -91,7 +130,16 @@ class Opf_Repeater extends Opf_Wrapper
 	 */
 	public function getValue()
 	{
-
+		$data = array();
+		foreach($this->_wrappers as $wrapper)
+		{
+			$value = $wrapper->getValue();
+			if(!empty($value))
+			{
+				$data[] = $value;
+			}
+		}
+		return $data;
 	} // end getValue();
 
 	/**
@@ -108,12 +156,47 @@ class Opf_Repeater extends Opf_Wrapper
 	 * Validates the field against the registered validators.
 	 * @param mixed $data The data to validate.
 	 */
-	protected function _validate(&$data)
+	protected function _validate(&$data, Opf_Item $errorClass = null)
 	{
-		parent::_validate($data);
+		if(!is_array($data))
+		{
+			$this->addErrorMessage('field_validation_initial');
+		}
+		$acceptedItems = 0;
+		foreach($this->_wrappers as $id => $item)
+		{
+			if(!isset($data[$id]))
+			{
+				continue;
+			}
+			if(!Opf_Item::isEmpty($data[$id]))
+			{
+				if($item->_validate($data[$id], $item))
+				{
+					$acceptedItems++;
+				}
+			}
+		}
 
-		foreach($)
-
-
+		if($acceptedItems < $this->_minRequired)
+		{
+			$this->addErrorMessage('field_validation_minimal_not_matched');
+			return $this->_valid = false;
+		}
+		else
+		{
+			return $this->_valid = true;
+		}
 	} // end _validate();
+
+	/**
+	 * Registers the item wrappers in the template as a placeholder.
+	 *
+	 * @param Opt_View $view The view the form is rendered in
+	 * @internal
+	 */
+	protected function _onRender(Opt_View $view)
+	{
+		$view->setFormat($this->_item->getName(), 'FormRepeater/Form');
+	} // end _onRender();
 } // end Opf_Repeater;

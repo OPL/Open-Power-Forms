@@ -25,6 +25,15 @@ interface Opf_Validator_Interface
 } // end Opf_Validator_Interface;
 
 /**
+ * The minimum collection interface.
+ */
+interface Opf_Collection_Interface
+{
+	public function getItems($placeholder = 'default');
+	public function findItem($name);
+} // end Opf_Collection_Interface;
+
+/**
  * The main Open Power Forms class that manages the configuration, plugins, etc.
  */
 class Opf_Class extends Opl_Class
@@ -65,6 +74,7 @@ class Opf_Class extends Opl_Class
 		$tpl->register(Opt_Class::OPT_INSTRUCTION, 'Form', 'Opf_View_Instruction_Form');
 		$tpl->register(Opt_Class::OPT_FORMAT, 'Form', 'Opf_View_Format_Form');
 		$tpl->register(Opt_Class::OPT_FORMAT, 'Design', 'Opf_View_Format_Design');
+		$tpl->register(Opt_Class::OPT_FORMAT, 'FormRepeater', 'Opf_View_Format_FormRepeater');
 
 		$tpl->register(Opt_Class::OPT_COMPONENT, 'opf:input', 'Opf_Widget_Input');
 		$tpl->register(Opt_Class::OPT_COMPONENT, 'opf:select', 'Opf_Widget_Select');
