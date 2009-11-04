@@ -56,6 +56,18 @@ class Opf_Wrapper extends Opf_Item implements Opf_Collection_Interface
 	} // end setItem();
 
 	/**
+	 * Returns the fully qualified name of the wrapped item.
+	 */
+	public function getFullyQualifiedName()
+	{
+		if($this->_fullyQualifiedName === '')
+		{
+			return $this->_item->getName();
+		}
+		return $this->_fullyQualifiedName.'['.$this->_item->getName().']';
+	} // end getFullyQualifiedName();
+
+	/**
 	 * Returns the repeated item.
 	 *
 	 * @return Opf_Item
@@ -64,6 +76,15 @@ class Opf_Wrapper extends Opf_Item implements Opf_Collection_Interface
 	{
 		return $this->_item;
 	} // end getItem();
+
+	/**
+	 * Shows the real nature of the wrapped item.
+	 * @return Opf_Item
+	 */
+	public function fluent()
+	{
+		return $this->_item;
+	} // end fluent();
 
 	/**
 	 * From Opf_Collection_Interface - works only, if the wrapped item
@@ -212,4 +233,15 @@ class Opf_Wrapper extends Opf_Item implements Opf_Collection_Interface
 	{
 		return $this->_value;
 	} // end getValue();
+
+	/**
+	 * Calls a method from the wrapped item.
+	 *
+	 * @param string $name The method name
+	 * @param array $arguments The method arguments
+	 */
+	public function __call($name, $arguments)
+	{
+		return call_user_func(array($this->_item, $name), $arguments);
+	} // end __call();
 } // end Opf_Pattern;

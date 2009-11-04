@@ -119,6 +119,15 @@ class Opf_InvalidObjectType_Exception extends Opf_Exception
 } // end Opf_InvalidObjectType_Exception;
 
 /**
+ * "Invalid form on stack" exception
+ * @package Exceptions
+ */
+class Opf_InvalidStackForm_Exception extends Opf_Exception
+{
+	protected $_message = 'Invalid form on stack found: %s, expected: %s.';
+} // end Opf_InvalidStackForm_Exception;
+
+/**
  * "Not supported" exception
  * @package Exceptions
  */

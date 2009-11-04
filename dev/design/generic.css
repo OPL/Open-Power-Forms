@@ -21,7 +21,7 @@ form.form div.errors {border: 1px solid #ff0000; margin: 5px 0; color: #ff0000; 
 form.form div.errors p {margin: 5px;}
 form.form p.legend {margin: 5px 0; font-size: 10pt;}
 form.form p.legend sup {color: #ff0000; font-weight: bold; }
-form.form div.row {margin: 0; padding: 5px 1px 5px 151px; line-height: 25px; clear: both; height: 100%; overflow: hidden;}
+form.form div.row {margin: 0; padding: 5px 1px 5px 151px; line-height: 25px; clear: both; /* height: 100%; */ overflow: hidden;}
 form.form div.row-error {padding: 4px 0px 4px 150px; margin: 5px 0; border: 1px solid #ff0000;}
 form.form div.row-error p.error {font-size: 9pt; font-weight: bold; color: #ff0000; margin-left: -22px; background: url(error.gif) no-repeat 0 5px; padding-left: 22px; line-height: 25px;}
 form.form div.row label {width: 140px; display: block; float: left; margin-left: -150px; position: relative; line-height: 25px; text-align: right;}

@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <opt:root>
 <opt:snippet name="widget">
-  <com:div>
+  <div opt:component-attributes="default">
     <opt:onEvent name="error">
 	  <opt:section name="errors" datasource="$system.component.errors">
       <p class="error">{$errors}</p>
@@ -9,7 +9,7 @@
     </opt:onEvent>
     <label for="">{$system.component.label} <opt:onEvent name="required"><sup>*</sup></opt:onEvent></label>
     <opt:display />
-  </com:div>
+  </div>
 </opt:snippet>
 <html>
   <head>

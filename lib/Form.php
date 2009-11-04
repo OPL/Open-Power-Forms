@@ -57,6 +57,13 @@ class Opf_Form extends Opf_Collection
 	protected $_internals = array();
 
 	/**
+	 * The rendering form stack
+	 * @var SplStack
+	 * @static
+	 */
+	static protected $_stack = null;
+
+	/**
 	 * Initializes the form processor.
 	 *
 	 * @param String $name The form name.
@@ -396,6 +403,7 @@ class Opf_Form extends Opf_Collection
 			throw new Opf_InvalidWidget_Exception($className);
 		}
 		$item->setWidget($widget);
+		$item->setFullyQualifiedName($this->getFullyQualifiedName());
 		return $widget;
 	} // end _widgetFactory();
 
@@ -477,4 +485,64 @@ class Opf_Form extends Opf_Collection
 			$item->_onRender($view);
 		}
 	} // end _onRender();
+
+	/**
+	 * Pushes the specified form into the stack.
+	 *
+	 * @internal
+	 * @static
+	 * @param Opf_Form $form The form pushed to the stack.
+	 */
+	static public function pushToStack(Opf_Form $form)
+	{
+		if(self::$_stack === null)
+		{
+			self::$_stack = new SplStack();
+		}
+		self::$_stack->push($form);
+	} // end pushToStack();
+
+	/**
+	 * Pops the form from a stack. If the stack is empty, the method
+	 * throws an exception.
+	 *
+	 * @internal
+	 * @static
+	 * @param Opf_Form $form The form to be popped.
+	 * @return Opf_Form
+	 */
+	static public function popFromStack(Opf_Form $form)
+	{
+		if(self::$_stack === null)
+		{
+			self::$_stack = new SplStack();
+		}
+		$element = self::$_stack->pop();
+		if($element !== $form)
+		{
+			throw new Opf_InvalidStackForm_Exception($element->getName(), $form->getName());
+		}
+		return $element;
+	} // end popFromStack();
+
+	/**
+	 * Returns the form stack head element. If the stack is empty,
+	 * the method returns NULL.
+	 *
+	 * @internal
+	 * @static
+	 * @return Opf_Form
+	 */
+	static public function topOfStack()
+	{
+		if(self::$_stack === null)
+		{
+			self::$_stack = new SplStack();
+		}
+		if(self::$_stack->count() == 0)
+		{
+			return null;
+		}
+		return self::$_stack->top();
+	} // end topOfStack();
 } // end Opf_Form;

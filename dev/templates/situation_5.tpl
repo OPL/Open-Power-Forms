@@ -17,8 +17,10 @@
 		</thead>
 		<tbody>
 			<tr opt:section="subform">
+			<opf:form from="$subform">
 				<td><opf:input name="field1"><opt:display /></opf:input></td>
 				<td><opf:input name="field2"><opt:display /></opf:input></td>
+			</opf:form>
 			</tr>
 		</tbody>
 	</table>

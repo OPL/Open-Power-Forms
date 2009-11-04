@@ -202,8 +202,8 @@ class Opf_Form_Sequence extends Opf_Form
 						$this->_step = $current;
 						$this->_state = $form->_state = self::ERROR;
 						$form->populate($data);
-						$form->_onRender();
-						$this->_onRender();
+						$form->_onRender($this->_view);
+						$this->_onRender($this->_view);
 						$this->invokeEvent('preRender');
 						$form->invokeEvent('preRender');
 						$form->onRender();
@@ -219,8 +219,7 @@ class Opf_Form_Sequence extends Opf_Form
 				{
 					$this->_state = $form->_state = self::ERROR;
 					$form->populate($data);
-					$form->_onRender();
-					$this->_onRender();
+					$form->_onRender($this->_view);
 					$form->invokeEvent('preRender');
 					$form->onRender();
 					$form->invokeEvent('postRender');
@@ -244,8 +243,8 @@ class Opf_Form_Sequence extends Opf_Form
 				else
 				{
 					$this->_state = $form->_state = self::RENDER;
-					$form->_onRender();
-					$this->_onRender();
+					$form->_onRender($this->_view);
+					$this->_onRender($this->_view);
 					$form->invokeEvent('preRender');
 					$form->onRender();
 					$form->invokeEvent('postRender');
@@ -255,8 +254,8 @@ class Opf_Form_Sequence extends Opf_Form
 		}
 		$form = $this->getNextSubform();
 		$this->_state = $form->_state = self::RENDER;
-		$form->_onRender();
-		$this->_onRender();
+		$form->_onRender($this->_view);
+		$this->_onRender($this->_view);
 		$form->invokeEvent('preRender');
 		$form->onRender();
 		$form->invokeEvent('postRender');
@@ -268,7 +267,7 @@ class Opf_Form_Sequence extends Opf_Form
 	 *
 	 * @internal
 	 */
-	protected function _onRender()
+	protected function _onRender(Opt_View $view)
 	{
 		$this->setInternal('name', $this->_name);
 		$this->setInternal('step', $this->_step);

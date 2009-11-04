@@ -20,7 +20,9 @@
      </opt:section>
 
 	 <!-- some final stuff -->
-	 <input type="submit" value="Submit" />
+	 <div class="row row-submit">
+        <input type="submit" class="inputSubmit" value="Submit" id="form1:submit"/>
+    </div>
     </opf:form>
   </opt:snippet>
 </opt:extend>

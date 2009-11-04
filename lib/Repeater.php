@@ -57,6 +57,21 @@ class Opf_Repeater extends Opf_Wrapper
 	} // end __construct();
 
 	/**
+	 * Sets the fully qualified name the item belongs to. Note
+	 * that the $fqn does not include the item name itself.
+	 *
+	 * @param string $fqn The new fully qualified name
+	 */
+	public function setFullyQualifiedName($fqn)
+	{
+		$this->_fullyQualifiedName = (string)$fqn;
+		foreach($this->_wrappers as $i => $wrapper)
+		{
+			$wrapper->setFullyQualifiedName($fqn.'['.$this->_name.']['.$i.']');
+		}
+	} // end setFullyQualifiedName();
+
+	/**
 	 * Sets the number of repetitions.
 	 *
 	 * @param integer $repetitions The number of repetitions.

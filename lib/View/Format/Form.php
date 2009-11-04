@@ -68,9 +68,9 @@ class Opf_View_Format_Form extends Opt_Compiler_Format
 				$form = Opf_View_Instruction_Form::getProcessedForm();
 				if($section['order'] == 'desc')
 				{
-					return '$_sect'.$section['name'].'_vals = array_reverse($_form'.$form.'->getItems(\''.$section['name'].'\')); ';
+					return '$_sect'.$section['name'].'_vals = array_reverse($_form->getItems(\''.$section['name'].'\')); ';
 				}
-				return '$_sect'.$section['name'].'_vals = $_form_'.$form.'->getItems(\''.$section['name'].'\'); ';
+				return '$_sect'.$section['name'].'_vals = $_form->getItems(\''.$section['name'].'\'); ';
 			// The end of the section loop.
 			case 'section:endLoop':
 				return ' } ';
@@ -86,10 +86,6 @@ class Opf_View_Format_Form extends Opt_Compiler_Format
 			// The code block after the conditional block
 			case 'section:done':
 				$section = $this->_getVar('section');
-				if($section['parent'] !== null)
-				{
-					$this->_compiler->setConversion('##component', array_pop($this->_conversions));
-				}
 				return '';
 			// The code block before entering the loop.
 			case 'section:loopBefore':

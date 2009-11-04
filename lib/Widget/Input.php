@@ -35,7 +35,7 @@ class Opf_Widget_Input extends Opf_Widget_Component
 	public function display($attributes = array())
 	{
 		$attributes = array(
-			'name' => $this->_name,
+			'name' => $this->_item->getFullyQualifiedName(),
 			'value' => $this->_item->getValue(),
 			'class' => Opf_Design::getClass('input', $this->_item->isValid())
 		);

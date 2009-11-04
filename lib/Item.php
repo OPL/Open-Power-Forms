@@ -30,6 +30,12 @@ abstract class Opf_Item
 	protected $_name = null;
 
 	/**
+	 * The fully qualified name
+	 * @var String
+	 */
+	protected $_fullyQualifiedName = '';
+
+	/**
 	 * The list of listeners.
 	 * @var SplDoublyLinkedList
 	 */
@@ -83,6 +89,30 @@ abstract class Opf_Item
 	{
 		return $this->_name;
 	} // end getName();
+
+	/**
+	 * Sets the fully qualified name the item belongs to. Note
+	 * that the $fqn does not include the item name itself.
+	 *
+	 * @param string $fqn The new fully qualified name
+	 */
+	public function setFullyQualifiedName($fqn)
+	{
+		$this->_fullyQualifiedName = (string)$fqn;
+	} // end setFullyQualifiedName();
+
+	/**
+	 * Returns the fully qualified name of the element.
+	 * @return string
+	 */
+	public function getFullyQualifiedName()
+	{
+		if($this->_fullyQualifiedName === '')
+		{
+			return $this->_name;
+		}
+		return $this->_fullyQualifiedName.'['.$this->_name.']';
+	} // end getFullyQualifiedName();
 
 	/**
 	 * Sets the required state.

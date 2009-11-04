@@ -53,7 +53,7 @@ class Opf_Widget_Select extends Opf_Widget_Component
 	public function display($attributes = array())
 	{
 		$attributes = array(
-			'name' => $this->_name,
+			'name' => $this->_item->getFullyQualifiedName(),
 			'class' => Opf_Design::getClass('select', $this->_item->isValid())
 		);
 		$code = '<select '.Opt_Function::buildAttributes($attributes).'>';

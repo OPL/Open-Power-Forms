@@ -52,16 +52,13 @@ class Opf_View_Format_FormRepeater extends Opf_View_Format_Form
 			// Initializes the section by obtaining the list of items to display
 			$section = $this->_getVar('section');
 			$form = Opf_View_Instruction_Form::getProcessedForm();
-			$code = '$_repeater'.$section['name'].' = $_form_'.$form.'->findItem(\''.$section['name'].'\'); ';
-
-			self::$_conversions[] = $this->_compiler->convert('##component');
-			$this->_compiler->setConversion('##component', '$_sect'.$section['name'].'_v->_widgetFactory(\'%CLASS%\', \'%TAG%\', %ATTRIBUTES%)');
+			$code = '$_repeater = $_form->findItem(\''.$section['name'].'\'); ';
 
 			if($section['order'] == 'desc')
 			{
-				return $code.' $_sect'.$section['name'].'_vals = array_reverse($_repeater'.$section['name'].'->getItems(\''.$section['name'].'\')); ';
+				return $code.' $_sect'.$section['name'].'_vals = array_reverse($_repeater->getItems(\''.$section['name'].'\')); ';
 			}
-			return $code.' $_sect'.$section['name'].'_vals = $_repeater'.$section['name'].'->getItems(\''.$section['name'].'\'); ';
+			return $code.' $_sect'.$section['name'].'_vals = $_repeater->getItems(\''.$section['name'].'\'); ';
 		}
 		return parent::_build($hookName);
 	} // end _build();

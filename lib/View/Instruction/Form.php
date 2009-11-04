@@ -55,23 +55,29 @@ class Opf_View_Instruction_Form extends Opt_Compiler_Processor
 		$this->_addInstructions('opf:form');
 	} // end configure();
 
+	/**
+	 * Processes the opt:form XML node.
+	 *
+	 * @param Opt_Xml_Node $node The recognized node.
+	 */
 	public function _processForm(Opt_Xml_Node $node)
 	{
 		$this->_nesting++;
 
-		if($this->_nesting > 1)
-		{
-			throw new Opt_CannotBeNested_Exception('opf:form', 'nesting withing itself not allowed');
-		}
-
 		$params = array(
-			'name' => array(0 => self::REQUIRED, self::HARD_STRING),
+			'name' => array(0 => self::OPTIONAL, self::HARD_STRING, null),
+			'from' => array(0 => self::OPTIONAL, self::EXPRESSION, null),
 			'__UNKNOWN__' => array(0 => self::OPTIONAL, self::STRING)
 		);
 		$extra = $this->_extractAttributes($node, $params);
 
-		$attr = 'array(\'method\' => $_form_'.$params['name'].'->getMethod(), \'action\' => $_form_'.$params['name'].'->getAction(),
-			\'class\' => Opf_Design::getClass(\'form\', $_form_'.$params['name'].'->isValid()), ';
+		if((!isset($params['name']) && !isset($params['from'])) || (isset($params['name']) && isset($params['from'])))
+		{
+			throw new Opt_AttributeNotDefined_Exception('name" or "from');
+		}
+
+		$attr = 'array(\'method\' => $_form->getMethod(), \'action\' => $_form->getAction(),
+			\'class\' => Opf_Design::getClass(\'form\', $_form->isValid()), ';
 		foreach($extra as $name => $value)
 		{
 			$attr .= ' \''.$name.'\' => '.$value.',';
@@ -80,18 +86,44 @@ class Opf_View_Instruction_Form extends Opt_Compiler_Processor
 
 		$opf = Opl_Registry::get('opf');
 
-		$node->addAfter(Opt_Xml_Buffer::TAG_BEFORE, 'if(Opf_Class::hasForm(\''.$params['name'].'\')){ $_formx_'.$params['name'].' = Opf_Class::getForm(\''.$params['name'].'\'); $_form_'.$params['name'].' = $_formx_'.$params['name'].'->fluent();
-	echo \'<form \'.Opt_Function::buildAttributes('.$attr.').\'>\'; foreach($_formx_'.$params['name'].'->getInternals() as $n => $v){ echo \'<input type="hidden" name="'.$opf->formInternalId.'[\'.$n.\']" value="\'.htmlspecialchars($v).\'" />\'; }
-	self::$_vars[\'form\'] = $_form_'.$params['name'].';
-		');
-		$node->addAfter(Opt_Xml_Buffer::TAG_BEFORE, '  ');
-		$node->addBefore(Opt_Xml_Buffer::TAG_AFTER,' echo \'</form>\'; self::$_vars[\'form\'] = null; } ');
-	
+		$node->addAfter(Opt_Xml_Buffer::TAG_BEFORE, 'if(($_formy = Opf_Form::topOfStack()) === null)
+{
+	if(Opf_Class::hasForm(\''.$params['name'].'\'))
+	{
+		$_fqdn = \'\';
+		$_formx = Opf_Class::getForm(\''.$params['name'].'\');
+		$_form = $_formx->fluent();
+		Opf_Form::pushToStack($_form);
+		echo \'<form \'.Opt_Function::buildAttributes('.$attr.').\'>\'; 
+	}
+}
+else
+{
+	$_fqdn = $_form->getFullyQualifiedName();
+	$_formx = '.(isset($params['from']) ? $params['from'] : '$_formy->findElement(\''.$params['name'].'\')').';
+	$_form = $_formx->fluent();
+	if(!$_form instanceof Opf_Form)
+	{
+		throw new Opf_InvalidObjectType_Exception(get_class($_formx), \'Opf_Form\');
+	}
+	$_form->setFullyQualifiedName($_fqdn);
+	Opf_Form::pushToStack($_form);
+}
+
+if(isset($_form))
+{
+	foreach($_formx->getInternals() as $n => $v){ echo \'<input type="hidden" name="'.$opf->formInternalId.'[\'.$n.\']" value="\'.htmlspecialchars($v).\'" />\'; }
+	self::$_vars[\'form\'] = $_form;
+');
+		$node->addBefore(Opt_Xml_Buffer::TAG_AFTER,' Opf_Form::popFromStack($_form);
+	if((self::$_vars[\'form\'] = $_form = Opf_Form::topOfStack()) === null)
+	{
+		echo \'</form>\';
+	}
+}');
 		self::_setProcessedForm($params['name']);
 
-		$this->_compiler->setConversion('##component', '$_form_'.$params['name'].'->_widgetFactory(\'%CLASS%\', \'%TAG%\', %ATTRIBUTES%)');
-
-
+		$this->_compiler->setConversion('##component', '$_form->_widgetFactory(\'%CLASS%\', \'%TAG%\', %ATTRIBUTES%)');
 		$node->set('postprocess', true);
 		$this->_process($node);
 	} // end _processForm();
@@ -107,7 +139,7 @@ class Opf_View_Instruction_Form extends Opt_Compiler_Processor
 		switch($system[2])
 		{
 			case 'valid':
-				return '($_form_'.self::getProcessedForm().'->getState() != Opf_Form::ERROR)';
+				return '($_form->getState() != Opf_Form::ERROR)';
 		}
 	} // end processSystemVar();
 } // end Opf_View_Instruction_Form;
