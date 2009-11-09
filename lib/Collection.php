@@ -121,7 +121,6 @@ abstract class Opf_Collection extends Opf_Item implements Opf_Collection_Interfa
 	 */
 	public function findItem($name)
 	{
-		// TODO: Add sub-collection support.
 		if(isset($this->_collection[$name]))
 		{
 			return $this->_collection[$name];

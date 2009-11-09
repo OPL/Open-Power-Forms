@@ -11,6 +11,7 @@
 
 	<!-- display a form -->
     <opf:form name="form5">
+	<opf:collection name="subform">
 	<table border="1">
 		<thead>
 			<th opt:section="labels">{$labels.label}</th>
@@ -24,6 +25,12 @@
 			</tr>
 		</tbody>
 	</table>
+    <opt:onEvent name="error">
+	  <opt:section name="errors" datasource="$system.component.errors">
+      <p class="error">{$errors}</p>
+	  </opt:section>
+    </opt:onEvent>
+	</opf:collection>
 
 	<!-- some final stuff -->
 	<input type="submit" value="Submit" />

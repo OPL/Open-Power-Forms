@@ -78,6 +78,7 @@ class Opf_Class extends Opl_Class
 
 		$tpl->register(Opt_Class::OPT_COMPONENT, 'opf:input', 'Opf_Widget_Input');
 		$tpl->register(Opt_Class::OPT_COMPONENT, 'opf:select', 'Opf_Widget_Select');
+		$tpl->register(Opt_Class::OPT_COMPONENT, 'opf:collection', 'Opf_Widget_Collection');
 
 		Opt_View::setFormatGlobal('design', 'Design', false);
 	} // end __construct();

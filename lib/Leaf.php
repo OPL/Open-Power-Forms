@@ -26,12 +26,6 @@ class Opf_Leaf extends Opf_Item
 	protected $_value = null;
 
 	/**
-	 * The widget associated with the element.
-	 * @var Opf_Widget_Component
-	 */
-	protected $_widget = null;
-
-	/**
 	 * Creates a new leaf item.
 	 * @param string $name The item name.
 	 */
@@ -41,58 +35,6 @@ class Opf_Leaf extends Opf_Item
 	} // end __construct();
 
 	/**
-	 * Sets the widget associated with the item. Returns the
-	 * assigned widget for the fluent interface purposes.
-	 *
-	 * @param Opf_Widget_Component $widget The new widget.
-	 * @return Opf_Item
-	 */
-	public function setWidget(Opf_Widget_Component $widget)
-	{
-		if($widget->isBound())
-		{
-			throw new Opf_WidgetAlreadyBound_Exception($this->_name);
-		}
-		$widget->setItem($this);
-
-		if($this->_widget !== null)
-		{
-			if($this->_widget instanceof Opf_Widget_Generic)
-			{
-				$widget->importFromGeneric($this->_widget);
-			}
-			$this->_widget->unsetItem();
-		}
-
-		$this->_widget = $widget;
-
-		return $widget;
-	} // end setWidget();
-
-	/**
-	 * Returns a widget associated with the form field.
-	 * @return Opf_Widget_Component
-	 */
-	public function getWidget()
-	{
-		if($this->_widget === null)
-		{
-			$this->setWidget(new Opf_Widget_Generic());
-		}
-		return $this->_widget;
-	} // end getWidget();
-
-	/**
-	 * Returns true, if the user has specified a widget
-	 * to the leaf.
-	 * @return boolean
-	 */
-	public function hasWidget()
-	{
-		return ($this->_widget === null);
-	} // end hasWidget();
-
-	/**
 	 * Populates the item with the data.
 	 * @param mixed &$data The data used to populate the item
 	 */
@@ -100,6 +42,11 @@ class Opf_Leaf extends Opf_Item
 	{
 		$this->_value = $data;
 	} // end populate();
+
+	public function setFullyQualifiedName($name)
+	{
+		parent::setFullyQualifiedName($name);
+	}
 
 	/**
 	 * Sets the item value.

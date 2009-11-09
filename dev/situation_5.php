@@ -38,7 +38,7 @@ class GeneralForm extends Opf_Form
 	public function onAccept()
 	{
 		$view = $this->getView();
-		$view->setTemplate('results.tpl');
+		$view->setTemplate('results2.tpl');
 		$results = array();
 		foreach($this->getValue() as $name => $value)
 		{
@@ -57,6 +57,7 @@ try
 	$tpl->compileMode = Opt_Class::CM_REBUILD;
 	$tpl->stripWhitespaces = false;
 	$tpl->gzipCompression = false;
+	$tpl->register(Opt_Class::PHP_FUNCTION, 'dump', 'var_dump');
 	$tpl->setup();
 
 	$translate = new Opc_Translate(new Opc_Translate_Adapter_Ini(array('directory' => './lang/')));

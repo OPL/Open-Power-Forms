@@ -18,7 +18,7 @@
  * several times. The programmer may control the number of repetitions
  * and the number of required instances that must be filled in.
  */
-class Opf_Repeater extends Opf_Wrapper
+class Opf_Repeater extends Opf_Item
 {
 	/**
 	 * The number of repetitions.
@@ -46,15 +46,26 @@ class Opf_Repeater extends Opf_Wrapper
 	 */
 	public function __construct(Opf_Item $item, $repetitions = 0)
 	{
-		parent::__construct($item);
 		$this->_repetitions = $repetitions;
+		$this->_name = $item->getName();
 
 		$this->_wrappers = array();
 		for($i = 0; $i < $repetitions; $i++)
 		{
-			$this->_wrappers[] = new Opf_Wrapper($item);
+			$this->_wrappers[] = clone $item;
 		}
 	} // end __construct();
+
+	public function onInit()
+	{
+		foreach($this->_wrappers as $i => $wrapper)
+		{
+			if($wrapper instanceof Opf_Form || $wrapper instanceof Opf_Repeater)
+			{
+				$wrapper->onInit();
+			}
+		}
+	} // end onInit();
 
 	/**
 	 * Sets the fully qualified name the item belongs to. Note
@@ -65,9 +76,19 @@ class Opf_Repeater extends Opf_Wrapper
 	public function setFullyQualifiedName($fqn)
 	{
 		$this->_fullyQualifiedName = (string)$fqn;
+
+		if($fqn == '')
+		{
+			$path = $this->_name;
+		}
+		else
+		{
+			$path = $fqn.'['.$this->_name.']';
+		}
+
 		foreach($this->_wrappers as $i => $wrapper)
 		{
-			$wrapper->setFullyQualifiedName($fqn.'['.$this->_name.']['.$i.']');
+			$wrapper->setSuperiorQualifiedName($path.'['.$i.']');
 		}
 	} // end setFullyQualifiedName();
 
@@ -108,22 +129,6 @@ class Opf_Repeater extends Opf_Wrapper
 	{
 		return $this->_minRequired;
 	} // end setMinRequired();
-
-	/**
-	 * Sets the item to repeat.
-	 *
-	 * @param Opf_Item $item The new item to repeat.
-	 */
-	public function setItem(Opf_Item $item)
-	{
-		$this->_item = $item;
-		$this->setName($item->getName());
-
-		foreach($this->_wrappers as $wrapper)
-		{
-			$wrapper->setItem($item);
-		}
-	} // end setItem();
 
 	/**
 	 * Returns the repeated items represented by the repeater. The returned
@@ -168,6 +173,24 @@ class Opf_Repeater extends Opf_Wrapper
 	} // end setValue();
 
 	/**
+	 * Sets the item value.
+	 * @param mixed $value The new value.
+	 */
+	public function populate(&$value)
+	{
+		if(is_array($value))
+		{
+			for($i = 0; $i < $this->_repetitions; $i++)
+			{
+				if(isset($value[$i]))
+				{
+					$this->_wrappers[$i]->populate($value[$i]);
+				}
+			}
+		}
+	} // end setValue();
+
+	/**
 	 * Validates the field against the registered validators.
 	 * @param mixed $data The data to validate.
 	 */
@@ -176,8 +199,10 @@ class Opf_Repeater extends Opf_Wrapper
 		if(!is_array($data))
 		{
 			$this->addErrorMessage('field_validation_initial');
+			return $this->_valid = false;
 		}
 		$acceptedItems = 0;
+		$collected = array();
 		foreach($this->_wrappers as $id => $item)
 		{
 			if(!isset($data[$id]))
@@ -189,6 +214,7 @@ class Opf_Repeater extends Opf_Wrapper
 				if($item->_validate($data[$id], $item))
 				{
 					$acceptedItems++;
+					$collected[] = $data[$id];
 				}
 			}
 		}
@@ -200,6 +226,7 @@ class Opf_Repeater extends Opf_Wrapper
 		}
 		else
 		{
+			$data = $collected;
 			return $this->_valid = true;
 		}
 	} // end _validate();
@@ -212,6 +239,6 @@ class Opf_Repeater extends Opf_Wrapper
 	 */
 	protected function _onRender(Opt_View $view)
 	{
-		$view->setFormat($this->_item->getName(), 'FormRepeater/Form');
+		$view->setFormat($this->_name, 'FormRepeater/Form');
 	} // end _onRender();
 } // end Opf_Repeater;

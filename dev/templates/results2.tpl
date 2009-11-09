@@ -4,7 +4,7 @@
   <opt:snippet name="content">
     <p>The form results:</p>
 	<opt:section name="results">
-		<p>{$results.name} = {u:$results.value}</p>
+		<p>{$results.name} = {dump($results.value)}</p>
 	</opt:section>
   </opt:snippet>
 </opt:extend>

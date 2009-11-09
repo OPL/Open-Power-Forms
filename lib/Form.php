@@ -57,6 +57,24 @@ class Opf_Form extends Opf_Collection
 	protected $_internals = array();
 
 	/**
+	 * Is the form executed?
+	 * @var boolean
+	 */
+	protected $_executed = false;
+
+	/**
+	 * Superior qualified name - has a priority over the normal name.
+	 * @var string
+	 */
+	protected $_superiorQualifiedName = null;
+
+	/**
+	 * The returned data.
+	 * @var array
+	 */
+	protected $_data;
+
+	/**
 	 * The rendering form stack
 	 * @var SplStack
 	 * @static
@@ -74,6 +92,18 @@ class Opf_Form extends Opf_Collection
 
 		Opf_Class::addForm($this);
 	} // end __construct();
+
+	public function __clone()
+	{
+		foreach($this->_items as &$itemList)
+		{
+			foreach($itemList as $name => $item)
+			{
+				$itemList[$name] = clone $item;
+				$this->_collection[$name] = $itemList[$name];
+			}
+		}
+	} // end __clone();
 
 	/**
 	 * Extendable fluent interface - here, it returns
@@ -196,6 +226,38 @@ class Opf_Form extends Opf_Collection
 	} // end getInternals();
 
 	/**
+	 * Sets a superior qualified name that has a priority over the normal
+	 * fully qualified name.
+	 *
+	 * @param string $name The new superior qualified name
+	 */
+	public function setSuperiorQualifiedName($name)
+	{
+		$this->_superiorQualifiedName = $name;
+	} // end setSuperiorQualifiedName();
+
+	/**
+	 * Returns the fully qualified name of the element.
+	 * @return string
+	 */
+	public function getFullyQualifiedName()
+	{
+		if($this->_superiorQualifiedName !== null)
+		{
+			return $this->_superiorQualifiedName;
+		}
+		if($this->_executed)
+		{
+			return '';
+		}
+		if($this->_fullyQualifiedName === '')
+		{
+			return $this->_name;
+		}
+		return $this->_fullyQualifiedName.'['.$this->_name.']';
+	} // end getFullyQualifiedName();
+
+	/**
 	 * Returns the current form state.
 	 * @return integer
 	 */
@@ -204,6 +266,13 @@ class Opf_Form extends Opf_Collection
 		return $this->_state;
 	} // end getState();
 
+	public function getItemDisplay($item)
+	{
+		$item = $this->getItem($item);
+		$item->setFullyQualifiedName($this->getFullyQualifiedName());
+		return $item;
+	} // end getItemDisplay();
+
 	/**
 	 * Returns the values entered to the form as an array.
 	 *
@@ -211,12 +280,15 @@ class Opf_Form extends Opf_Collection
 	 */
 	public function getValue()
 	{
+		/*
 		$data = array();
 		foreach($this->_collection as $name => $item)
 		{
 			$data[$name] = $item->getValue();
 		}
 		return $data;
+		 */
+		return $this->_data;
 	} // end getValue();
 
 	/**
@@ -252,13 +324,9 @@ class Opf_Form extends Opf_Collection
 	{
 		foreach($this->_collection as $item)
 		{
-			if($item instanceof Opf_Form)
+			if($item instanceof Opf_Form || $item instanceof Opf_Repeater)
 			{
 				$item->onInit();
-			}
-			elseif($item instanceof Opf_Repeater && $item->getItem() instanceof Opf_Form)
-			{
-				$item->getItem()->onInit();
 			}
 		}
 	} // end onInit();
@@ -298,6 +366,7 @@ class Opf_Form extends Opf_Collection
 	 */
 	public function execute()
 	{
+		$this->_executed = true;
 		$opf = Opl_Registry::get('opf');
 
 		$this->invokeEvent('preInit');
@@ -329,6 +398,7 @@ class Opf_Form extends Opf_Collection
 					$this->invokeEvent('postRender');
 					return $this->_state;
 				}
+				$this->_data = $data;
 				$this->_state = self::ACCEPTED;
 				$this->invokeEvent('preAccept');
 				$this->onAccept();
@@ -392,10 +462,10 @@ class Opf_Form extends Opf_Collection
 		{
 			throw new Opf_ItemNotExists_Exception('item', $attributes['name']);
 		}
-		if(!$item instanceof Opf_Leaf)
+	/*	if(!$item instanceof Opf_Leaf)
 		{
 			throw new Opf_InvalidItem_Exception($attributes['name']);
-		}
+		}*/
 		$widget = new $className();
 
 		if(!$widget instanceof Opf_Widget_Component)

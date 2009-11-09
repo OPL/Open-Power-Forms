@@ -90,7 +90,6 @@ class Opf_View_Instruction_Form extends Opt_Compiler_Processor
 {
 	if(Opf_Class::hasForm(\''.$params['name'].'\'))
 	{
-		$_fqdn = \'\';
 		$_formx = Opf_Class::getForm(\''.$params['name'].'\');
 		$_form = $_formx->fluent();
 		Opf_Form::pushToStack($_form);
@@ -99,14 +98,12 @@ class Opf_View_Instruction_Form extends Opt_Compiler_Processor
 }
 else
 {
-	$_fqdn = $_form->getFullyQualifiedName();
-	$_formx = '.(isset($params['from']) ? $params['from'] : '$_formy->findElement(\''.$params['name'].'\')').';
+	$_formx = '.(isset($params['from']) ? $params['from'] : '$_formy->getItemDisplay(\''.$params['name'].'\')').';
 	$_form = $_formx->fluent();
 	if(!$_form instanceof Opf_Form)
 	{
 		throw new Opf_InvalidObjectType_Exception(get_class($_formx), \'Opf_Form\');
 	}
-	$_form->setFullyQualifiedName($_fqdn);
 	Opf_Form::pushToStack($_form);
 }
 
