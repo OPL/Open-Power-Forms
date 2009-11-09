@@ -36,6 +36,12 @@ abstract class Opf_Item
 	protected $_fullyQualifiedName = '';
 
 	/**
+	 * Superior qualified name - has a priority over the normal name.
+	 * @var string
+	 */
+	protected $_superiorQualifiedName = null;
+
+	/**
 	 * The list of listeners.
 	 * @var SplDoublyLinkedList
 	 */
@@ -107,11 +113,26 @@ abstract class Opf_Item
 	} // end setFullyQualifiedName();
 
 	/**
+	 * Sets a superior qualified name that has a priority over the normal
+	 * fully qualified name.
+	 *
+	 * @param string $name The new superior qualified name
+	 */
+	public function setSuperiorQualifiedName($name)
+	{
+		$this->_superiorQualifiedName = (string)$name;
+	} // end setSuperiorQualifiedName();
+
+	/**
 	 * Returns the fully qualified name of the element.
 	 * @return string
 	 */
 	public function getFullyQualifiedName()
 	{
+		if($this->_superiorQualifiedName !== null)
+		{
+			return $this->_superiorQualifiedName;
+		}
 		if($this->_fullyQualifiedName === '')
 		{
 			return $this->_name;

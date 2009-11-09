@@ -63,12 +63,6 @@ class Opf_Form extends Opf_Collection
 	protected $_executed = false;
 
 	/**
-	 * Superior qualified name - has a priority over the normal name.
-	 * @var string
-	 */
-	protected $_superiorQualifiedName = null;
-
-	/**
 	 * The returned data.
 	 * @var array
 	 */
@@ -93,6 +87,11 @@ class Opf_Form extends Opf_Collection
 		Opf_Class::addForm($this);
 	} // end __construct();
 
+	/**
+	 * Clones the form.
+	 *
+	 * @todo Rewrite to a non-recursive version.
+	 */
 	public function __clone()
 	{
 		foreach($this->_items as &$itemList)
@@ -226,17 +225,6 @@ class Opf_Form extends Opf_Collection
 	} // end getInternals();
 
 	/**
-	 * Sets a superior qualified name that has a priority over the normal
-	 * fully qualified name.
-	 *
-	 * @param string $name The new superior qualified name
-	 */
-	public function setSuperiorQualifiedName($name)
-	{
-		$this->_superiorQualifiedName = $name;
-	} // end setSuperiorQualifiedName();
-
-	/**
 	 * Returns the fully qualified name of the element.
 	 * @return string
 	 */
@@ -266,6 +254,15 @@ class Opf_Form extends Opf_Collection
 		return $this->_state;
 	} // end getState();
 
+	/**
+	 * Returns an item to be displayed by the view. Despite the standard
+	 * search procedure, it performs some extra actions connected with displaying
+	 * the item.
+	 *
+	 * @internal
+	 * @param string $item The item name
+	 * @return Opf_Item
+	 */
 	public function getItemDisplay($item)
 	{
 		$item = $this->getItem($item);

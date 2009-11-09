@@ -1,0 +1,23 @@
+Title: What OPF is?
+
+----
+
+Open Power Forms is another library from the Open Power Libs series. It focuses on forms and provides a generic framework to design and manage them. It has been designed to handle both the smallest and the biggest and most complex forms. Thanks to the flexible model behind the public API, the programmer is not limited just to a plain list of elements. The form may consist of smaller sub-forms or repetitions organized in different containers.
+
+However, the flexible form processing engine is not the only goal that we wished to achieve. The form processors must also generate the HTML code for the forms and most of the libraries of this type usually offer a complex PHP-based API where it is very hard to separate the presentation from the logic and customize the layout without hacking a lot of code. Open Power Forms does not follow this way. Instead, it incorporates the power of Open Power Template 2 template engine. With XML templates, component system, template inheritance and sections, the programmer has control over the form layout all the time and may easily decide which forms should use the standard layout and which should be rendered in some other way.
+
+Project goals
+=============
+
+Open Power Forms was created because of two reasons. Basically, we were disappointed with the features and general design of form processing components provided by various PHP frameworks. They were either limited to just a set of view helpers, where the programmer had to implement most of the logic manually, or were not able to handle more complex cases. What is more, they are all based on PHP language, when it comes to rendering the forms. This made their layout very hard to customize, brought the presentation part back to the other application parts and sometimes required lots of resources. We decided to design a new form processing library that does not repeat these mistakes and specified several goals for it:
+
+* **Flexible design** - the programmer must be able to express even the most complex forms, such as multi-page forms, form compositions or repetitions to insert more than one row at once.
+* **Customizable layout** - the form layout must be easy to customize at all levels, from a single widget to entire application.
+* **Good code quality** - the library must follow the most strict PHP language standards and the best programming practices.
+* **Security and stability** - forms are one of the most critical parts of every web application. First of all, the new library must be secure and stable, as it works with the data vulnerable to attacks.
+* **Availability of widgets, validators and other elements** - the programmer composes forms of smaller bricks: validators, widgets, filters and many more. The librarty must provide a rich (and useful) set of them.
+
+Project status
+==============
+
+Currently, Open Power Forms is being developed. Many features are not implemented yet and the other may not work or work incorrectly.

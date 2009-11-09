@@ -1,0 +1,8 @@
+Title: Guide
+
+----
+
+This guide shows, how to use OPF and the features it offers properly. You are recommended to read it chapter-by-chapter.
+
+> [important]
+> The guide does not cover the use of Open Power Template. We assume that the reader already knows this library in the basic level and is familiar with such concepts, as *components* or *output systems*. We recommend you to read the Open Power Template user guide first.

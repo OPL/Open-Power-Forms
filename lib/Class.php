@@ -25,6 +25,15 @@ interface Opf_Validator_Interface
 } // end Opf_Validator_Interface;
 
 /**
+ * The filter interface
+ */
+interface Opf_Filter_Interface
+{
+	public function toInternal($value);
+	public function toPublic($value);
+} // end Opf_Filter_Interface;
+
+/**
  * The minimum collection interface.
  */
 interface Opf_Collection_Interface
@@ -38,10 +47,16 @@ interface Opf_Collection_Interface
  */
 class Opf_Class extends Opl_Class
 {
+	const ENABLED = 2;
+	const DETECT = 1;
+	const DISABLED = 0;
+
 	// The configuration
 	public $translationGroup = 'form';
 	public $defaultTracker = 'Opf_Tracker_Client';
 	public $formInternalId = 'opf';
+
+	public $useWebforms2 = self::DISABLED;
 
 	/**
 	 * Translation interface

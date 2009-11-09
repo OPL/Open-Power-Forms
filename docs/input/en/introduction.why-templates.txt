@@ -1,0 +1,7 @@
+Title: Why using templates with forms?
+
+----
+
+There are already many form validation libraries that generate the form HTML code on their own. In opinion of many programmers, their customization is very hard, especially if you want to get a layout unexpected by the developers. Instead of looking yet another solution that will repeat the same mistakes, we decided to use an external template engine. A different template language does not have to repeat the problems that occur in PHP and may give the programmers and designers a better flexibility.
+
+Our choice was Open Power Template 2, a template engine for PHP5 with XML-based language. The main advantage is the built-in system called *components* which was designed to render form fields. Open Power Forms provides widgets and other instructions that extend OPT to create a customizable form rendering system in templates.

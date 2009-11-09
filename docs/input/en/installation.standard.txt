@@ -1,0 +1,68 @@
+Title: Standard
+
+----
+
+This chapter covers the standard installation.
+
+> [information]
+> The chapter shows also, how to install Open Power Libs core and Open Power Template. To get to know more about them, please refer their documentations.
+
+Obtaining a copy
+================
+
+To begin with, you must visit [www.invenzzia.org](http://www.invenzzia.org/) and download a copy of Open Power Forms from the *Download page*. Select the freshest version available and save it somewhere on your hard disk. Although OPF requires two other libraries in order to work, you do not have to download them separately, as they are included in the OPF archive.
+
+> [help]
+> The OPF archive contains also the newest releases of OPT and OPL core. You may update them at any time you want or use with the older versions, if they satisfy the requirements of OPF.
+
+Directory structure
+===================
+
+In the downloaded archive you can find a directory called `/lib` with the source codes of OPL, OPT and OPF. Copy its contents to your project directory structure, leaving the archive layout. If you are already using other OPL libraries and they satisfy the requirements of OPF, you can copy just the `Opf` subdirectory.
+
+Open Power Template needs two extra directories for templates and their precompiled versions. In this document, we will name it `/templates` and `/templates_c` respectively. PHP must have a write access to the second one.
+
+> [help]
+> If you are working with a framework, you will probably need a more customizable directory structure for templates. Please refer to the framework port documentation to get to know more.
+
+Setting up the autoloader
+=========================
+
+In the beginning, you must load the OPL core, configure the path to the libraries and set the autoloader. This is the basic configuration of OPL autoloader:
+
+~~~~
+[php]
+<?php
+require('./libs/Opl/Base.php'); // 1
+Opl_Loader::setDirectory('./libs/'); // 2
+Opl_Loader::register(); // 3
+~~~~
+
+> [steps]
+> 1. We load the OPL core.
+> 2. We set the library path. It should end with `/`, but it is not necessary. We recommend to set the absolute path, because OPL does not use *include_path* by default.
+> 3. We register the autoloader that will automatically locate and load the classes.
+
+Note that OPL autoloader may handle other libraries that use similar class naming conventions. The instructions, how to configure the autoloader to handle them, can be found in the OPL documentation. However, you must also remember that the autoloaders such as Zend Framework, cannot be used to load OPL classes!
+
+Setting up OPT
+==============
+
+Before configuring OPF, Open Power Template library must be set up properly. We start with creating an object of `Opt_Class` and configure it:
+
+~~~~
+[php]
+$opt = new Opt_Class;
+$opt->sourceDir = './templates/';
+$opt->compileDir = './templates_c/';
+$opt->setup();
+~~~~
+
+Setting up OPF
+==============
+
+
+
+Setting up error handling
+=========================
+

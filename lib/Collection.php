@@ -88,14 +88,131 @@ abstract class Opf_Collection extends Opf_Item implements Opf_Collection_Interfa
 		return $this->_collection[$item];
 	} // end getItem();
 
+	/**
+	 * Removes an existing item from a collection. The item can be determined by:
+	 *  - The object
+	 *  - The ordered number within a placeholder
+	 *  - The string name of an item
+	 *
+	 * Only the selected placeholder is scanned. The default placeholder is 'default'.
+	 * 
+	 * @param integer|string|Opf_Item $item The item to remove.
+	 * @param string $placeholder The placeholder, where the item should be looked for.
+	 * @return boolean
+	 * @throws Opf_PlaceholderNotExists_Exception
+	 */
 	public function removeItem($item, $placeholder = 'default')
 	{
+		if(!isset($this->_items[$placeholder]))
+		{
+			throw new Opf_PlaceholderNotExists_Exception($placeholder, $this->getName());
+		}
 
+		// The integer call
+		if(is_integer($item))
+		{
+			$i = 0;
+			foreach($this->_items[$placeholder] as $id => $it)
+			{
+				if($i == $id)
+				{
+					unset($this->_items[$placeholder][$id]);
+					unset($this->_collection[$it->_name]);
+					return true;
+				}
+				$i++;
+			}
+		}
+		// The string call
+		elseif(is_string($item))
+		{
+			foreach($this->_items[$placeholder] as $id => $it)
+			{
+				if($item == $it->_name)
+				{
+					unset($this->_items[$placeholder][$id]);
+					unset($this->_collection[$it->_name]);
+					return true;
+				}
+			}
+		}
+		// The object call
+		elseif(is_object($item))
+		{
+			foreach($this->_items[$placeholder] as $id => $it)
+			{
+				if($item === $it)
+				{
+					unset($this->_items[$placeholder][$id]);
+					unset($this->_collection[$it->_name]);
+					return true;
+				}
+			}
+		}
+		return false;
 	} // end removeItem();
 
-	public function replaceItem($newItem, $oldItem, $placeholder = 'default')
+	/**
+	 * Replaces an existing item with a new one. The item can be determined by:
+	 *  - The object
+	 *  - The ordered number within a placeholder
+	 *  - The string name of an item
+	 *
+	 * Only the selected placeholder is scanned. The default placeholder is 'default'.
+	 * 
+	 * @param Opf_Item $newItem The new item
+	 * @param integer|string|Opf_Item $oldItem The item to replace
+	 * @param string $placeholder The placeholder where the item is located
+	 */
+	public function replaceItem(Opf_Item $newItem, $oldItem, $placeholder = 'default')
 	{
+		if(!isset($this->_items[$placeholder]))
+		{
+			throw new Opf_PlaceholderNotExists_Exception($placeholder, $this->getName());
+		}
 
+		// The integer call
+		if(is_integer($oldItem))
+		{
+			$i = 0;
+			foreach($this->_items[$placeholder] as $id => $it)
+			{
+				if($i == $oldItem)
+				{
+					$this->_items[$placeholder][$id] = $newItem;
+					$this->_collection[$it->_name] = $newItem;
+					return true;
+				}
+				$i++;
+			}
+		}
+		// The string call
+		elseif(is_string($oldItem))
+		{
+			foreach($this->_items[$placeholder] as $id => $it)
+			{
+				if($oldItem == $it->_name)
+				{
+					$this->_items[$placeholder][$id] = $newItem;
+					$this->_collection[$it->_name] = $newItem;
+					return true;
+				}
+			}
+		}
+		// The object call
+		elseif(is_object($oldItem))
+		{
+			foreach($this->_items[$placeholder] as $id => $it)
+			{
+				if($oldItem === $it)
+				{
+					$this->_items[$placeholder][$id] = $newItem;
+					$this->_collection[$it->_name] = $newItem;
+					return true;
+				}
+			}
+		}
+		return false;
 	} // end replaceItem();
 
 	public function getItems($placeholder = 'default')
@@ -128,6 +245,14 @@ abstract class Opf_Collection extends Opf_Item implements Opf_Collection_Interfa
 		return NULL;
 	} // end findItem();
 
+	/**
+	 * Allows to check, if the item is allowed in this particular collection.
+	 * In the default implementation, the method always returns true.
+	 *
+	 * @param Opf_Item $item The item to test
+	 * @param string $placeholder The placeholder name
+	 * @return boolean
+	 */
 	protected function _isItemAllowed(Opf_Item $item, $placeholder = 'default')
 	{
 		return true;

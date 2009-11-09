@@ -1,0 +1,13 @@
+Title: Preface
+
+----
+
+Forms are the basic way to interact with the user exploring the web application. They are used to modify the content, publish new articles or entering the business data. Their importance requires the programmer to pay a special attention to them. But forms are not just a set of tags in the HTML template. They also consist of the validation rules, error reporting and algorithms to prevent unauthorized attacks. The multiplicity of the tasks that must be done in order to process a form leads us to *form processors*, special libraries that take care of them. Open Power Forms is one of such libraries.
+
+We would like to present you Open Power Forms, the PHP5 form validating and processing library for professionals. In this guide you will learn, why form processing is so important, how to design your forms with OPF and how to customize their layout. In the latter part, you will find many useful advices and more advanced features that will help you with the most complex cases.
+
+
+Open Power Forms is another library from the Open Power Libs series. It focuses on forms and provides a generic framework to design and manage them. It has been designed to handle both the smallest and the biggest and most complex forms. Thanks to the flexible model behind the public API, the programmer is not limited just to a plain list of elements. The form may consist of smaller sub-forms or repetitions organized in different containers.
+
+However, the flexible form processing engine is not the only goal that we wished to achieve. The form processors must also generate the HTML code for the forms and most of the libraries of this type usually offer a complex PHP-based API where it is very hard to separate the presentation from the logic and customize the layout without hacking a lot of code. Open Power Forms does not follow this way. Instead, it incorporates the power of Open Power Template 2 template engine. With XML templates, component system, template inheritance and sections, the programmer has control over the form layout all the time and may easily decide which forms should use the standard layout and which should be rendered in some other way.
+

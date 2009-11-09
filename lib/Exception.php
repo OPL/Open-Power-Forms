@@ -92,6 +92,15 @@ class Opf_ItemNotExists_Exception extends Opf_Exception
 } // end Opf_ItemNotExists_Exception;
 
 /**
+ * "Placeholder does not exist" exception
+ * @package Exceptions
+ */
+class Opf_PlaceholderNotExists_Exception extends Opf_Exception
+{
+	protected $_message = 'The placeholder %s does not exist in the collection \'%s\'.';
+} // end Opf_PlaceholderNotExists_Exception;
+
+/**
  * "Cannot display a generic widget" exception
  * @package Exceptions
  */

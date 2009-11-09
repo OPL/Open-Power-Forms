@@ -1,0 +1,5 @@
+Title: PHAR
+
+----
+
+This chapter covers installation from PHP Archives (PHAR).

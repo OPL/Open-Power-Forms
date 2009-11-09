@@ -1,0 +1,17 @@
+Title: Requirements
+
+----
+
+Open Power Forms requires the following software to work:
+
+* PHP 5.2 (5.3 recommended)
+* Standard PHP Library
+* Open Power Libs core 2.0.0 or newer - the core library of the OPL project (distributed with OPF)
+* Open Power Template 2.0.2 or newer - template engine that is used to render the forms (distributed with OPF)
+
+The following dependencies are optional:
+
+* PHAR
+
+> [warning]
+> This is a development version of Open Power Forms. The requirements may change in the future!

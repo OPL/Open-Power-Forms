@@ -26,6 +26,12 @@ class Opf_Leaf extends Opf_Item
 	protected $_value = null;
 
 	/**
+	 * The list of data filters
+	 * @var array
+	 */
+	protected $_filters = array();
+
+	/**
 	 * Creates a new leaf item.
 	 * @param string $name The item name.
 	 */
@@ -43,10 +49,73 @@ class Opf_Leaf extends Opf_Item
 		$this->_value = $data;
 	} // end populate();
 
-	public function setFullyQualifiedName($name)
+	/**
+	 * Adds a new data filter to the item. Implements fluent
+	 * interface.
+	 *
+	 * @param Opf_Filter_Interface $filter The new filter.
+	 * @return Opf_Leaf
+	 */
+	public function addFilter(Opf_Filter_Interface $filter)
 	{
-		parent::setFullyQualifiedName($name);
-	}
+		$this->_filters[] = $filter;
+
+		return $this;
+	} // end addFilter();
+
+	/**
+	 * Returns all the data filters currently assigned to the item.
+	 *
+	 * @return array
+	 */
+	public function getFilters()
+	{
+		return $this->_filters;
+	} // end getFilter();
+
+	/**
+	 * Returns true, if the item uses the specified filter.
+	 *
+	 * @return boolean
+	 */
+	public function hasFilter(Opf_Filter_Interface $filter)
+	{
+		foreach($this->_filters as $scanned)
+		{
+			if($scanned === $filter)
+			{
+				return true;
+			}
+		}
+		return false;
+	} // end hasFilter();
+
+	/**
+	 * Removes an existing filter from an item. The filter can be determined
+	 * either by its index number or the object.
+	 *
+	 * @param integer|Opf_Filter_Interface $filter The filter to remove.
+	 */
+	public function removeFilter($filter)
+	{
+		if(is_integer($filter))
+		{
+			if(isset($this->_validators[$filter]))
+			{
+				unset($this->_validators[$filter]);
+			}
+		}
+		elseif($filter instanceof Opf_Filter_Interface)
+		{
+			foreach($this->_filters as $id => $obj)
+			{
+				if($obj === $filter)
+				{
+					unset($this->_filters[$id]);
+				}
+			}
+		}
+	} // end removeFilter();
 
 	/**
 	 * Sets the item value.
@@ -54,7 +123,14 @@ class Opf_Leaf extends Opf_Item
 	 */
 	public function setValue($value)
 	{
-		$this->_value = $value;
+		if($this->_filter !== null)
+		{
+			$this->_value = $this->_filter->toPublic($value);
+		}
+		else
+		{
+			$this->_value = $value;
+		}
 	} // end setValue();
 
 	/**
@@ -65,4 +141,17 @@ class Opf_Leaf extends Opf_Item
 	{
 		return $this->_value;
 	} // end getValue();
+
+	/**
+	 * Validates the field against the registered validators.
+	 * @param mixed $data The data to validate.
+	 */
+	protected function _validate(&$data, Opf_Item $errorClass = null)
+	{
+		foreach($this->_filters as $filter)
+		{
+			$data = $filter->toInternal($data);
+		}
+		return parent::_validate($data, $errorClass);
+	} // end _validate();
 } // end Opf_Leaf;
