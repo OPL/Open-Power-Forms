@@ -29,17 +29,24 @@ class Opf_Validator_Scope implements Opf_Validator_Interface
 	 * @var integer
 	 */
 	private $_maximum = 0;
+        /**
+         * If values needs not to be in scope
+         * @var boolean
+         */
+        private $_reverseScope = false;
 
 	/**
 	 * Constructs the scope constraint object.
 	 *
 	 * @param integer $min The minimum range
 	 * @param integer $max The maximum range
+         * @param boolean $reverseScope Value has not to be in scope?
 	 */
-	public function __construct($min, $max)
+	public function __construct($min, $max, $reverseScope = false)
 	{
 		$this->_minimum = (integer)$min;
 		$this->_maximum = (integer)$max;
+                $this->_reverseScope = (boolean)$reverseScope;
 	} // end __construct();
 
 	/**
@@ -67,7 +74,7 @@ class Opf_Validator_Scope implements Opf_Validator_Interface
 	 */
 	public function getErrorData()
 	{
-		return array(0 => $this->_minimum, $this->_maximum);
+		return array(0 => $this->_minimum, $this->_maximum, $this->_reverseScope);
 	} // end getErrorData();
 
 	/**
@@ -78,6 +85,13 @@ class Opf_Validator_Scope implements Opf_Validator_Interface
 	public function validate(Opf_Item $item, $value)
 	{
 		$value = (integer)$value;
-		return ($this->_minimum < $value && $value < $this->_maximum);
+                if($this->_reverseScope)
+                {
+                    return ($this->_minimum > $value || $value > $this->_maximum);
+                }
+                else
+                {
+                    return ($this->_minimum < $value && $value < $this->_maximum);
+                }
 	} // end validate();
 } // end Opf_Validator_Scope;

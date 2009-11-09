@@ -13,10 +13,10 @@
  */
 
 /**
- * The class represents valid e-mail string.
+ * The class represents valid URL.
  * @package Validators
  */
-class Opf_Validator_Email implements Opf_Validator_Interface
+class Opf_Validator_URL implements Opf_Validator_Interface
 {
 	/**
 	 * Constructs the validator object.
@@ -42,7 +42,7 @@ class Opf_Validator_Email implements Opf_Validator_Interface
 	 */
 	public function getError()
 	{
-		return 'failed_validation_email';
+		return 'failed_validation_url';
 	} // end getError();
 
 	/**
@@ -51,7 +51,7 @@ class Opf_Validator_Email implements Opf_Validator_Interface
 	 */
 	public function getErrorData()
 	{
-		return array(0 => 'email');
+		return array(0 => 'url');
 	} // end getErrorData();
 
 	/**
@@ -66,7 +66,7 @@ class Opf_Validator_Email implements Opf_Validator_Interface
 		{
 			return false;
 		}
-		return (bool)filter_var($value, FILTER_VALIDATE_EMAIL);
+		return (bool)filter_var($value, FILTER_VALIDATE_URL);
 		
 	} // end validate();
-} // end Opf_Validator_Email;
+} // end Opf_Validator_URL;
