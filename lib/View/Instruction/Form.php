@@ -10,7 +10,6 @@
  * Copyright (c) Invenzzia Group <http://www.invenzzia.org>
  * and other contributors. See website for details.
  *
- * $Id$
  */
 
 class Opf_View_Instruction_Form extends Opt_Compiler_Processor
