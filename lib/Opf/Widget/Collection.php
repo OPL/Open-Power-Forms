@@ -9,8 +9,6 @@
  *
  * Copyright (c) Invenzzia Group <http://www.invenzzia.org>
  * and other contributors. See website for details.
- *
- * $Id: Input.php 256 2009-11-04 11:32:38Z zyxist $
  */
 
 /**

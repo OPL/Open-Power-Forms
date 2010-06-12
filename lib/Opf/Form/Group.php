@@ -9,8 +9,6 @@
  *
  * Copyright (c) Invenzzia Group <http://www.invenzzia.org>
  * and other contributors. See website for details.
- *
- * $Id: Group.php -1   $
  */
 
 class Opf_Form_Group extends Opf_Form
