@@ -149,7 +149,7 @@ class Opf_Form extends Opf_Collection
 				$this->_method = 'GET';
 				break;
 			default:
-				throw new Opf_UnknownMethod_Exception($method);
+				throw new Opf_Exception('Unknown request method: ' . $method);
 				break;
 		}
 	} // end setMethod();
@@ -192,7 +192,7 @@ class Opf_Form extends Opf_Collection
 	{
 		if(!is_scalar($value))
 		{
-			throw new BadMethodCallException('The second argument in Opf_Form::setInternal() must be scalar.');
+			throw new Opf_Exception('The second argument in Opf_Form::setInternal() must be scalar.');
 		}
 		$this->_internals[(string)$name] = $value;
 	} // end setInternal();
@@ -450,12 +450,12 @@ class Opf_Form extends Opf_Collection
 	{
 		if(!isset($attributes['name']))
 		{
-			throw new Opf_AttributeNotDefined_Exception('name', $tagName);
+			throw new Opf_Exception('Attribute "name" not defined in ' . $tagName);
 		}
 		$item = $this->getItem($attributes['name']);
 		if($item === null)
 		{
-			throw new Opf_ItemNotExists_Exception('item', $attributes['name']);
+			throw new Opf_Exception('Item ' . $attributes['name'] . ' not exist.');
 		}
 	/*	if(!$item instanceof Opf_Leaf)
 		{
@@ -465,7 +465,7 @@ class Opf_Form extends Opf_Collection
 
 		if(!$widget instanceof Opf_Widget_Component)
 		{
-			throw new Opf_InvalidWidget_Exception($className);
+			throw new Opf_Exception('Widget ' . $className . ' is invalid');
 		}
 		$item->setWidget($widget);
 		$item->setFullyQualifiedName($this->getFullyQualifiedName());
@@ -483,7 +483,7 @@ class Opf_Form extends Opf_Collection
 		foreach($this->_collection as $item)
 		{
 			$name = $item->getName();
-			if(empty($data[$name]))
+			if(empty($data[$name]) and (isset($data[$name]) and $data[$name] != '0' and is_scalar($data[$name])))
 			{
 				if($item->getRequired())
 				{
@@ -585,7 +585,7 @@ class Opf_Form extends Opf_Collection
 		$element = self::$_stack->pop();
 		if($element !== $form)
 		{
-			throw new Opf_InvalidStackForm_Exception($element->getName(), $form->getName());
+			throw new Opf_Exception('Invalid form ' . $form -> getName() . ' on stack ' . $element->getName());
 		}
 		return $element;
 	} // end popFromStack();

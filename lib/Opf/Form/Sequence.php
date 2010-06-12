@@ -114,7 +114,7 @@ class Opf_Form_Sequence extends Opf_Form
 			$tracker = new $className;
 			if(!$tracker instanceof Opf_Tracker_Interface)
 			{
-				throw new Opf_InvalidObjectType_Exception(get_class($tracker), 'Opf_Tracker_Interface');
+				throw new Opf_Exception('Invalid object type(' . get_class($tracker) . '), should be Opf_Tracker_Interface');
 			}
 			$this->_tracker = $tracker;
 		}

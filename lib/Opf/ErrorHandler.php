@@ -16,6 +16,10 @@
  */
 class Opf_ErrorHandler extends Opl_ErrorHandler
 {
-
-
+	protected $_library = 'Open Power Forms';
+	protected $_context = array(
+		'__UNKNOWN__' => array(
+			'BasicConfiguration' => array()
+		),
+	);
 } // end Opf_ErrorHandler;

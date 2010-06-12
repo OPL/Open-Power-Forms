@@ -245,7 +245,7 @@ abstract class Opf_Item
 				}
 				else
 				{
-					throw new Opf_UnknownEvent_Exception($eventName);
+					throw new Opf_Exception('Unknown event: '.$eventName);
 				}
 			}
 		}
@@ -378,7 +378,7 @@ abstract class Opf_Item
 	{
 		if($widget->isBound())
 		{
-			throw new Opf_WidgetAlreadyBound_Exception($this->_name);
+			throw new Opf_Exception('Widget already bound: '.$this->_name);
 		}
 		$widget->setItem($this);
 

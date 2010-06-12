@@ -43,6 +43,6 @@ class Opf_Widget_Generic extends Opf_Widget_Component
 	 */
 	public function display($attributes = array())
 	{
-		throw new Opf_CannotDisplay_Exception();
+		throw new Opf_Exception('Opf_Widget_Generic cannot be displayed.');
 	} // end display();
 } // end Opf_Widget_Generic;

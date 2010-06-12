@@ -71,7 +71,7 @@ class Opf_View_Instruction_Form extends Opt_Instruction_Abstract
 
 		if((!isset($params['name']) && !isset($params['from'])) || (isset($params['name']) && isset($params['from'])))
 		{
-			throw new Opt_AttributeNotDefined_Exception('name" or "from');
+			throw new Opf_Exception('Attributes "name" or "from" are not defined.');
 		}
 
 		$attr = 'array(\'method\' => $_form->getMethod(), \'action\' => $_form->getAction(),
@@ -100,7 +100,7 @@ else
 	$_form = $_formx->fluent();
 	if(!$_form instanceof Opf_Form)
 	{
-		throw new Opf_InvalidObjectType_Exception(get_class($_formx), \'Opf_Form\');
+		throw new Opf_Exception(\'Invalid form object type(\'.get_class($_formx).\'), should be Opf_Form\');
 	}
 	Opf_Form::pushToStack($_form);
 }

@@ -39,7 +39,7 @@ abstract class Opf_Collection extends Opf_Item// implements Opf_Collection_Inter
 	{
 		if(!$this->_isItemAllowed($item, $placeholder))
 		{
-			throw new Opf_ItemNotAllowed_Exception($item->getName(), $this->getName());
+			throw new Opf_Exception('Adding item ' . $item->getName() . ' to collection ' . $this->getName() . ' not allowed.');
 		}
 
 		if(!isset($this->_items[$placeholder]))
@@ -60,7 +60,7 @@ abstract class Opf_Collection extends Opf_Item// implements Opf_Collection_Inter
 	{
 		if(!$this->_isItemAllowed($item, $placeholder))
 		{
-			throw new Opf_ItemNotAllowed_Exception($item->getName(), $this->getName());
+			throw new Opf_Exception('Adding item ' . $item->getName() . ' to collection ' . $this->getName() . ' not allowed.');
 		}
 
 		if(!isset($this->_items[$placeholder]))
@@ -103,7 +103,7 @@ abstract class Opf_Collection extends Opf_Item// implements Opf_Collection_Inter
 	{
 		if(!isset($this->_items[$placeholder]))
 		{
-			throw new Opf_PlaceholderNotExists_Exception($placeholder, $this->getName());
+			throw new Opf_Exception('Placeholder ' . $placeholder . ' does not exist in collection ' . $this->getName());
 		}
 
 		// The integer call

@@ -59,6 +59,7 @@ class My_Form extends Opf_Form
 
 try
 {
+	$opc = new Opc_Class;
 	$tpl = new Opt_Class;
 	$opf = new Opf_Class;
 	$tpl->sourceDir = './templates/';
@@ -84,28 +85,15 @@ try
 	$output = new Opt_Output_Http;
 	$output->render($view);
 }
-catch(Exception $e)
-{
-	ob_end_flush();
-	var_dump($e);
-}
-catch(Opf_Exception $exception)
-{
-	$handler = new Opf_ErrorHandler;
-	$handler->display($exception);
-}
-catch(Opt_Exception $exception)
-{
-	$handler = new Opt_ErrorHandler;
-	$handler->display($exception);
-}
-catch(Opc_Exception $exception)
-{
-	$handler = new Opc_ErrorHandler;
-	$handler->display($exception);
-}
+//catch(Exception $e)
+//{
+//	ob_end_flush();
+//	var_dump($e);
+//}
 catch(Opl_Exception $exception)
 {
-	$handler = new Opl_ErrorHandler;
+	$handler = new Opf_ErrorHandler;
+	$handler->addPort(new Opf_ErrorHandler_Port);
+	$handler->addPort(new Opt_ErrorHandler_Port);
 	$handler->display($exception);
 }

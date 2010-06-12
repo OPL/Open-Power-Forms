@@ -78,7 +78,7 @@ class Opf_Class extends Opl_Class
 	{
 		if(!Opl_Registry::exists('opt'))
 		{
-			throw new Opf_OptNotInitialized_Exception();
+			throw new Opf_Exception('Opt not initialized');
 		}
 		Opl_Registry::set('opf', $this);
 		$tpl = Opl_Registry::get('opt');
@@ -128,7 +128,7 @@ class Opf_Class extends Opl_Class
 	{
 		if(isset(self::$_forms[$form->getName()]))
 		{
-			throw new Opf_ItemAlreadyExists_Exception('form', $form->getName());
+			throw new Opf_Exception('Form ' . $form->getName() . ' already exist.');
 		}
 
 		self::$_forms[$form->getName()] = $form;
@@ -157,7 +157,7 @@ class Opf_Class extends Opl_Class
 	{
 		if(!isset(self::$_forms[(string)$name]))
 		{
-			throw new Opf_ItemNotExists_Exception('form', $name);
+			throw new Opf_Exception('Form ' . $name . ' does not exist');
 		}
 
 		return self::$_forms[(string)$name];

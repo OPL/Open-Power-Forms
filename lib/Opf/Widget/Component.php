@@ -148,7 +148,7 @@ abstract class Opf_Widget_Component implements Opt_Component_Interface
 			$this->_form = $view->getTemplateVar('form');
 			if($this->_form === null)
 			{
-				throw new Opf_ItemNotExists_Exception('form');
+				throw new Opf_Exception('Item "form" not exists.');
 			}
 		}
 	} // end setView();
