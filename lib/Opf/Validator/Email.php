@@ -18,6 +18,7 @@
  */
 class Opf_Validator_Email implements Opf_Validator_Interface
 {
+	protected $_error = 'failed_validation_email';
 	/**
 	 * Constructs the validator object.
 	 */
@@ -29,11 +30,10 @@ class Opf_Validator_Email implements Opf_Validator_Interface
 	/**
 	 * Sets a custom error message for the validator.
 	 * @param string $customError The custom error message.
-	 * @todo implement
 	 */
 	public function setCustomError($customError)
 	{
-
+		$this -> _error = $customError;
 	} // end setCustomError();
 
 	/**
@@ -42,7 +42,7 @@ class Opf_Validator_Email implements Opf_Validator_Interface
 	 */
 	public function getError()
 	{
-		return 'failed_validation_email';
+		return $this -> _error;
 	} // end getError();
 
 	/**

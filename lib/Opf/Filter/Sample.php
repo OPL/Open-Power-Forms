@@ -10,6 +10,7 @@
  * Copyright (c) Invenzzia Group <http://www.invenzzia.org>
  * and other contributors. See website for details.
  *
+ * $Id: Class.php 257 2009-11-09 08:30:15Z zyxist $
  */
 
 /**
@@ -35,6 +36,10 @@ class Opf_Filter_Sample implements Opf_Filter_Interface
 
 	public function toPublic($value)
 	{
-		
+		if(is_int($value) or ctype_alnum($value))
+		{
+			return (string)(-(int)$value);
+		}
+		return $value;
 	} // end toInternal();
 } // end Opf_Filter_Sample;

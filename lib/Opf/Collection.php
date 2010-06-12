@@ -10,13 +10,14 @@
  * Copyright (c) Invenzzia Group <http://www.invenzzia.org>
  * and other contributors. See website for details.
  *
+ * $Id: Collection.php -1   $
  */
 
 /**
  * The class represents a collection of items and provides services to manage
  * them.
  */
-abstract class Opf_Collection extends Opf_Item implements Opf_Collection_Interface
+abstract class Opf_Collection extends Opf_Item// implements Opf_Collection_Interface
 {
 	/**
 	 * The item list.

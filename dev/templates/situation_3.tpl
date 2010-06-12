@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<opt:extend file="base.tpl">
+<opt:extend file="base.tpl" xmlns:opt="http://invenzzia.org/opt" xmlns:opf="http://invenzzia.org/opf">
   <opt:snippet name="title">Situation 3</opt:snippet>
   <opt:snippet name="content">
 	{$design.form.valid is 'form'}
@@ -14,7 +14,7 @@
      </opf:input>
 
 	 <opf:select name="countries" template="widget">
-		 <opt:set str:name="label" str:value="Countries" />
+		 <opt:set name="str:label" value="str:Countries" />
      </opf:select>
 
 	 <input type="submit" value="Submit" />

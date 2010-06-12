@@ -10,12 +10,13 @@
  * Copyright (c) Invenzzia Group <http://www.invenzzia.org>
  * and other contributors. See website for details.
  *
+ * $Id: Form.php 220 2009-09-01 10:24:06Z zyxist $
  */
 
 /**
  * A data format for form sections in OPT templates.
  */
-class Opf_View_Format_FormRepeater extends Opf_View_Format_Form
+class Opf_View_Format_FormRepeater extends Opt_Format_Abstract
 {
 	/**
 	 * The supported elements.
@@ -30,6 +31,7 @@ class Opf_View_Format_FormRepeater extends Opf_View_Format_Form
 	 * @var array
 	 */
 	protected $_properties = array(
+		'section:item' => true,
 		'section:useReference' => false,
 		'section:anyRequests' => null,
 		'section:itemAssign' => false,
@@ -59,6 +61,6 @@ class Opf_View_Format_FormRepeater extends Opf_View_Format_Form
 			}
 			return $code.' $_sect'.$section['name'].'_vals = $_repeater->getItems(\''.$section['name'].'\'); ';
 		}
-		return parent::_build($hookName);
+		// return parent::_build($hookName);
 	} // end _build();
 } // end Opf_View_Format_FormWrapper;

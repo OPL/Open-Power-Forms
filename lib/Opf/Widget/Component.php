@@ -10,6 +10,7 @@
  * Copyright (c) Invenzzia Group <http://www.invenzzia.org>
  * and other contributors. See website for details.
  *
+ * $Id: Component.php -1   $
  */
 
 /**
@@ -222,6 +223,39 @@ abstract class Opf_Widget_Component implements Opt_Component_Interface
 	} // end defined();
 
 	/**
+	 * Alias for get.
+	 */
+	public function __get($name)
+	{
+		return $this -> get($name);
+	} // end __get
+
+	/**
+	 * Alias for set.
+	 */
+	public function __set($name, $value)
+	{
+		$this -> set($name, $value);
+	} // end __set
+
+	/**
+	 * Alias for defined.
+	 */
+	public function __isset($name)
+	{
+		return $this -> defined($name);
+	} // end __isset
+
+	/**
+	 * Performs code injection.
+	 * @param closure $injection
+	 */
+	public function setInjection($injection)
+	{
+		;
+	}// end setInjection
+
+	/**
 	 * Processes the widget events. Returns true, if the event template code
 	 * should be shown.
 	 * @param string $name The event name.
@@ -234,7 +268,6 @@ abstract class Opf_Widget_Component implements Opt_Component_Interface
 			case 'error':
 				if(!$this->_item->isValid())
 				{
-					// TODO: Add error messages here!
 					return true;
 				}
 				return false;

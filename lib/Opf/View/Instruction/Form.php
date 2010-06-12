@@ -10,9 +10,10 @@
  * Copyright (c) Invenzzia Group <http://www.invenzzia.org>
  * and other contributors. See website for details.
  *
+ * $Id: Form.php -1   $
  */
 
-class Opf_View_Instruction_Form extends Opt_Compiler_Processor
+class Opf_View_Instruction_Form extends Opt_Instruction_Abstract
 {
 	protected $_name = 'form';
 
@@ -64,7 +65,7 @@ class Opf_View_Instruction_Form extends Opt_Compiler_Processor
 		$this->_nesting++;
 
 		$params = array(
-			'name' => array(0 => self::OPTIONAL, self::HARD_STRING, null),
+			'name' => array(0 => self::OPTIONAL, self::STRING, null),
 			'from' => array(0 => self::OPTIONAL, self::EXPRESSION, null),
 			'__UNKNOWN__' => array(0 => self::OPTIONAL, self::STRING)
 		);

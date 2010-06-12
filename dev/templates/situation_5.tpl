@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<opt:extend file="base.tpl">
+<opt:extend file="base.tpl" xmlns:opt="http://invenzzia.org/opt" xmlns:opf="http://invenzzia.org/opf">
   <opt:snippet name="title">Situation 5</opt:snippet>
 
   <opt:snippet name="content">
@@ -25,11 +25,11 @@
 			</tr>
 		</tbody>
 	</table>
-    <opt:onEvent name="error">
+    <opt:on-event name="error">
 	  <opt:section name="errors" datasource="$system.component.errors">
       <p class="error">{$errors}</p>
 	  </opt:section>
-    </opt:onEvent>
+    </opt:on-event>
 	</opf:collection>
 
 	<!-- some final stuff -->

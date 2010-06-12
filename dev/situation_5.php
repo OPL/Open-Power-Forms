@@ -76,7 +76,7 @@ try
 	$output = new Opt_Output_Http;
 	$output->render($view);
 }
-catch(Opf_Exception $exception)
+/*catch(Opf_Exception $exception)
 {
 	$handler = new Opf_ErrorHandler;
 	$handler->display($exception);
@@ -90,6 +90,10 @@ catch(Opc_Exception $exception)
 {
 	$handler = new Opc_ErrorHandler;
 	$handler->display($exception);
+}*/
+catch(Exception $e)
+{
+	var_dump($e);
 }
 catch(Opl_Exception $exception)
 {

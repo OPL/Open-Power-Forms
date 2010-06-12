@@ -10,6 +10,7 @@
  * Copyright (c) Invenzzia Group <http://www.invenzzia.org>
  * and other contributors. See website for details.
  *
+ * $Id: Class.php -1   $
  */
 
 /**
@@ -77,12 +78,11 @@ class Opf_Class extends Opl_Class
 	 */
 	public function __construct()
 	{
-		Opl_Registry::register('opf', $this);
-		
 		if(!Opl_Registry::exists('opt'))
 		{
 			throw new Opf_OptNotInitialized_Exception();
 		}
+		Opl_Registry::set('opf', $this);
 		$tpl = Opl_Registry::get('opt');
 		$tpl->register(Opt_Class::OPT_NAMESPACE, 'opf');
 		$tpl->register(Opt_Class::OPT_INSTRUCTION, 'Form', 'Opf_View_Instruction_Form');

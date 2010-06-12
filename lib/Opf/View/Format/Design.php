@@ -10,12 +10,13 @@
  * Copyright (c) Invenzzia Group <http://www.invenzzia.org>
  * and other contributors. See website for details.
  *
+ * $Id: Design.php -1   $
  */
 
 /**
  * A data format for Opf_Design.
  */
-class Opf_View_Format_Design extends Opt_Compiler_Format
+class Opf_View_Format_Design extends Opt_Format_Abstract
 {
 	/**
 	 * The supported elements.
@@ -31,8 +32,11 @@ class Opf_View_Format_Design extends Opt_Compiler_Format
 	 */
 	protected $_properties = array(
 		'variable:captureAll' => true,
+		'variable:capture.assign' => true,
 		'variable:assign' => true,
 		'variable:useReference' => false,
+		'variable:item.assign' => true,
+		'item:item.assign' => true,
 	);
 
 	/**
@@ -46,14 +50,7 @@ class Opf_View_Format_Design extends Opt_Compiler_Format
 		switch($hookName)
 		{
 			case 'variable:capture':
-				$ns = $this->_getVar('items');
-				if(sizeof($ns) < 2)
-				{
-					throw new Opf_InvalidDesignCall_Exception(implode('.', $ns));
-				}
-				// Remove the unnecessary items
-				$last = end($ns);
-				array_shift($ns);
+				$last = $this -> _getVar('item');
 				if($last == 'valid' || $last == 'invalid')
 				{
 					$method = ($last == 'valid' ? 'getValidClass' : 'getInvalidClass');
@@ -64,15 +61,9 @@ class Opf_View_Format_Design extends Opt_Compiler_Format
 					$method = 'getValidClass';
 				}
 				return 'Opf_Design::'.$method.'(\''.implode('.', $ns).'\')';
-			case 'variable:captureAssign':
-				$ns = $this->_getVar('items');
-				if(sizeof($ns) < 2)
-				{
-					throw new Opf_InvalidDesignCall_Exception(implode('.', $ns));
-				}
-				// Remove the unnecessary items
-				$last = end($ns);
-				array_shift($ns);
+			// case 'variable:item.assign':
+			case 'variable:item.assign':
+				$last = $this -> _getVar('item');
 				if($last == 'valid' || $last == 'invalid')
 				{
 					$method = ($last == 'valid' ? 'setValidClass' : 'setInvalidClass');
@@ -82,7 +73,8 @@ class Opf_View_Format_Design extends Opt_Compiler_Format
 				{
 					$method = 'setValidClass';
 				}
-				return 'Opf_Design::'.$method.'(\''.implode('.', $ns).'\', '.$this->_getVar('value').')';
+				static $i = 0;
+				return '$set' . ++$i . ' = Opf_Design::'.$method.'(\''.$this->_getVar('item') . '.' . substr($this->_getVar('value'), 1, -1) . '\', '.$this->_getVar('value') . '); $set' . $i;
 		}
 	} // end _build();
 } // end Opf_View_Format_Design;

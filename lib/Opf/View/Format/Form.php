@@ -10,12 +10,13 @@
  * Copyright (c) Invenzzia Group <http://www.invenzzia.org>
  * and other contributors. See website for details.
  *
+ * $Id: Form.php -1   $
  */
 
 /**
  * A data format for form sections in OPT templates.
  */
-class Opf_View_Format_Form extends Opt_Compiler_Format
+class Opf_View_Format_Form extends Opt_Format_Abstract
 {
 	/**
 	 * The supported elements.
@@ -34,6 +35,7 @@ class Opf_View_Format_Form extends Opt_Compiler_Format
 		'section:anyRequests' => null,
 		'section:itemAssign' => false,
 		'section:variableAssign' => false,
+		'section:variable' => true,
 		'item:assign' => false,
 		'item:useReference' => false,
 	);

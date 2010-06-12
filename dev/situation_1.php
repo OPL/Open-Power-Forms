@@ -14,7 +14,7 @@ class My_Form extends Opf_Form
 	{
 		$item = $this->itemFactory('title');
 		$item->setRequired(true);
-		$item->addValidator(new Opf_Validator_Length(5), 'The length is invalid');
+		$item->addValidator(new Opf_Validator_MinLength(5), 'The length is invalid');
 		$item->setWidget(new Opf_Widget_Input)
 			->setLabel('Title');
 
@@ -29,7 +29,7 @@ class My_Form extends Opf_Form
 	public function onRender()
 	{
 		$view = $this->getView();
-		
+
 		$item = $this->itemFactory('countries');
 		$item->getWidget()->setOptions(array(0 =>
 			'China',
@@ -65,6 +65,7 @@ try
 	$tpl->compileDir = './templates_c/';
 	$tpl->compileMode = Opt_Class::CM_REBUILD;
 	$tpl->stripWhitespaces = false;
+	$tpl->gzipCompression = false;
 	$tpl->setup();
 
 	$translate = new Opc_Translate(new Opc_Translate_Adapter_Ini(array('directory' => './lang/')));
@@ -82,6 +83,11 @@ try
 
 	$output = new Opt_Output_Http;
 	$output->render($view);
+}
+catch(Exception $e)
+{
+	ob_end_flush();
+	var_dump($e);
 }
 catch(Opf_Exception $exception)
 {

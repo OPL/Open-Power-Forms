@@ -75,6 +75,10 @@ try
 	$output = new Opt_Output_Http;
 	$output->render($view);
 }
+catch(Exception $e)
+{
+	var_dump($e);
+}
 catch(Opf_Exception $exception)
 {
 	$handler = new Opf_ErrorHandler;
