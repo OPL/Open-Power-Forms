@@ -386,11 +386,6 @@ class Opf_Form extends Opf_Collection
 				if(!$state)
 				{
 					$this->_state = self::ERROR;
-					$this->populate($data);
-					$this->_onRender($this->_view);
-					$this->invokeEvent('preRender');
-					$this->onRender();
-					$this->invokeEvent('postRender');
 					return $this->_state;
 				}
 				$this->_data = $data;
@@ -403,12 +398,31 @@ class Opf_Form extends Opf_Collection
 		}
 		
 		$this->_state = self::RENDER;
+
+		return $this->_state;
+	} // end execute();
+
+	/**
+	 * Renders the view.
+	 *
+	 * @throws Opf_Exception
+	 */
+	public function render()
+	{
+		if($this->_state != self::RENDER && $this->_state != self::ERROR)
+		{
+			throw new Opf_Exception('Cannot render the specified view: invalid state.');
+		}
+
+		if($this->_state == self::ERROR)
+		{
+			$this->populate($data);
+		}
 		$this->_onRender($this->_view);
 		$this->invokeEvent('preRender');
 		$this->onRender();
 		$this->invokeEvent('postRender');
-		return $this->_state;
-	} // end execute();
+	} // end render();
 
 	/**
 	 * Constructs a new iem object. The method allows to use the

@@ -86,7 +86,7 @@ class GeneralForm extends Opf_Form_Sequence
 try
 {
 	$tpl = new Opt_Class;
-	$opf = new Opf_Class;
+	$opf = new Opf_Class($tpl);
 	$tpl->sourceDir = './templates/';
 	$tpl->compileDir = './templates_c/';
 	$tpl->compileMode = Opt_Class::CM_REBUILD;

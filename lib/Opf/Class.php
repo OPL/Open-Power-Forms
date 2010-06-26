@@ -72,25 +72,22 @@ class Opf_Class extends Opl_Class
 
 	/**
 	 * Creates a new instance of OPF.
-	 * @throws Opf_OptNotInitialized_Exception
+	 *
+	 * @param Opt_Class $opt Open Power Template instance.
 	 */
-	public function __construct()
+	public function __construct(Opt_Class $opt)
 	{
-		if(!Opl_Registry::exists('opt'))
-		{
-			throw new Opf_Exception('Opt not initialized');
-		}
 		Opl_Registry::set('opf', $this);
-		$tpl = Opl_Registry::get('opt');
-		$tpl->register(Opt_Class::OPT_NAMESPACE, 'opf');
-		$tpl->register(Opt_Class::OPT_INSTRUCTION, 'Form', 'Opf_View_Instruction_Form');
-		$tpl->register(Opt_Class::OPT_FORMAT, 'Form', 'Opf_View_Format_Form');
-		$tpl->register(Opt_Class::OPT_FORMAT, 'Design', 'Opf_View_Format_Design');
-		$tpl->register(Opt_Class::OPT_FORMAT, 'FormRepeater', 'Opf_View_Format_FormRepeater');
 
-		$tpl->register(Opt_Class::OPT_COMPONENT, 'opf:input', 'Opf_Widget_Input');
-		$tpl->register(Opt_Class::OPT_COMPONENT, 'opf:select', 'Opf_Widget_Select');
-		$tpl->register(Opt_Class::OPT_COMPONENT, 'opf:collection', 'Opf_Widget_Collection');
+		$opt->register(Opt_Class::OPT_NAMESPACE, 'opf');
+		$opt->register(Opt_Class::OPT_INSTRUCTION, 'Form', 'Opf_View_Instruction_Form');
+		$opt->register(Opt_Class::OPT_FORMAT, 'Form', 'Opf_View_Format_Form');
+		$opt->register(Opt_Class::OPT_FORMAT, 'Design', 'Opf_View_Format_Design');
+		$opt->register(Opt_Class::OPT_FORMAT, 'FormRepeater', 'Opf_View_Format_FormRepeater');
+
+		$opt->register(Opt_Class::OPT_COMPONENT, 'opf:input', 'Opf_Widget_Input');
+		$opt->register(Opt_Class::OPT_COMPONENT, 'opf:select', 'Opf_Widget_Select');
+		$opt->register(Opt_Class::OPT_COMPONENT, 'opf:collection', 'Opf_Widget_Collection');
 
 		Opt_View::setFormatGlobal('design', 'Design', false);
 	} // end __construct();
