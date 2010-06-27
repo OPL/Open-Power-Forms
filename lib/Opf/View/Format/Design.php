@@ -29,7 +29,7 @@ class Opf_View_Format_Design extends Opt_Format_Abstract
 	 * @var array
 	 */
 	protected $_properties = array(
-		'variable:captureAll' => true,
+		'variable:capture' => true,
 		'variable:capture.assign' => true,
 		'variable:assign' => true,
 		'variable:useReference' => false,
@@ -48,7 +48,9 @@ class Opf_View_Format_Design extends Opt_Format_Abstract
 		switch($hookName)
 		{
 			case 'variable:capture':
-				$last = $this -> _getVar('item');
+				$ns = $this -> _getVar('items');
+				$last = end($ns);
+
 				if($last == 'valid' || $last == 'invalid')
 				{
 					$method = ($last == 'valid' ? 'getValidClass' : 'getInvalidClass');
@@ -58,10 +60,12 @@ class Opf_View_Format_Design extends Opt_Format_Abstract
 				{
 					$method = 'getValidClass';
 				}
+				array_shift($ns);
 				return 'Opf_Design::'.$method.'(\''.implode('.', $ns).'\')';
 			// case 'variable:item.assign':
-			case 'variable:item.assign':
-				$last = $this -> _getVar('item');
+			case 'variable:capture.assign':
+				$ns = $this -> _getVar('items');
+				$last = end($ns);
 				if($last == 'valid' || $last == 'invalid')
 				{
 					$method = ($last == 'valid' ? 'setValidClass' : 'setInvalidClass');
@@ -71,8 +75,8 @@ class Opf_View_Format_Design extends Opt_Format_Abstract
 				{
 					$method = 'setValidClass';
 				}
-				static $i = 0;
-				return '$set' . ++$i . ' = Opf_Design::'.$method.'(\''.$this->_getVar('item') . '.' . substr($this->_getVar('value'), 1, -1) . '\', '.$this->_getVar('value') . '); $set' . $i;
+				array_shift($ns);
+				return 'Opf_Design::'.$method.'(\''.implode('.', $ns).'\', '.$this->_getVar('value') . ')';
 		}
 	} // end _build();
 } // end Opf_View_Format_Design;
