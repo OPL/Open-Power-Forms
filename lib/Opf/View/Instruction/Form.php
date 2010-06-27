@@ -63,7 +63,7 @@ class Opf_View_Instruction_Form extends Opt_Instruction_Abstract
 		$this->_nesting++;
 
 		$params = array(
-			'name' => array(0 => self::OPTIONAL, self::STRING, null),
+			'name' => array(0 => self::OPTIONAL, self::EXPRESSION, null),
 			'from' => array(0 => self::OPTIONAL, self::EXPRESSION, null),
 			'__UNKNOWN__' => array(0 => self::OPTIONAL, self::STRING)
 		);
@@ -86,9 +86,9 @@ class Opf_View_Instruction_Form extends Opt_Instruction_Abstract
 
 		$node->addAfter(Opt_Xml_Buffer::TAG_BEFORE, 'if(($_formy = Opf_Form::topOfStack()) === null)
 {
-	if(Opf_Class::hasForm(\''.$params['name'].'\'))
+	if(Opf_Class::hasForm('.$params['name'].'))
 	{
-		$_formx = Opf_Class::getForm(\''.$params['name'].'\');
+		$_formx = Opf_Class::getForm('.$params['name'].');
 		$_form = $_formx->fluent();
 		Opf_Form::pushToStack($_form);
 		echo \'<form \'.Opt_Function::buildAttributes('.$attr.').\'>\'; 
@@ -96,7 +96,7 @@ class Opf_View_Instruction_Form extends Opt_Instruction_Abstract
 }
 else
 {
-	$_formx = '.(isset($params['from']) ? $params['from'] : '$_formy->getItemDisplay(\''.$params['name'].'\')').';
+	$_formx = '.(isset($params['from']) ? $params['from'] : '$_formy->getItemDisplay('.$params['name'].')').';
 	$_form = $_formx->fluent();
 	if(!$_form instanceof Opf_Form)
 	{
