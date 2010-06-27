@@ -15,7 +15,7 @@
  * The class represents an input widget.
  * @package Widgets
  */
-class Opf_Widget_Input extends Opf_Widget_Component
+class Opf_Widget_Password extends Opf_Widget_Component
 {
 	/**
 	 * Returns the unique component type name.
@@ -23,7 +23,7 @@ class Opf_Widget_Input extends Opf_Widget_Component
 	 */
 	public function getComponentName()
 	{
-		return 'input';
+		return 'password';
 	} // end getComponentName();
 	/**
 	 * Displays the input component.
@@ -34,9 +34,8 @@ class Opf_Widget_Input extends Opf_Widget_Component
 	{
 		$attributes = array(
 			'name' => $this->_item->getFullyQualifiedName(),
-			'value' => $this->_item->getDisplayedValue(),
 			'class' => Opf_Design::getClass('input', $this->_item->isValid())
 		);
-		echo '<input type="text" '.Opt_Function::buildAttributes($attributes).' />';
+		echo '<input type="password" '.Opt_Function::buildAttributes($attributes).' />';
 	} // end display();
-} // end Opf_Widget_Input;
+} // end Opf_Widget_Password;

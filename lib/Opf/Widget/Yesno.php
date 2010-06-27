@@ -15,7 +15,7 @@
  * The class represents an input widget.
  * @package Widgets
  */
-class Opf_Widget_Input extends Opf_Widget_Component
+class Opf_Widget_Yesno extends Opf_Widget_Component
 {
 	/**
 	 * Returns the unique component type name.
@@ -23,20 +23,22 @@ class Opf_Widget_Input extends Opf_Widget_Component
 	 */
 	public function getComponentName()
 	{
-		return 'input';
+		return 'yesno';
 	} // end getComponentName();
 	/**
 	 * Displays the input component.
 	 *
+	 * @todo Add procedure injection!
+	 * @todo Add translations.
 	 * @param array $attributes The opt:display attribute list.
 	 */
 	public function display($attributes = array())
 	{
-		$attributes = array(
-			'name' => $this->_item->getFullyQualifiedName(),
-			'value' => $this->_item->getDisplayedValue(),
-			'class' => Opf_Design::getClass('input', $this->_item->isValid())
-		);
-		echo '<input type="text" '.Opt_Function::buildAttributes($attributes).' />';
+		$name = $this->_item->getFullyQualifiedName();
+		$value = $this->_item->getValue();
+		echo '<fieldset class="'.Opf_Design::getClass('yesno', $this->_item->isValid()).'">
+			<label class="yes"><input type="radio" name="'.$name.'" value="1" '.($value == true ? 'checked="checked"' : '').'> Yes</label>
+			<label class="no"><input type="radio" name="'.$name.'" value="0" '.($value == false ? 'checked="checked"' : '').'> No</label>
+		</fieldset>';
 	} // end display();
-} // end Opf_Widget_Input;
+} // end Opf_Widget_Yesno;
