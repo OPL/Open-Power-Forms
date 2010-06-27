@@ -67,6 +67,12 @@ class Opf_Form extends Opf_Collection
 	protected $_data;
 
 	/**
+	 * The validators
+	 * @var array
+	 */
+	protected $_validators;
+
+	/**
 	 * The rendering form stack
 	 * @var SplStack
 	 * @static
@@ -253,6 +259,81 @@ class Opf_Form extends Opf_Collection
 	} // end getState();
 
 	/**
+	 * Allows to change the form state from executed to either
+	 * render of error.
+	 *
+	 * @param int $state The new state
+	 * @return boolean
+	 */
+	public function setState($state)
+	{
+		if($this->_state == self::ACCEPTED)
+		{
+			$this->_state = (int)$state;
+			return true;
+		}
+		return false;
+	} // end setState();
+
+	/**
+	 * Adds a new validator to the form.
+	 *
+	 * @throws Opf_Form_Exception
+	 * @param string $name The validator name
+	 * @param Opf_Validator_Interface $validator The validator.
+	 */
+	public function addValidator($name, Opf_Validator_Interface $validator)
+	{
+		if(isset($this->_validators[$name]))
+		{
+			throw new Opf_Form_Exception('The validator with the specified name already exists.');
+		}
+		$this->_validators[$name] = $validator;
+	} // end addValidator();
+
+	/**
+	 * Returns the specified validator.
+	 *
+	 * @throws Opf_Form_Exception
+	 * @param string $name Validator name.
+	 * @return array
+	 */
+	public function getValidator($name)
+	{
+		if(!isset($this->_validators[$name]))
+		{
+			throw new Opf_Form_Exception('The validator with the specified name does not exists.');
+		}
+		return $this->_validators[$name];
+	} // end getValidator();
+
+	/**
+	 * Checks if the specified validator exists.
+	 *
+	 * @param string $name Validator name.
+	 * @return boolean
+	 */
+	public function hasValidator($name)
+	{
+		return isset($this->_validators[$name]);
+	} // end hasValidator();
+
+	/**
+	 * Removes the validator.
+	 *
+	 * @throws Opf_Form_Exception
+	 * @param string $name Validator name.
+	 */
+	public function removeValidator($name)
+	{
+		if(!isset($this->_validators[$name]))
+		{
+			throw new Opf_Form_Exception('The validator with the specified name does not exists.');
+		}
+		unset($this->_validators[$name]);
+	} // end removeValidator();
+
+	/**
 	 * Returns an item to be displayed by the view. Despite the standard
 	 * search procedure, it performs some extra actions connected with displaying
 	 * the item.
@@ -298,9 +379,9 @@ class Opf_Form extends Opf_Collection
 	/**
 	 * Populates the form with the initial data.
 	 *
-	 * @param Array $data The reference to the data array.
+	 * @param array $data The reference to the data array.
 	 */
-	public function populate(&$data)
+	public function populate($data)
 	{
 		foreach($this->_collection as $name => $item)
 		{
@@ -413,11 +494,6 @@ class Opf_Form extends Opf_Collection
 		{
 			throw new Opf_Exception('Cannot render the specified view: invalid state.');
 		}
-
-		if($this->_state == self::ERROR)
-		{
-			$this->populate($data);
-		}
 		$this->_onRender($this->_view);
 		$this->invokeEvent('preRender');
 		$this->onRender();
@@ -493,7 +569,9 @@ class Opf_Form extends Opf_Collection
 	 */
 	protected function _validate(&$data, Opf_Item $errorClass = null)
 	{
-		$state = true;
+		$valid = true;
+		$this->invokeEvent('preValidate');
+		// Check what fields are required.
 		foreach($this->_collection as $item)
 		{
 			$name = $item->getName();
@@ -501,7 +579,7 @@ class Opf_Form extends Opf_Collection
 			{
 				if($item->getRequired())
 				{
-					$state = false;
+					$valid = false;
 					$item->addErrorMessage('failed_validation_required');
 				}
 				else
@@ -509,36 +587,37 @@ class Opf_Form extends Opf_Collection
 					$item->setValue(null);
 				}
 			}
-			if(!$item->_validate($data[$name]))
-			{
-				$state = false;
-			}
 			else
 			{
-				$item->populate($data[$name]);
+				$item->setValue($data[$name]);
 			}
-
 		}
-		$this->invokeEvent('preValidate');
-		$state = $this->_valid = $state && $this->onValidate();
-		$this->invokeEvent('postValidate');
 
-		return $state;
+		// Apply the validators
+		foreach($this->_validators as $item)
+		{
+			if(!$item->validate($this))
+			{
+				$valid = false;
+			}
+		}
+		$this->invokeEvent('postValidate');
+		return $this->_valid = $valid;
 	} // end _validate();
 
 	/**
 	 * Retrieves the data from the input.
 	 * @return &boolean
 	 */
-	protected function &_retrieveData()
+	protected function _retrieveData()
 	{
 		switch($this->_method)
 		{
 			case 'POST':
-				$data = &$_POST;
+				$data = $_POST;
 				break;
 			case 'GET':
-				$data = &$_GET;
+				$data = $_GET;
 				break;
 		}
 		return $data;

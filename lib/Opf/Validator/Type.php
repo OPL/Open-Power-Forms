@@ -9,10 +9,12 @@
  *
  * Copyright (c) Invenzzia Group <http://www.invenzzia.org>
  * and other contributors. See website for details.
+ *
  */
 
 /**
- * The class represents the type of value.
+ * The class represents maximum string length applied as a rule to a
+ * form field.
  * @package Validators
  */
 class Opf_Validator_Type implements Opf_Validator_Interface
@@ -22,85 +24,75 @@ class Opf_Validator_Type implements Opf_Validator_Interface
 	const NUMBER = 2;
 	const STRING = 3;
 	const BOOLEAN = 4;
-	
-	/**
-	 * The represented type.
-	 * 
-	 * @var Integer 
-	 */
-	protected $_type;
-	
-	/**
-	 * Constructs the validator object.
-	 * 
-	 * @param Integer $type The represented type. 
-	 */
-	public function __construct($type)
-	{
-		$this->_type = $type;
-	} // end __construct();
+	const DATETIME = 5;
 
 	/**
-	 * Sets a custom error message for the validator.
-	 * @param string $customError The custom error message.
-	 * @todo implement
+	 * The type to validate.
+	 * @var integer
 	 */
-	public function setCustomError($customError)
-	{
-
-	} // end setCustomError();
+	private $_type = 0;
 
 	/**
-	 * Returns the type represented by the validator.
-	 * @return Integer
+	 * The list of fields.
+	 * @var array
 	 */
-	public function getType()
-	{
-		return $this->_type;
-	} // end getType();
+	private $_fields;
 
 	/**
-	 * Returns the error message used, if the validator fails.
-	 * @return string
+	 * Constructs maximum length constraint object.
+	 *
+	 * @param integer $type The type to validate.
+	 * @param string|array $fields The fields to validate.
 	 */
-	public function getError()
+	public function __construct($type, $fields)
 	{
-		return 'failed_validation_type';
-	} // end getError();
+		$this->_maxLength = (int)$length;
 
-	/**
-	 * Returns the data for the error message.
-	 * @return array
-	 */
-	public function getErrorData()
-	{
-		switch($this->_type)
+		if(is_string($fields))
 		{
-			case self::STRING:
-				return array(0 => 'string');
-			case self::INTEGER:
-				return array(0 => 'integer');
-			case self::FLOAT:
-				return array(0 => 'float');
-			case self::BOOLEAN:
-				return array(0 => 'boolean');
-			case self::NUMBER:
-				return array(0 => 'number');
+			$this->_fields = array($fields);
 		}
-	} // end getErrorData();
+		elseif(is_array($fields))
+		{
+			$this->_fields = $fields;
+		}
+		else
+		{
+			throw new Opf_Validator_Exception('Invalid configuration for Opf_Validator_Email.');
+		}
+	} // end __construct();
 
 	/**
 	 * Validates the value in a specified type.
 	 *
-	 * @param Mixed $value The value to validate.
+	 * @param Opf_Collection $collection The collection to validate
 	 * @return Boolean
 	 */
-	public function validate(Opf_Item $item, $value)
+	public function validate(Opf_Collection $collection)
 	{
-		if(!is_scalar($value))
+		$valid = true;
+		foreach($this->_fields as $field)
 		{
-			return false;
+			$item = $collection->findItem($field);
+			$value = $item->getValue();
+			if(!$this->_checkType($value))
+			{
+				$valid = false;
+				$item->addErrorMessage('Invalid data type.');
+				$item->invalidate();
+			}
 		}
+		return $valid;
+	} // end validate();
+
+	/**
+	 * Validates the value in a specified type.
+	 *
+	 * @param mixed $value The value to validate.
+	 * @return boolean
+	 */
+	public function _checkType($value)
+	{
 		switch($this->_type)
 		{
 			case self::INTEGER:
@@ -133,7 +125,9 @@ class Opf_Validator_Type implements Opf_Validator_Interface
 					return true;
 				}
 				return false;
+			case self::DATETIME:
+				return $value instanceof DateTime;
 		}
 		return false;
-	} // end validate();
+	} // end _checkType();
 } // end Opf_Validator_Type;

@@ -25,9 +25,9 @@ class Opf_Leaf extends Opf_Item
 
 	/**
 	 * The list of data filters
-	 * @var array
+	 * @var Opf_Filter_Interface
 	 */
-	protected $_filters = array();
+	protected $_filter;
 
 	/**
 	 * Creates a new leaf item.
@@ -39,24 +39,15 @@ class Opf_Leaf extends Opf_Item
 	} // end __construct();
 
 	/**
-	 * Populates the item with the data.
-	 * @param mixed &$data The data used to populate the item
-	 */
-	public function populate(&$data)
-	{
-		$this->_value = $data;
-	} // end populate();
-
-	/**
 	 * Adds a new data filter to the item. Implements fluent
 	 * interface.
 	 *
 	 * @param Opf_Filter_Interface $filter The new filter.
 	 * @return Opf_Leaf
 	 */
-	public function addFilter(Opf_Filter_Interface $filter)
+	public function setFilter(Opf_Filter_Interface $filter)
 	{
-		$this->_filters[] = $filter;
+		$this->_filter = $filter;
 
 		return $this;
 	} // end addFilter();
@@ -64,56 +55,12 @@ class Opf_Leaf extends Opf_Item
 	/**
 	 * Returns all the data filters currently assigned to the item.
 	 *
-	 * @return array
+	 * @return Opf_Filter_Interface
 	 */
-	public function getFilters()
+	public function getFilter()
 	{
-		return $this->_filters;
+		return $this->_filter;
 	} // end getFilter();
-
-	/**
-	 * Returns true, if the item uses the specified filter.
-	 *
-	 * @return boolean
-	 */
-	public function hasFilter(Opf_Filter_Interface $filter)
-	{
-		foreach($this->_filters as $scanned)
-		{
-			if($scanned === $filter)
-			{
-				return true;
-			}
-		}
-		return false;
-	} // end hasFilter();
-
-	/**
-	 * Removes an existing filter from an item. The filter can be determined
-	 * either by its index number or the object.
-	 *
-	 * @param integer|Opf_Filter_Interface $filter The filter to remove.
-	 */
-	public function removeFilter($filter)
-	{
-		if(is_integer($filter))
-		{
-			if(isset($this->_validators[$filter]))
-			{
-				unset($this->_validators[$filter]);
-			}
-		}
-		elseif($filter instanceof Opf_Filter_Interface)
-		{
-			foreach($this->_filters as $id => $obj)
-			{
-				if($obj === $filter)
-				{
-					unset($this->_filters[$id]);
-				}
-			}
-		}
-	} // end removeFilter();
 
 	/**
 	 * Sets the item value.
@@ -123,7 +70,7 @@ class Opf_Leaf extends Opf_Item
 	{
 		if($this->_filter !== null)
 		{
-			$this->_value = $this->_filter->toPublic($value);
+			$this->_value = $this->_filter->toInternal($value);
 		}
 		else
 		{
@@ -139,17 +86,4 @@ class Opf_Leaf extends Opf_Item
 	{
 		return $this->_value;
 	} // end getValue();
-
-	/**
-	 * Validates the field against the registered validators.
-	 * @param mixed $data The data to validate.
-	 */
-	protected function _validate(&$data, Opf_Item $errorClass = null)
-	{
-		foreach($this->_filters as $filter)
-		{
-			$data = $filter->toInternal($data);
-		}
-		return parent::_validate($data, $errorClass);
-	} // end _validate();
 } // end Opf_Leaf;

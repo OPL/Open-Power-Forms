@@ -16,10 +16,7 @@
  */
 interface Opf_Validator_Interface
 {
-	public function setCustomError($customError);
-	public function getError();
-	public function getErrorData();
-	public function validate(Opf_Item $item, $value);
+	public function validate(Opf_Collection $collection);
 } // end Opf_Validator_Interface;
 
 /**

@@ -15,7 +15,7 @@
  * The general exception class for OPF
  * @package Exceptions
  */
-class Opf_Exception extends Opl_Exception
+class Opf_Validator_Exception extends Opf_Exception
 {
 	/* null */
-} // end Opf_Exception;
+} // end Opf_Validator_Exception;

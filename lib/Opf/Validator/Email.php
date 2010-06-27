@@ -18,55 +18,54 @@
  */
 class Opf_Validator_Email implements Opf_Validator_Interface
 {
-	protected $_error = 'failed_validation_email';
+	private $_fields;
+
 	/**
-	 * Constructs the validator object.
+	 * Creates the validator.
+	 *
+	 * @param string|array $fields The list of fields, where the validator applies.
 	 */
-	public function __construct()
+	public function __construct($fields)
 	{
-	    // null
+		if(is_string($fields))
+		{
+			$this->_fields = array($fields);
+		}
+		elseif(is_array($fields))
+		{
+			$this->_fields = $fields;
+		}
+		else
+		{
+			throw new Opf_Validator_Exception('Invalid configuration for Opf_Validator_Email.');
+		}
 	} // end __construct();
-
-	/**
-	 * Sets a custom error message for the validator.
-	 * @param string $customError The custom error message.
-	 */
-	public function setCustomError($customError)
-	{
-		$this -> _error = $customError;
-	} // end setCustomError();
-
-	/**
-	 * Returns the error message used, if the validator fails.
-	 * @return string
-	 */
-	public function getError()
-	{
-		return $this -> _error;
-	} // end getError();
-
-	/**
-	 * Returns the data for the error message.
-	 * @return array
-	 */
-	public function getErrorData()
-	{
-		return array(0 => 'email');
-	} // end getErrorData();
 
 	/**
 	 * Validates the value in a specified type.
 	 *
-	 * @param Mixed $value The value to validate.
+	 * @param Opf_Collection $collection The collection to validate
 	 * @return Boolean
 	 */
-	public function validate(Opf_Item $item, $value)
+	public function validate(Opf_Collection $collection)
 	{
-		if(!is_scalar($value))
+		$valid = true;
+		foreach($this->_fields as $field)
 		{
-			return false;
+			$item = $collection->findItem($field);
+			$value = $item->getValue();
+			if(!is_scalar($value))
+			{
+				$valid = false;
+				$item->invalidate();
+			}
+			if((bool)filter_var($value, FILTER_VALIDATE_EMAIL) === false)
+			{
+				$valid = false;
+				$item->addErrorMessage('Not a valid e-mail address.');
+				$item->invalidate();
+			}
 		}
-		return (bool)filter_var($value, FILTER_VALIDATE_EMAIL);
-		
+		return $valid;
 	} // end validate();
 } // end Opf_Validator_Email;

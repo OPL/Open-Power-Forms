@@ -26,50 +26,54 @@ class Opf_Validator_MaxLength implements Opf_Validator_Interface
 	private $_maxLength = 0;
 
 	/**
+	 * The list of fields.
+	 * @var array
+	 */
+	private $_fields;
+
+	/**
 	 * Constructs maximum length constraint object.
 	 *
 	 * @param integer $length Maximum string length
 	 */
-	public function __construct($length)
+	public function __construct($length, $fields)
 	{
 		$this->_maxLength = (int)$length;
+
+		if(is_string($fields))
+		{
+			$this->_fields = array($fields);
+		}
+		elseif(is_array($fields))
+		{
+			$this->_fields = $fields;
+		}
+		else
+		{
+			throw new Opf_Validator_Exception('Invalid configuration for Opf_Validator_Email.');
+		}
 	} // end __construct();
 
 	/**
-	 * Sets a custom error message for the validator.
-	 * @param string $customError The custom error message.
-	 * @todo implement
+	 * Validates the value in a specified type.
+	 *
+	 * @param Opf_Collection $collection The collection to validate
+	 * @return Boolean
 	 */
-	public function setCustomError($customError)
+	public function validate(Opf_Collection $collection)
 	{
-
-	} // end setCustomError();
-
-	/**
-	 * Returns the error message used, if the validator fails.
-	 * @return string
-	 */
-	public function getError()
-	{
-		return 'failed_validation_maxlength';
-	} // end getError();
-
-	/**
-	 * Returns the data for the error message.
-	 * @return array
-	 */
-	public function getErrorData()
-	{
-		return array(0 => $this->_maxLength);
-	} // end getErrorData();
-
-	/**
-	 * Validates the value length.
-	 * @param mixed $value The value to validate.
-	 * @return boolean
-	 */
-	public function validate(Opf_Item $item, $value)
-	{
-		return (strlen($value) <= $this->_maxLength);
+		$valid = true;
+		foreach($this->_fields as $field)
+		{
+			$item = $collection->findItem($field);
+			$value = $item->getValue();
+			if(strlen($value) > $this->_maxLength)
+			{
+				$valid = false;
+				$item->addErrorMessage('Maximum allowed length is '.$this->_maxLength.'.');
+				$item->invalidate();
+			}
+		}
+		return $valid;
 	} // end validate();
 } // end Opf_Validator_MaxLength;

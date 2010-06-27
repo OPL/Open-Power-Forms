@@ -46,12 +46,6 @@ abstract class Opf_Item
 	protected $_listeners = null;
 
 	/**
-	 * The list of validators.
-	 * @var array
-	 */
-	protected $_validators = array();
-
-	/**
 	 * The list of errors.
 	 * @var array
 	 */
@@ -252,76 +246,6 @@ abstract class Opf_Item
 	} // end invokeEvent();
 
 	/**
-	 * Adds a new validator to the item.
-	 * @param Opf_Validator_Interface $validator The new validator to add.
-	 * @param string $customError A custom error message used with this validator.
-	 */
-	public function addValidator(Opf_Validator_Interface $validator, $customError = null)
-	{
-		$this->_validators[] = $validator;
-
-		if($customError !== null)
-		{
-			$validator->setCustomError($customError);
-		}
-	} // end addValidator();
-
-	/**
-	 * Removes an existing validator from an item. The validator can be determined
-	 * either by its index number or the object.
-	 *
-	 * @param integer|Opf_Validator_Interface $validator The validator to remove.
-	 */
-	public function removeValidator($validator)
-	{
-		if(is_integer($validator))
-		{
-			if(isset($this->_validators[$validator]))
-			{
-				unset($this->_validators[$validator]);
-			}
-		}
-		elseif($validator instanceof Opf_Validator_Interface)
-		{
-			foreach($this->_validators as $id => $obj)
-			{
-				if($obj === $validator)
-				{
-					unset($this->_validators[$id]);
-				}
-			}
-		}
-	} // end removeValidator();
-
-	/**
-	 * Returns true, if the specified validator is registered in the item.
-	 * The validator can be determined either by its index number or the
-	 * object.
-	 *
-	 * @param integer|Opf_Validator_Interface $validator The validator to check.
-	 * @return boolean
-	 */
-	public function hasValidator($validator)
-	{
-		if(is_integer($validator))
-		{
-			return (isset($this->_validators[$validator]));
-		}
-		elseif($validator instanceof Opf_Validator_Interface)
-		{
-			foreach($this->_validators as $id => $obj)
-			{
-				if($obj === $validator)
-				{
-					return true;
-				}
-			}
-			return false;
-		}
-		// TODO: Add exception, because of wrong validator type
-	} // end hasValidator();
-
-	/**
 	 * Adds a new error message to the error list.
 	 * @param string $error The new error message
 	 */
@@ -430,6 +354,11 @@ abstract class Opf_Item
 	 * @return mixed
 	 */
 	abstract public function getValue();
+
+	public function invalidate()
+	{
+		$this->_valid = false;
+	} // end invalidate();
 
 	/**
 	 * Validates the field against the registered validators.
