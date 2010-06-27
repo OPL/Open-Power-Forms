@@ -46,8 +46,7 @@ class Opf_Validator_Type implements Opf_Validator_Interface
 	 */
 	public function __construct($type, $fields)
 	{
-		$this->_maxLength = (int)$length;
-
+		$this->_type = (int)$type;
 		if(is_string($fields))
 		{
 			$this->_fields = array($fields);
@@ -73,8 +72,12 @@ class Opf_Validator_Type implements Opf_Validator_Interface
 		$valid = true;
 		foreach($this->_fields as $field)
 		{
-			$item = $collection->findItem($field);
+			$item = $collection->findItemStrict($field);
 			$value = $item->getValue();
+			if($value === null && $item->getRequired() === false)
+			{
+				continue;
+			}
 			if(!$this->_checkType($value))
 			{
 				$valid = false;

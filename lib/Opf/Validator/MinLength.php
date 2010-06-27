@@ -65,8 +65,12 @@ class Opf_Validator_MinLength implements Opf_Validator_Interface
 		$valid = true;
 		foreach($this->_fields as $field)
 		{
-			$item = $collection->findItem($field);
+			$item = $collection->findItemStrict($field);
 			$value = $item->getValue();
+			if($value === null && $item->getRequired() === false)
+			{
+				continue;
+			}
 			if(strlen($value) < $this->_minLength)
 			{
 				$valid = false;

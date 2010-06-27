@@ -52,8 +52,12 @@ class Opf_Validator_Email implements Opf_Validator_Interface
 		$valid = true;
 		foreach($this->_fields as $field)
 		{
-			$item = $collection->findItem($field);
+			$item = $collection->findItemStrict($field);
 			$value = $item->getValue();
+			if($value === null && $item->getRequired() === false)
+			{
+				continue;
+			}
 			if(!is_scalar($value))
 			{
 				$valid = false;
