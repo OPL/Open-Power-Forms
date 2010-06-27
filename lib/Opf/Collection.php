@@ -244,6 +244,22 @@ abstract class Opf_Collection extends Opf_Item// implements Opf_Collection_Inter
 	} // end findItem();
 
 	/**
+	 * Finds an item with the specified name in the entire collection.
+	 * The item is also looked for in the sub-collections.
+	 *
+	 * @param string $name The item name
+	 * @return Opf_Item
+	 */
+	public function findItemStrict($name)
+	{
+		if(isset($this->_collection[$name]))
+		{
+			return $this->_collection[$name];
+		}
+		throw new Opf_Collection_Exception('Item '.$name.' does not exist in the collection.');
+	} // end findItemStrict();
+
+	/**
 	 * Allows to check, if the item is allowed in this particular collection.
 	 * In the default implementation, the method always returns true.
 	 *

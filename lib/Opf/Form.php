@@ -356,15 +356,12 @@ class Opf_Form extends Opf_Collection
 	 */
 	public function getValue()
 	{
-		/*
 		$data = array();
 		foreach($this->_collection as $name => $item)
 		{
 			$data[$name] = $item->getValue();
 		}
 		return $data;
-		 */
-		return $this->_data;
 	} // end getValue();
 
 	/**

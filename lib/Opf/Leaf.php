@@ -79,6 +79,15 @@ class Opf_Leaf extends Opf_Item
 	} // end setValue();
 
 	/**
+	 * Sets the item value.
+	 * @param mixed $value The new value.
+	 */
+	public function populate($value)
+	{
+		$this->_value = $value;
+	} // end populate();
+
+	/**
 	 * Returns the item value.
 	 * @return mixed
 	 */
@@ -86,4 +95,20 @@ class Opf_Leaf extends Opf_Item
 	{
 		return $this->_value;
 	} // end getValue();
+
+	/**
+	 * Returns the item value.
+	 * @return mixed
+	 */
+	public function getDisplayedValue()
+	{
+		if($this->_filter !== null && $this->_value !== null)
+		{
+			return $this->_filter->toPublic($this->_value);
+		}
+		else
+		{
+			return $this->_value;
+		}
+	} // end getDisplayedValue();
 } // end Opf_Leaf;
