@@ -25,6 +25,7 @@ class Opf_Validator_Type implements Opf_Validator_Interface
 	const STRING = 3;
 	const BOOLEAN = 4;
 	const DATETIME = 5;
+	const CHARACTER = 6;
 
 	/**
 	 * The type to validate.
@@ -130,6 +131,11 @@ class Opf_Validator_Type implements Opf_Validator_Interface
 				return false;
 			case self::DATETIME:
 				return $value instanceof DateTime;
+			case self::CHARACTER:
+				if(strlen($value) == 1 && ctype_alpha($value))
+				{
+					return true;
+				}
 		}
 		return false;
 	} // end _checkType();

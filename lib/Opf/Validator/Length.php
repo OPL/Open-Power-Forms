@@ -1,7 +1,6 @@
 <?php
 /*
  *  OPEN POWER LIBS <http://www.invenzzia.org>
- *  ------------------------------------------
  *
  * This file is subject to the new BSD license that is bundled
  * with this package in the file LICENSE. It is also available through
@@ -12,8 +11,8 @@
  */
 
 /**
- * The class represents the string length applied as a rule to a
- * form field.
+ * The class represents the allowed field length validator.
+ * 
  * @package Validators
  */
 class Opf_Validator_Length implements Opf_Validator_Interface
@@ -25,50 +24,58 @@ class Opf_Validator_Length implements Opf_Validator_Interface
 	private $_length = 0;
 
 	/**
-	 * Constructs the length constraint object.
-	 *
-	 * @param integer $length The string length
+	 * The list of fields.
+	 * @var array
 	 */
-	public function __construct($length)
+	private $_fields;
+
+	/**
+	 * Constructs length constraint object.
+	 *
+	 * @param integer $length Maximum string length
+	 */
+	public function __construct($length, $fields)
 	{
 		$this->_length = (int)$length;
+
+		if(is_string($fields))
+		{
+			$this->_fields = array($fields);
+		}
+		elseif(is_array($fields))
+		{
+			$this->_fields = $fields;
+		}
+		else
+		{
+			throw new Opf_Validator_Exception('Invalid configuration for Opf_Validator_Email.');
+		}
 	} // end __construct();
 
 	/**
-	 * Sets a custom error message for the validator.
-	 * @param string $customError The custom error message.
-	 * @todo implement
+	 * Validates the value in a specified type.
+	 *
+	 * @param Opf_Collection $collection The collection to validate
+	 * @return Boolean
 	 */
-	public function setCustomError($customError)
+	public function validate(Opf_Collection $collection)
 	{
-
-	} // end setCustomError();
-
-	/**
-	 * Returns the error message used, if the validator fails.
-	 * @return string
-	 */
-	public function getError()
-	{
-		return 'failed_validation_length';
-	} // end getError();
-
-	/**
-	 * Returns the data for the error message.
-	 * @return array
-	 */
-	public function getErrorData()
-	{
-		return array(0 => $this->_length);
-	} // end getErrorData();
-
-	/**
-	 * Validates the value length.
-	 * @param mixed $value The value to validate.
-	 * @return boolean
-	 */
-	public function validate(Opf_Item $item, $value)
-	{
-		return (strlen($value) == $this->_length);
+		$valid = true;
+		foreach($this->_fields as $field)
+		{
+			$item = $collection->findItemStrict($field);
+			$value = $item->getValue();
+			if($value === null && $item->getRequired() === false)
+			{
+				continue;
+			}
+			if(strlen($value) != $this->_length)
+			{
+				$valid = false;
+				$item->addErrorMessage('The field must be '.$this->_length.' characters long.');
+				$item->invalidate();
+			}
+		}
+		return $valid;
 	} // end validate();
 } // end Opf_Validator_Length;
