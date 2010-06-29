@@ -1,7 +1,6 @@
 <?php
 /*
  *  OPEN POWER LIBS <http://www.invenzzia.org>
- *  ------------------------------------------
  *
  * This file is subject to the new BSD license that is bundled
  * with this package in the file LICENSE. It is also available through
@@ -12,84 +11,80 @@
  */
 
 /**
- * The class represents the scope of the integer field.
+ * The class represents the scope validator.
+ *
  * @package Validators
  */
 class Opf_Validator_Scope implements Opf_Validator_Interface
 {
 	/**
-	 * The minimum range.
+	 * The minimum value in the scope.
 	 * @var integer
 	 */
-	private $_minimum = 0;
+	private $_minRange = 0;
+
 	/**
-	 * The maximum range.
+	 * The maximum value in the scope.
 	 * @var integer
 	 */
-	private $_maximum = 0;
-        /**
-         * If values needs not to be in scope
-         * @var boolean
-         */
-        private $_reverseScope = false;
+	private $_maxRange = 0;
+
+	/**
+	 * The list of fields.
+	 * @var array
+	 */
+	private $_fields;
 
 	/**
 	 * Constructs the scope constraint object.
 	 *
-	 * @param integer $min The minimum range
-	 * @param integer $max The maximum range
-         * @param boolean $reverseScope Value has not to be in scope?
+	 * @param integer $min The minimum available value.
+	 * @param integer $max The maximum available value.
+	 * @param string|array $fields The list of fields where this validator applies.
 	 */
-	public function __construct($min, $max, $reverseScope = false)
+	public function __construct($min, $max, $fields)
 	{
-		$this->_minimum = (integer)$min;
-		$this->_maximum = (integer)$max;
-                $this->_reverseScope = (boolean)$reverseScope;
+		$this->_minRange = $min;
+		$this->_maxRange = $max;
+
+		if(is_string($fields))
+		{
+			$this->_fields = array($fields);
+		}
+		elseif(is_array($fields))
+		{
+			$this->_fields = $fields;
+		}
+		else
+		{
+			throw new Opf_Validator_Exception('Invalid configuration for Opf_Validator_Scope.');
+		}
 	} // end __construct();
 
 	/**
-	 * Sets a custom error message for the validator.
-	 * @param string $customError The custom error message.
-	 * @todo implement
-	 */
-	public function setCustomError($customError)
-	{
-
-	} // end setCustomError();
-
-	/**
-	 * Returns the error message used, if the validator fails.
-	 * @return string
-	 */
-	public function getError()
-	{
-		return 'failed_validation_scope';
-	} // end getError();
-
-	/**
-	 * Returns the data for the error message.
-	 * @return array
-	 */
-	public function getErrorData()
-	{
-		return array(0 => $this->_minimum, $this->_maximum, $this->_reverseScope);
-	} // end getErrorData();
-
-	/**
-	 * Validates the value length.
-	 * @param mixed $value The value to validate.
+	 * Validates the value.
+	 *
+	 * @param Opf_Collection $collection The collection to validate
 	 * @return boolean
 	 */
-	public function validate(Opf_Item $item, $value)
+	public function validate(Opf_Collection $collection)
 	{
-		$value = (integer)$value;
-                if($this->_reverseScope)
-                {
-                    return ($this->_minimum > $value || $value > $this->_maximum);
-                }
-                else
-                {
-                    return ($this->_minimum < $value && $value < $this->_maximum);
-                }
+		$valid = true;
+		foreach($this->_fields as $field)
+		{
+			$item = $collection->findItemStrict($field);
+			$value = $item->getValue();
+			if($value === null && $item->getRequired() === false)
+			{
+				continue;
+			}
+			if($value < $this->_minRange || $value > $this->_maxRange)
+			{
+				$valid = false;
+				$item->addErrorMessage('The field value must be choosen from values between '.$this->_minRange.' '.$this->_maxRange);
+				$item->invalidate();
+			}
+		}
+		return $valid;
 	} // end validate();
 } // end Opf_Validator_Scope;
