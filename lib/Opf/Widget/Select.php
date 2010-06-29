@@ -68,4 +68,25 @@ class Opf_Widget_Select extends Opf_Widget_Component
 		}
 		echo $code.'</select>';
 	} // end display();
+
+	/**
+	 * Utility method for generating ranges of values.
+	 *
+	 * @param mixed $start Starting item
+	 * @param mixed $end Ending item
+	 * @return array
+	 */
+	public function range($start, $end)
+	{
+		if($start < $end)
+		{
+			$list = array();
+			for(; $start <= $end; $start++)
+			{
+				$list[$start] = $start;
+			}
+			return $list;
+		}
+		return array();
+	} // end range();
 } // end Opf_Widget_Select;
