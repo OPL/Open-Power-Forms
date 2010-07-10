@@ -10,12 +10,16 @@
  * and other contributors. See website for details.
  */
 
+namespace Opf\Validator;
+
+use Opf\Item\Collection;
+
 /**
  * The class represents the scope validator.
  *
  * @package Validators
  */
-class Opf_Validator_Scope implements Opf_Validator_Interface
+class Scope implements ValidatorInterface
 {
 	/**
 	 * The minimum value in the scope.
@@ -57,17 +61,17 @@ class Opf_Validator_Scope implements Opf_Validator_Interface
 		}
 		else
 		{
-			throw new Opf_Validator_Exception('Invalid configuration for Opf_Validator_Scope.');
+			throw new Exception('Invalid configuration for Scope validator.');
 		}
 	} // end __construct();
 
 	/**
 	 * Validates the value.
 	 *
-	 * @param Opf_Collection $collection The collection to validate
+	 * @param Opf\Item\Collection $collection The collection to validate
 	 * @return boolean
 	 */
-	public function validate(Opf_Collection $collection)
+	public function validate(Collection $collection)
 	{
 		$valid = true;
 		foreach($this->_fields as $field)
@@ -87,4 +91,4 @@ class Opf_Validator_Scope implements Opf_Validator_Interface
 		}
 		return $valid;
 	} // end validate();
-} // end Opf_Validator_Scope;
+} // end Scope;

@@ -12,11 +12,15 @@
  *
  */
 
+namespace Opf\Validator;
+
+use Opf\Item\Collection;
+
 /**
  * The class compares the values of two fields.
  * @package Validators
  */
-class Opf_Validator_Matcher implements Opf_Validator_Interface
+class Matcher implements ValidatorInterface
 {
 	private $_fields;
 
@@ -37,17 +41,17 @@ class Opf_Validator_Matcher implements Opf_Validator_Interface
 		}
 		else
 		{
-			throw new Opf_Validator_Exception('Invalid configuration for Opf_Validator_Matcher.');
+			throw new Exception('Invalid configuration for Matcher validator.');
 		}
 	} // end __construct();
 
 	/**
 	 * Validates the value in a specified type.
 	 *
-	 * @param Opf_Collection $collection The collection to validate
-	 * @return Boolean
+	 * @param Opf\Item\Collection $collection The collection to validate
+	 * @return boolean
 	 */
-	public function validate(Opf_Collection $collection)
+	public function validate(Collection $collection)
 	{
 		$previous = null;
 		foreach($this->_fields as $field)
@@ -71,4 +75,4 @@ class Opf_Validator_Matcher implements Opf_Validator_Interface
 		}
 		return true;
 	} // end validate();
-} // end Opf_Validator_Matcher;
+} // end Matcher;

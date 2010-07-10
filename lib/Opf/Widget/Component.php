@@ -11,12 +11,19 @@
  * and other contributors. See website for details.
  */
 
+namespace Opf\Widget;
+
+use Opf\Design;
+use Opf\Item\AbstractItem;
+use Opf\Widget\Generic;
+use Opf\Exception;
+
 /**
  * The class provides the necessary logic for the widgets in templates,
  * using the OPT Component API.
  * @package Widgets
  */
-abstract class Opf_Widget_Component implements Opt_Component_Interface
+abstract class Component implements \Opt_Component_Interface
 {
 	/**
 	 * The view the widget is deployed in.
@@ -26,13 +33,13 @@ abstract class Opf_Widget_Component implements Opt_Component_Interface
 
 	/**
 	 * The form the widget is assigned to.
-	 * @var Opf_Form
+	 * @var Opf\Form\Form
 	 */
 	protected $_form;
 
 	/**
 	 * The item the widget is assigned to.
-	 * @var Opf_Item
+	 * @var Opf\Item\AbstractItem
 	 */
 	protected $_item;
 
@@ -72,7 +79,7 @@ abstract class Opf_Widget_Component implements Opt_Component_Interface
 	 * Sets the widget label. Implements the fluent interface.
 	 *
 	 * @param string $label The new label
-	 * @return Opf_Widget_Component
+	 * @return Opf\Widget\Component
 	 */
 	public function setLabel($label)
 	{
@@ -84,7 +91,7 @@ abstract class Opf_Widget_Component implements Opt_Component_Interface
 	 * Allows to set the options. By default, it does nothing but
 	 * implementing the fluent interface.
 	 * @param array $options The option list.
-	 * @return Opf_Widget_Component
+	 * @return Opf\Widget\Component
 	 */
 	public function setOptions($options)
 	{
@@ -93,9 +100,9 @@ abstract class Opf_Widget_Component implements Opt_Component_Interface
 
 	/**
 	 * Assigns the widget to a form item.
-	 * @param Opf_Item $item The item the widget is assigned to.
+	 * @param Opf\Item\AbstractItem $item The item the widget is assigned to.
 	 */
-	public function setItem(Opf_Item $item)
+	public function setItem(AbstractItem $item)
 	{
 		// TODO: How about assigning forms here?
 		$this->_item = $item;
@@ -122,9 +129,9 @@ abstract class Opf_Widget_Component implements Opt_Component_Interface
 
 	/**
 	 * Copies the properties from a generic widget.
-	 * @param Opf_Widget_Generic $generic The generic widget.
+	 * @param Opf\Widget\Generic $generic The generic widget.
 	 */
-	public function importFromGeneric(Opf_Widget_Generic $generic)
+	public function importFromGeneric(Generic $generic)
 	{
 		$this->_item = $generic->_item;
 		$this->_form = $generic->_form;
@@ -139,8 +146,9 @@ abstract class Opf_Widget_Component implements Opt_Component_Interface
 	 * Passes the OPT view to the widget.
 	 *
 	 * @param Opt_View $view The view.
+	 * @throws OutOfBoundsException
 	 */
-	public function setView(Opt_View $view)
+	public function setView(\Opt_View $view)
 	{
 		$this->_view = $view;
 		if($this->_form === null)
@@ -148,7 +156,7 @@ abstract class Opf_Widget_Component implements Opt_Component_Interface
 			$this->_form = $view->getTemplateVar('form');
 			if($this->_form === null)
 			{
-				throw new Opf_Exception('Item "form" not exists.');
+				throw new \OutOfBoundsException('Item "form" not exists.');
 			}
 		}
 	} // end setView();
@@ -156,7 +164,7 @@ abstract class Opf_Widget_Component implements Opt_Component_Interface
 	/**
 	 * Sets the widget datasource.
 	 *
-	 * @param Array $data
+	 * @param array $data
 	 */
 	public function setDatasource($data)
 	{
@@ -168,6 +176,7 @@ abstract class Opf_Widget_Component implements Opt_Component_Interface
 
 	/**
 	 * Allows to set various component properties.
+	 * 
 	 * @param string $name The property name
 	 * @param mixed $value The property value
 	 */
@@ -186,7 +195,7 @@ abstract class Opf_Widget_Component implements Opt_Component_Interface
 					$item->setWidget($this);
 					if($item === null)
 					{
-						throw new Opf_ItemNotExists_Exception('item', $this->_name);
+						throw new Exception('item', $this->_name);
 					}
 				}
 				break; */
@@ -274,14 +283,14 @@ abstract class Opf_Widget_Component implements Opt_Component_Interface
 		}
 	} // end processEvent();
 
-	public function manageAttributes($tagName, Array $attributes)
+	public function manageAttributes($tagName, array $attributes)
 	{
 		$valid = $this->_item->isValid();
-		$attributes['class'] = Opf_Design::getClass($this->getComponentName().'.field', $valid);
+		$attributes['class'] = Design::getClass($this->getComponentName().'.field', $valid);
 		if($attributes['class'] === null)
 		{
-			$attributes['class'] = Opf_Design::getClass('field', $valid);
+			$attributes['class'] = Design::getClass('field', $valid);
 		}
 		return $attributes;
 	} // end manageAttributes();
-} // end Opf_Widget_Component;
+} // end Component;

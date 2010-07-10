@@ -11,11 +11,13 @@
  * and other contributors. See website for details.
  */
 
+namespace Opf\Widget;
+
 /**
  * The class represents a collection widget.
  * @package Widgets
  */
-class Opf_Widget_Collection extends Opf_Widget_Component
+class Collection extends Component
 {
 	/**
 	 * Returns the unique component type name.
@@ -25,6 +27,7 @@ class Opf_Widget_Collection extends Opf_Widget_Component
 	{
 		return 'collection';
 	} // end getComponentName();
+
 	/**
 	 * Displays the input component.
 	 *
@@ -34,4 +37,4 @@ class Opf_Widget_Collection extends Opf_Widget_Component
 	{
 		/* todo: add view creation here */
 	} // end display();
-} // end Opf_Widget_Collection;
+} // end Collection;

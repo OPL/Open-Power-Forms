@@ -11,15 +11,15 @@
  * and other contributors. See website for details.
  */
 
+namespace Opf\Item;
+
+use Opf\Exception;
+
 /**
- * Implements the default error handler for OPF exceptions.
+ * The form exception.
+ * @package Exceptions
  */
-class Opf_ErrorHandler extends Opl_ErrorHandler
+class CollectionException extends Exception
 {
-	protected $_library = 'Open Power Forms';
-	protected $_context = array(
-		'__UNKNOWN__' => array(
-			'BasicConfiguration' => array()
-		),
-	);
-} // end Opf_ErrorHandler;
+	/* null */
+} // end CollectionException;

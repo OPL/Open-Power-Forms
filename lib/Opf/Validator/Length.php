@@ -10,12 +10,16 @@
  * and other contributors. See website for details.
  */
 
+namespace Opf\Validator;
+
+use Opf\Item\Collection;
+
 /**
  * The class represents the allowed field length validator.
  * 
  * @package Validators
  */
-class Opf_Validator_Length implements Opf_Validator_Interface
+class Length implements ValidatorInterface
 {
 	/**
 	 * The length represented by the validator.
@@ -48,17 +52,17 @@ class Opf_Validator_Length implements Opf_Validator_Interface
 		}
 		else
 		{
-			throw new Opf_Validator_Exception('Invalid configuration for Opf_Validator_Email.');
+			throw new Exception('Invalid configuration for Length validator.');
 		}
 	} // end __construct();
 
 	/**
 	 * Validates the value in a specified type.
 	 *
-	 * @param Opf_Collection $collection The collection to validate
-	 * @return Boolean
+	 * @param Opf\Item\Collection $collection The collection to validate
+	 * @return boolean
 	 */
-	public function validate(Opf_Collection $collection)
+	public function validate(Collection $collection)
 	{
 		$valid = true;
 		foreach($this->_fields as $field)
@@ -78,4 +82,4 @@ class Opf_Validator_Length implements Opf_Validator_Interface
 		}
 		return $valid;
 	} // end validate();
-} // end Opf_Validator_Length;
+} // end Length;

@@ -11,15 +11,19 @@
  * and other contributors. See website for details.
  */
 
+namespace Opf\Tracker;
+
+use Opf\Form\Sequence;
+
 /**
  * This tracker passes the data of multi-step forms in hidden fields
  * of the HTML form.
  */
-class Opf_Tracker_Client implements Opf_Tracker_Interface
+class Client implements TrackerInterface
 {
 	/**
 	 * The processed sequence
-	 * @var Opf_Form_Sequence
+	 * @var Opf\Form\Sequence
 	 */
 	protected $_sequence;
 
@@ -31,9 +35,9 @@ class Opf_Tracker_Client implements Opf_Tracker_Interface
 
 	/**
 	 * Sets the currently processed sequence.
-	 * @param Opf_Form_Sequence $form The processed sequence
+	 * @param Opf\Form\Sequence $form The processed sequence
 	 */
-	public function setSequence(Opf_Form_Sequence $form)
+	public function setSequence(Sequence $form)
 	{
 		$this->_data = null;
 		$this->_sequence = $form;
@@ -81,4 +85,4 @@ class Opf_Tracker_Client implements Opf_Tracker_Interface
 		}
 		return array();
 	} // end retrieve();
-} // end Opf_Tracker_Client;
+} // end Client;

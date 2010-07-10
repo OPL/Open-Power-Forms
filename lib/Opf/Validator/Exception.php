@@ -11,11 +11,13 @@
  * and other contributors. See website for details.
  */
 
+namespace Opf\Validator;
+
 /**
  * The general exception class for OPF
  * @package Exceptions
  */
-class Opf_Validator_Exception extends Opf_Exception
+class Exception extends Opf\Exception
 {
 	/* null */
-} // end Opf_Validator_Exception;
+} // end Exception;

@@ -11,12 +11,15 @@
  * and other contributors. See website for details.
  */
 
+namespace Opf\Item;
+
+use Opf\Filter\FilterInterface;
+
 /**
  * Represents a leaf node of a form tree, unsually a form field.
  */
-class Opf_Leaf extends Opf_Item
+class Leaf extends AbstractItem
 {
-
 	/**
 	 * The leaf initial value.
 	 * @var mixed
@@ -25,7 +28,7 @@ class Opf_Leaf extends Opf_Item
 
 	/**
 	 * The list of data filters
-	 * @var Opf_Filter_Interface
+	 * @var Opf\Filter\FilterInterface
 	 */
 	protected $_filter;
 
@@ -42,20 +45,20 @@ class Opf_Leaf extends Opf_Item
 	 * Adds a new data filter to the item. Implements fluent
 	 * interface.
 	 *
-	 * @param Opf_Filter_Interface $filter The new filter.
-	 * @return Opf_Leaf
+	 * @param Opf\Filter\FilterInterface $filter The new filter.
+	 * @return Opf\Item\Leaf
 	 */
-	public function setFilter(Opf_Filter_Interface $filter)
+	public function setFilter(FilterInterface $filter)
 	{
 		$this->_filter = $filter;
 
 		return $this;
-	} // end addFilter();
+	} // end setFilter();
 
 	/**
 	 * Returns all the data filters currently assigned to the item.
 	 *
-	 * @return Opf_Filter_Interface
+	 * @return Opf\Filter\FilterInterface
 	 */
 	public function getFilter()
 	{
@@ -111,4 +114,4 @@ class Opf_Leaf extends Opf_Item
 			return $this->_value;
 		}
 	} // end getDisplayedValue();
-} // end Opf_Leaf;
+} // end Leaf;

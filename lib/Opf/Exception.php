@@ -11,11 +11,13 @@
  * and other contributors. See website for details.
  */
 
+namespace Opf;
+
 /**
  * The general exception class for OPF
  * @package Exceptions
  */
-class Opf_Exception extends Opl_Exception
+class Exception extends \Opl_Exception
 {
 	/* null */
-} // end Opf_Exception;
+} // end Exception;

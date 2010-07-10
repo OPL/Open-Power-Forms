@@ -11,10 +11,14 @@
  * and other contributors. See website for details.
  */
 
+namespace Opf\View\Format;
+
+use Opf\View\Instruction;
+
 /**
  * A data format for form sections in OPT templates.
  */
-class Opf_View_Format_FormRepeater extends Opt_Format_Abstract
+class FormRepeater extends \Opt_Format_Abstract
 {
 	/**
 	 * The supported elements.
@@ -41,8 +45,8 @@ class Opf_View_Format_FormRepeater extends Opt_Format_Abstract
 	/**
 	 * Builds a PHP code for the specified hook name.
 	 *
-	 * @param String $hookName The hook name
-	 * @return String The output PHP code
+	 * @param string $hookName The hook name
+	 * @return string The output PHP code
 	 */
 	protected function _build($hookName)
 	{
@@ -50,7 +54,7 @@ class Opf_View_Format_FormRepeater extends Opt_Format_Abstract
 		{
 			// Initializes the section by obtaining the list of items to display
 			$section = $this->_getVar('section');
-			$form = Opf_View_Instruction_Form::getProcessedForm();
+			$form = Instruction\Form::getProcessedForm();
 			$code = '$_repeater = $_form->findItem(\''.$section['name'].'\'); ';
 
 			if($section['order'] == 'desc')
@@ -61,4 +65,4 @@ class Opf_View_Format_FormRepeater extends Opt_Format_Abstract
 		}
 		// return parent::_build($hookName);
 	} // end _build();
-} // end Opf_View_Format_FormWrapper;
+} // end FormRepeater;

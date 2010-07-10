@@ -11,6 +11,13 @@
  * and other contributors. See website for details.
  */
 
+namespace Opf\Item;
+
+use Opf\Exception;
+use Opf\Event\EventListener;
+use Opf\Event\Event;
+use Opf\Widget;
+
 /**
  * Represents a single item that OPF manages.
  *
@@ -19,17 +26,17 @@
  * a common ancestor, they will be using the same basic features, such
  * as event handling.
  */
-abstract class Opf_Item
+abstract class AbstractItem
 {
 	/**
 	 * The item name.
-	 * @var String
+	 * @var string
 	 */
 	protected $_name = null;
 
 	/**
 	 * The fully qualified name
-	 * @var String
+	 * @var string
 	 */
 	protected $_fullyQualifiedName = '';
 
@@ -64,20 +71,14 @@ abstract class Opf_Item
 	protected $_valid = true;
 	/**
 	 * The widget associated with the element.
-	 * @var Opf_Widget_Component
+	 * @var Opf\Widget\Component
 	 */
 	protected $_widget = null;
 
 	/**
-	 * The validator list.
-	 *
-	 * @var Array
-	 */
-
-	/**
 	 * Sets the item name.
 	 *
-	 * @param String $name
+	 * @param string $name
 	 */
 	public function setName($name)
 	{
@@ -86,7 +87,7 @@ abstract class Opf_Item
 
 	/**
 	 * Returns the item name.
-	 * @return String
+	 * @return string
 	 */
 	public function getName()
 	{
@@ -162,13 +163,13 @@ abstract class Opf_Item
 	/**
 	 * Appends the new listener to the list of item listeners.
 	 *
-	 * @param Opf_EventListener $listener The listener.
+	 * @param Opf\Event\EventListener $listener The listener.
 	 */
-	public function appendListener(Opf_EventListener $listener)
+	public function appendListener(EventListener $listener)
 	{
 		if($this->_listeners === null)
 		{
-			$this->_listeners = new SplDoublyLinkedList;
+			$this->_listeners = new \SplDoublyLinkedList;
 		}
 		$this->_listeners->push($listener);
 	} // end appendListener();
@@ -176,13 +177,13 @@ abstract class Opf_Item
 	/**
 	 * Prepends the new listener to the list of item listeners.
 	 *
-	 * @param Opf_EventListener $listener The listener.
+	 * @param Opf\Event\EventListener $listener The listener.
 	 */
-	public function prependListener(Opf_EventListener $listener)
+	public function prependListener(EventListener $listener)
 	{
 		if($this->_listeners === null)
 		{
-			$this->_listeners = new SplDoublyLinkedList;
+			$this->_listeners = new \SplDoublyLinkedList;
 		}
 		$this->_listeners->unshift($listener);
 	} // end prependListener();
@@ -190,7 +191,7 @@ abstract class Opf_Item
 	/**
 	 * Returns the list of registered listeners.
 	 *
-	 * @return Array
+	 * @return array
 	 */
 	public function getListeners()
 	{
@@ -209,7 +210,7 @@ abstract class Opf_Item
 	/**
 	 * Returns true, if the item has any listeners.
 	 *
-	 * @return Boolean
+	 * @return boolean
 	 */
 	public function hasListeners()
 	{
@@ -222,15 +223,16 @@ abstract class Opf_Item
 
 	/**
 	 * Invokes the event on the registered event handlers.
+	 * 
 	 * @param string $eventName The event name
-	 * @throws Opf_UnknownEvent_Exception
+	 * @throws Opf\Event\UnknownEventException
 	 */
 	public function invokeEvent($eventName)
 	{
 		if($this->_listeners !== null)
 		{
-			$event = new Opf_Event($this, $eventName);
-
+			$event = new Event($this, $eventName);
+			
 			foreach($this->_listeners as $listener)
 			{
 				if(method_exists($listener, $eventName))
@@ -239,7 +241,7 @@ abstract class Opf_Item
 				}
 				else
 				{
-					throw new Opf_Exception('Unknown event: '.$eventName);
+					throw new Exception('Unknown event: '.$eventName);
 				}
 			}
 		}
@@ -295,20 +297,21 @@ abstract class Opf_Item
 	 * Sets the widget associated with the item. Returns the
 	 * assigned widget for the fluent interface purposes.
 	 *
-	 * @param Opf_Widget_Component $widget The new widget.
-	 * @return Opf_Item
+	 * @param Opf\Widget\Component $widget The new widget.
+	 * @return Opf\Item\AbstractItem
+	 * @throws Opf\Exception
 	 */
-	public function setWidget(Opf_Widget_Component $widget)
+	public function setWidget(Widget\Component $widget)
 	{
 		if($widget->isBound())
 		{
-			throw new Opf_Exception('Widget already bound: '.$this->_name);
+			throw new Exception('Widget already bound: '.$this->_name);
 		}
 		$widget->setItem($this);
 
 		if($this->_widget !== null)
 		{
-			if($this->_widget instanceof Opf_Widget_Generic)
+			if($this->_widget instanceof Widget\Generic)
 			{
 				$widget->importFromGeneric($this->_widget);
 			}
@@ -322,13 +325,13 @@ abstract class Opf_Item
 
 	/**
 	 * Returns a widget associated with the form field.
-	 * @return Opf_Widget_Component
+	 * @return Opf\Widget\Component
 	 */
 	public function getWidget()
 	{
 		if($this->_widget === null)
 		{
-			$this->setWidget(new Opf_Widget_Generic());
+			$this->setWidget(new Widget\Generic());
 		}
 		return $this->_widget;
 	} // end getWidget();
@@ -364,9 +367,9 @@ abstract class Opf_Item
 	 * Validates the field against the registered validators.
 	 * @param mixed $data The data to validate.
 	 */
-	protected function _validate(&$data, Opf_Item $errorClass = null)
+	protected function _validate(&$data, AbstractItem $errorClass = null)
 	{
-		$opf = Opl_Registry::get('opf');
+		$opf = \Opl_Registry::get('opf');
 		$tf = $opf->getTranslationInterface();
 
 		// The complex items may overwrite this setting to redirect the error
@@ -403,7 +406,7 @@ abstract class Opf_Item
 	 *
 	 * @internal
 	 */
-	protected function _onRender(Opt_View $view)
+	protected function _onRender(\Opt_View $view)
 	{
 		/* null */
 	} // end _onRender();
@@ -420,4 +423,4 @@ abstract class Opf_Item
 		}
 		return false;
 	} // end isEmpty();
-} // end Opf_Item;
+} // end AbstractItem;

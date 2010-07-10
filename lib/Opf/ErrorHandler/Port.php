@@ -11,6 +11,10 @@
  *
  */
 
+namespace Opf\ErrorHandler;
+
+use Opf\Exception;
+
 /**
  * A port that handles Opt_Exception exceptions.
  *
@@ -18,7 +22,7 @@
  * @copyright Invenzzia Group <http://www.invenzzia.org/> and contributors.
  * @license http://www.invenzzia.org/license/new-bsd New BSD License
  */
-class Opf_ErrorHandler_Port implements Opl_ErrorHandler_Port_Interface
+class Port implements \Opl_ErrorHandler_Port_Interface
 {
 	/**
 	 * Matches the exception to the port.
@@ -26,9 +30,9 @@ class Opf_ErrorHandler_Port implements Opl_ErrorHandler_Port_Interface
 	 * @param Exception $exception The exception to match
 	 * @return boolean Does the port handle the exception?
 	 */
-	public function match(Exception $exception)
+	public function match(\Exception $exception)
 	{
-		return ($exception instanceof Opf_Exception);
+		return ($exception instanceof Exception);
 	} // end match();
 
 	/**
@@ -47,7 +51,7 @@ class Opf_ErrorHandler_Port implements Opl_ErrorHandler_Port_Interface
 	 * @param Exception $exception The exception
 	 * @return array|Null The context information
 	 */
-	public function getContext(Exception $exception)
+	public function getContext(\Exception $exception)
 	{
 		return array('backtrace' => array());
 	} // end getContext();
@@ -59,8 +63,8 @@ class Opf_ErrorHandler_Port implements Opl_ErrorHandler_Port_Interface
 	 * @static
 	 * @param Opl_ErrorHandler $handler The OPL error handler
 	 */
-	static public function register(Opl_ErrorHandler &$handler)
+	static public function register(ErrorHandler &$handler)
 	{
-		$handler->addPort(new Opf_ErrorHandler_Port());
+		$handler->addPort(new Port());
 	} // end register();
-} // end Opt_ErrorHandler_Port;
+} // end Port;

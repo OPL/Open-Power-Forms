@@ -11,9 +11,19 @@
  * and other contributors. See website for details.
  */
 
-namespace Opf\Form;
+namespace Opf\Tracker;
 
-class Group extends Form
+use Opf\Form\Sequence;
+
+/**
+ * This interface is responsible for transmitting the data
+ * between the sub-pages in a multi-step form managed by
+ * Opf\Form\Sequence.
+ */
+interface TrackerInterface
 {
+	public function setSequence(Sequence $form);
+	public function track(&$data, $step);
+	public function retrieve(&$data, $step);
 
-} // end Group;
+} // end TrackerInterface;

@@ -11,6 +11,8 @@
  * and other contributors. See website for details.
  */
 
+namespace Opf\Event;
+
 /**
  * The class provides listening capabilities for items managed by OPF.
  *
@@ -19,45 +21,45 @@
  * extra behaviour, i.e. automatic movement of the inserted data to the
  * Doctrine model.
  */
-abstract class Opf_EventListener
+abstract class EventListener
 {
-	public function preInit(Opf_Event $event)
+	public function preInit(Event $event)
 	{
 		/* null */
 	} // end preInit();
 
-	public function postInit(Opf_Event $event)
+	public function postInit(Event $event)
 	{
 		/* null */
 	} // end postInit();
 
-	public function preRender(Opf_Event $event)
+	public function preRender(Event $event)
 	{
 		/* null */
 	} // end preRender();
 
-	public function postRender(Opf_Event $event)
+	public function postRender(Event $event)
 	{
 		/* null */
 	} // end postRender();
 
-	public function preValidate(Opf_Event $event)
+	public function preValidate(Event $event)
 	{
 		/* null */
 	} // end preValidate();
 
-	public function postValidate(Opf_Event $event)
+	public function postValidate(Event $event)
 	{
 		/* null */
 	} // end postValidate();
 
-	public function preAccept(Opf_Event $event)
+	public function preAccept(Event $event)
 	{
 		/* null */
 	} // end preAccept();
 
-	public function postAccept(Opf_Event $event)
+	public function postAccept(Event $event)
 	{
 		/* null */
 	} // end postAccept();
-} // end Opf_EventListener;
+} // end EventListener;

@@ -11,11 +11,15 @@
  * and other contributors. See website for details.
  */
 
+namespace Opf\Widget;
+
+use Opf\Design;
+ 
 /**
  * The class represents an input widget.
  * @package Widgets
  */
-class Opf_Widget_Yesno extends Opf_Widget_Component
+class Yesno extends Component
 {
 	/**
 	 * Returns the unique component type name.
@@ -25,6 +29,7 @@ class Opf_Widget_Yesno extends Opf_Widget_Component
 	{
 		return 'yesno';
 	} // end getComponentName();
+
 	/**
 	 * Displays the input component.
 	 *
@@ -36,9 +41,9 @@ class Opf_Widget_Yesno extends Opf_Widget_Component
 	{
 		$name = $this->_item->getFullyQualifiedName();
 		$value = $this->_item->getValue();
-		echo '<fieldset class="'.Opf_Design::getClass('yesno', $this->_item->isValid()).'">
+		echo '<fieldset class="'.Design::getClass('yesno', $this->_item->isValid()).'">
 			<label class="yes"><input type="radio" name="'.$name.'" value="1" '.($value == true ? 'checked="checked"' : '').'> Yes</label>
 			<label class="no"><input type="radio" name="'.$name.'" value="0" '.($value == false ? 'checked="checked"' : '').'> No</label>
 		</fieldset>';
 	} // end display();
-} // end Opf_Widget_Yesno;
+} // end Yesno;

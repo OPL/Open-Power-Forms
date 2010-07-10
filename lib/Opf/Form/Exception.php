@@ -11,11 +11,13 @@
  * and other contributors. See website for details.
  */
 
+namespace Opf\Form;
+
 /**
  * The form exception.
  * @package Exceptions
  */
-class Opf_Form_Exception extends Opf_Exception
+class Exception extends Opf\Exception
 {
 	/* null */
-} // end Opf_Form_Exception;
+} // end Exception;

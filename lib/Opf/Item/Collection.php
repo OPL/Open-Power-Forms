@@ -10,12 +10,16 @@
  * Copyright (c) Invenzzia Group <http://www.invenzzia.org>
  * and other contributors. See website for details.
  */
+ 
+namespace Opf\Item;
+
+use Opf\Exception;
 
 /**
  * The class represents a collection of items and provides services to manage
  * them.
  */
-abstract class Opf_Collection extends Opf_Item// implements Opf_Collection_Interface
+abstract class Collection extends AbstractItem
 {
 	/**
 	 * The item list.
@@ -32,14 +36,15 @@ abstract class Opf_Collection extends Opf_Item// implements Opf_Collection_Inter
 	/**
 	 * Appends a new item to a collection.
 	 *
-	 * @param Opf_Item $item The item to append.
+	 * @param Opf\Item\AbstractItem $item The item to append.
 	 * @param string $placeholder The placeholder name.
+	 * @throws Opf\Item\AddingItemNotAllowedException
 	 */
-	public function appendItem(Opf_Item $item, $placeholder = 'default')
+	public function appendItem(AbstractItem $item, $placeholder = 'default')
 	{
 		if(!$this->_isItemAllowed($item, $placeholder))
 		{
-			throw new Opf_Exception('Adding item ' . $item->getName() . ' to collection ' . $this->getName() . ' not allowed.');
+			throw new Exception('Adding item '.$item->getName().' to collection '.$this->getName().' not allowed.');
 		}
 
 		if(!isset($this->_items[$placeholder]))
@@ -53,14 +58,15 @@ abstract class Opf_Collection extends Opf_Item// implements Opf_Collection_Inter
 	/**
 	 * Prepends a new item to a collection.
 	 *
-	 * @param Opf_Item $item The item to append.
+	 * @param Opf\Item\AbstractItem $item The item to append.
 	 * @param string $placeholder The placeholder name.
+	 * @throws Opf\Item\AddingItemNotAllowedException
 	 */
-	public function prependItem(Opf_Item $item, $placeholder = 'default')
+	public function prependItem(AbstractItem $item, $placeholder = 'default')
 	{
 		if(!$this->_isItemAllowed($item, $placeholder))
 		{
-			throw new Opf_Exception('Adding item ' . $item->getName() . ' to collection ' . $this->getName() . ' not allowed.');
+			throw new Exception('Adding item '.$item->getName().' to collection '.$this->getName().' not allowed.');
 		}
 
 		if(!isset($this->_items[$placeholder]))
@@ -75,7 +81,7 @@ abstract class Opf_Collection extends Opf_Item// implements Opf_Collection_Inter
 	 * Returns the item from a collection.
 	 *
 	 * @param string $item The item name
-	 * @return Opf_Item
+	 * @return Opf\Item\AbstractItem
 	 */
 	public function getItem($item)
 	{
@@ -94,16 +100,16 @@ abstract class Opf_Collection extends Opf_Item// implements Opf_Collection_Inter
 	 *
 	 * Only the selected placeholder is scanned. The default placeholder is 'default'.
 	 * 
-	 * @param integer|string|Opf_Item $item The item to remove.
+	 * @param integer|string|Opf\Item\AbstractItem $item The item to remove.
 	 * @param string $placeholder The placeholder, where the item should be looked for.
 	 * @return boolean
-	 * @throws Opf_PlaceholderNotExists_Exception
+	 * @throws Opf\Item\PlaceholderNotExistsException
 	 */
 	public function removeItem($item, $placeholder = 'default')
 	{
 		if(!isset($this->_items[$placeholder]))
 		{
-			throw new Opf_Exception('Placeholder ' . $placeholder . ' does not exist in collection ' . $this->getName());
+			throw new Exception('Placeholder '.$placeholder.' does not exist in collection '.$this->getName());
 		}
 
 		// The integer call
@@ -158,15 +164,16 @@ abstract class Opf_Collection extends Opf_Item// implements Opf_Collection_Inter
 	 *
 	 * Only the selected placeholder is scanned. The default placeholder is 'default'.
 	 * 
-	 * @param Opf_Item $newItem The new item
-	 * @param integer|string|Opf_Item $oldItem The item to replace
+	 * @param Opf\Item\AbstractItem $newItem The new item
+	 * @param integer|string|Opf\Item\AbstractItem $oldItem The item to replace
 	 * @param string $placeholder The placeholder where the item is located
+	 * @throws Opf\Item\PlaceholderNotExistsException
 	 */
-	public function replaceItem(Opf_Item $newItem, $oldItem, $placeholder = 'default')
+	public function replaceItem(AbstractItem $newItem, $oldItem, $placeholder = 'default')
 	{
 		if(!isset($this->_items[$placeholder]))
 		{
-			throw new Opf_Exception('Placeholder ' . $placeholder . ' does not exist in collection ' . $this->getName());
+			throw new Exception('Placeholder '.$placeholder.' does not exist in collection '.$this->getName());
 		}
 
 		// The integer call
@@ -213,6 +220,12 @@ abstract class Opf_Collection extends Opf_Item// implements Opf_Collection_Inter
 		return false;
 	} // end replaceItem();
 
+	/**
+	 * Returns all items for specified placeholder.
+	 * 
+	 * @param string $placeholder The placeholder where the item is located
+	 * @return array
+	 */
 	public function getItems($placeholder = 'default')
 	{
 		$result = array();
@@ -232,7 +245,7 @@ abstract class Opf_Collection extends Opf_Item// implements Opf_Collection_Inter
 	 * The item is also looked for in the sub-collections.
 	 *
 	 * @param string $name The item name
-	 * @return Opf_Item
+	 * @return Opf\Item\AbstractItem
 	 */
 	public function findItem($name)
 	{
@@ -248,7 +261,8 @@ abstract class Opf_Collection extends Opf_Item// implements Opf_Collection_Inter
 	 * The item is also looked for in the sub-collections.
 	 *
 	 * @param string $name The item name
-	 * @return Opf_Item
+	 * @return Opf\Item\AbstractItem
+	 * @throws Opf\Item\CollectionExcepion
 	 */
 	public function findItemStrict($name)
 	{
@@ -256,19 +270,19 @@ abstract class Opf_Collection extends Opf_Item// implements Opf_Collection_Inter
 		{
 			return $this->_collection[$name];
 		}
-		throw new Opf_Collection_Exception('Item '.$name.' does not exist in the collection.');
+		throw new CollectionException('Item '.$name.' does not exist in the collection.');
 	} // end findItemStrict();
 
 	/**
 	 * Allows to check, if the item is allowed in this particular collection.
 	 * In the default implementation, the method always returns true.
 	 *
-	 * @param Opf_Item $item The item to test
+	 * @param Opf\Item\AbstractItem $item The item to test
 	 * @param string $placeholder The placeholder name
 	 * @return boolean
 	 */
-	protected function _isItemAllowed(Opf_Item $item, $placeholder = 'default')
+	protected function _isItemAllowed(AbstractItem $item, $placeholder = 'default')
 	{
 		return true;
 	} // end _isItemAllowed();
-} // end Opf_Collection;
+} // end Collection;

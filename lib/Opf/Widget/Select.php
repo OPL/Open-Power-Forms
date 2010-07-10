@@ -11,11 +11,15 @@
  * and other contributors. See website for details.
  */
 
+namespace Opf\Widget;
+
+use Opf\Design;
+
 /**
  * The class represents an input widget.
  * @package Widgets
  */
-class Opf_Widget_Select extends Opf_Widget_Component
+class Select extends Component
 {
 	/**
 	 * The option list.
@@ -35,7 +39,7 @@ class Opf_Widget_Select extends Opf_Widget_Component
 	/**
 	 * Allows to set the options. Implements the fluent interface.
 	 * @param array $options The option list.
-	 * @return Opf_Widget_Component
+	 * @return Opf\Widget\Component
 	 */
 	public function setOptions($options)
 	{
@@ -52,9 +56,9 @@ class Opf_Widget_Select extends Opf_Widget_Component
 	{
 		$attributes = array(
 			'name' => $this->_item->getFullyQualifiedName(),
-			'class' => Opf_Design::getClass('select', $this->_item->isValid())
+			'class' => Design::getClass('select', $this->_item->isValid())
 		);
-		$code = '<select '.Opt_Function::buildAttributes($attributes).'>';
+		$code = '<select '.\Opt_Function::buildAttributes($attributes).'>';
 		foreach($this->_options as $id => $option)
 		{
 			if($id == $this->_item->getValue())
@@ -89,4 +93,4 @@ class Opf_Widget_Select extends Opf_Widget_Component
 		}
 		return array();
 	} // end range();
-} // end Opf_Widget_Select;
+} // end Select;

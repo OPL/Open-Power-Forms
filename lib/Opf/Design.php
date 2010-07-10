@@ -11,12 +11,14 @@
  * and other contributors. See website for details.
  */
 
+namespace Opf;
+
 /**
  * Manages the CSS class set used by the widgets. It is
  * available both for the script and the templates through
  * a special wrapper.
  */
-class Opf_Design
+class Design
 {
 	/**
 	 * The list of CSS classes for valid elements.
@@ -109,4 +111,4 @@ class Opf_Design
 		}
 		return null;
 	} // end getClass();
-} // end Opf_Design;
+} // end Design;

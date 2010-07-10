@@ -11,11 +11,23 @@
  * and other contributors. See website for details.
  */
 
+namespace Opf\Form;
+
+use Opf\Item\AbstractItem;
+use Opf\Item\Leaf;
+use Opf\Item\Repeater;
+use Opf\Item\Collection;
+use Opf\Widget;
+use Opf\Exception;
+use Exception as FormException;
+use Opf\Core;
+use Opf\Validator\ValidatorInterface;
+
 /**
  * Represents a form. Because forms are treated as items, they can
  * be parts of other forms.
  */
-class Opf_Form extends Opf_Collection
+class Form extends Collection
 {
 	const POST = 0;
 	const GET = 1;
@@ -82,13 +94,13 @@ class Opf_Form extends Opf_Collection
 	/**
 	 * Initializes the form processor.
 	 *
-	 * @param String $name The form name.
+	 * @param string $name The form name.
 	 */
 	public function __construct($name)
 	{
 		$this->_name = $name;
 
-		Opf_Class::addForm($this);
+		Core::addForm($this);
 	} // end __construct();
 
 	/**
@@ -113,7 +125,7 @@ class Opf_Form extends Opf_Collection
 	 * THIS object, the extending classes may overwrite
 	 * it for some other purposes.
 	 *
-	 * @return Opf_Form
+	 * @return Opf\Form\Form
 	 */
 	public function fluent()
 	{
@@ -125,7 +137,7 @@ class Opf_Form extends Opf_Collection
 	 *
 	 * @param Opt_View $view
 	 */
-	public function setView(Opt_View $view)
+	public function setView(\Opt_View $view)
 	{
 		$this->_view = $view;
 	} // end setView();
@@ -142,7 +154,7 @@ class Opf_Form extends Opf_Collection
 	/**
 	 * Sets the form method.
 	 * @param integer $method The new method.
-	 * @throws Opf_UnknownMethod_Exception
+	 * @throws Opf\Exception
 	 */
 	public function setMethod($method)
 	{
@@ -155,7 +167,7 @@ class Opf_Form extends Opf_Collection
 				$this->_method = 'GET';
 				break;
 			default:
-				throw new Opf_Exception('Unknown request method: ' . $method);
+				throw new Exception('Unknown request method: '.$method);
 				break;
 		}
 	} // end setMethod();
@@ -198,7 +210,7 @@ class Opf_Form extends Opf_Collection
 	{
 		if(!is_scalar($value))
 		{
-			throw new Opf_Exception('The second argument in Opf_Form::setInternal() must be scalar.');
+			throw new \BadMethodCallException('The second argument in Opf\Form\Form::setInternal() must be scalar.');
 		}
 		$this->_internals[(string)$name] = $value;
 	} // end setInternal();
@@ -278,15 +290,15 @@ class Opf_Form extends Opf_Collection
 	/**
 	 * Adds a new validator to the form.
 	 *
-	 * @throws Opf_Form_Exception
+	 * @throws Opf\Form\Exception
 	 * @param string $name The validator name
-	 * @param Opf_Validator_Interface $validator The validator.
+	 * @param Opf\Validator\ValidatorInterface $validator The validator.
 	 */
-	public function addValidator($name, Opf_Validator_Interface $validator)
+	public function addValidator($name, ValidatorInterface $validator)
 	{
 		if(isset($this->_validators[$name]))
 		{
-			throw new Opf_Form_Exception('The validator with the specified name already exists.');
+			throw new FormException('The validator with the specified name already exists.');
 		}
 		$this->_validators[$name] = $validator;
 	} // end addValidator();
@@ -294,7 +306,7 @@ class Opf_Form extends Opf_Collection
 	/**
 	 * Returns the specified validator.
 	 *
-	 * @throws Opf_Form_Exception
+	 * @throws Opf\Form\Exception
 	 * @param string $name Validator name.
 	 * @return array
 	 */
@@ -302,7 +314,7 @@ class Opf_Form extends Opf_Collection
 	{
 		if(!isset($this->_validators[$name]))
 		{
-			throw new Opf_Form_Exception('The validator with the specified name does not exists.');
+			throw new FormException('The validator with the specified name does not exists.');
 		}
 		return $this->_validators[$name];
 	} // end getValidator();
@@ -321,14 +333,14 @@ class Opf_Form extends Opf_Collection
 	/**
 	 * Removes the validator.
 	 *
-	 * @throws Opf_Form_Exception
+	 * @throws Opf\Form\Exception
 	 * @param string $name Validator name.
 	 */
 	public function removeValidator($name)
 	{
 		if(!isset($this->_validators[$name]))
 		{
-			throw new Opf_Form_Exception('The validator with the specified name does not exists.');
+			throw new FormException('The validator with the specified name does not exists.');
 		}
 		unset($this->_validators[$name]);
 	} // end removeValidator();
@@ -340,7 +352,7 @@ class Opf_Form extends Opf_Collection
 	 *
 	 * @internal
 	 * @param string $item The item name
-	 * @return Opf_Item
+	 * @return Opf\Item\AbstractItem
 	 */
 	public function getItemDisplay($item)
 	{
@@ -397,7 +409,7 @@ class Opf_Form extends Opf_Collection
 	{
 		foreach($this->_collection as $item)
 		{
-			if($item instanceof Opf_Form || $item instanceof Opf_Repeater)
+			if($item instanceof Form || $item instanceof Repeater)
 			{
 				$item->onInit();
 			}
@@ -440,7 +452,7 @@ class Opf_Form extends Opf_Collection
 	public function execute()
 	{
 		$this->_executed = true;
-		$opf = Opl_Registry::get('opf');
+		$opf = \Opl_Registry::get('opf');
 
 		$this->invokeEvent('preInit');
 		$this->onInit();
@@ -483,13 +495,13 @@ class Opf_Form extends Opf_Collection
 	/**
 	 * Renders the view.
 	 *
-	 * @throws Opf_Exception
+	 * @throws Opf\Exception
 	 */
 	public function render()
 	{
 		if($this->_state != self::RENDER && $this->_state != self::ERROR)
 		{
-			throw new Opf_Exception('Cannot render the specified view: invalid state.');
+			throw new Exception('Cannot render the specified view: invalid state.');
 		}
 		$this->_onRender($this->_view);
 		$this->invokeEvent('preRender');
@@ -505,7 +517,7 @@ class Opf_Form extends Opf_Collection
 	 * 
 	 * @param string $name The item name.
 	 * @param string $placeholder The item placeholder.
-	 * @return Opf_Leaf
+	 * @return Opf\Item\Leaf
 	 */
 	public function itemFactory($name, $placeholder = 'default')
 	{
@@ -513,7 +525,7 @@ class Opf_Form extends Opf_Collection
 		{
 			return $item;
 		}
-		$item = new Opf_Leaf($name);
+		$item = new Leaf($name);
 		$this->appendItem($item, $placeholder);
 
 		return $item;
@@ -528,31 +540,31 @@ class Opf_Form extends Opf_Collection
 	 * @param string $className The widget class name
 	 * @param string $tagName The component tag name for debug purposes
 	 * @param array $attributes The component attribute list
-	 * @return Opf_Widget_Component
-	 * @throws Opf_AttributeNotDefined_Exception
-	 * @throws Opf_ItemNotExists_Exception
-	 * @throws Opf_InvalidWidget_Exception
+	 * @return Opf\Widget\Component
+	 * @throws Opf\AttributeNotDefinedException
+	 * @throws Opf\ItemNotExistsException
+	 * @throws Opf\InvalidWidgetException
 	 */
-	public function _widgetFactory($className, $tagName, Array $attributes)
+	public function _widgetFactory($className, $tagName, array $attributes)
 	{
 		if(!isset($attributes['name']))
 		{
-			throw new Opf_Exception('Attribute "name" not defined in ' . $tagName);
+			throw new Exception('Attribute "name" not defined in '.$tagName);
 		}
 		$item = $this->getItem($attributes['name']);
 		if($item === null)
 		{
-			throw new Opf_Exception('Item ' . $attributes['name'] . ' not exist.');
+			throw new Exception('Item '.$attributes['name'].' not exist.');
 		}
-	/*	if(!$item instanceof Opf_Leaf)
+		/*if(!$item instanceof Leaf)
 		{
-			throw new Opf_InvalidItem_Exception($attributes['name']);
+			throw new Exception($attributes['name']);
 		}*/
 		$widget = new $className();
 
-		if(!$widget instanceof Opf_Widget_Component)
+		if(!$widget instanceof Widget\Component)
 		{
-			throw new Opf_Exception('Widget ' . $className . ' is invalid');
+			throw new Exception('Widget '.$className.' is invalid');
 		}
 		$item->setWidget($widget);
 		$item->setFullyQualifiedName($this->getFullyQualifiedName());
@@ -564,7 +576,7 @@ class Opf_Form extends Opf_Collection
 	 * @internal
 	 * @param array $data The form data.
 	 */
-	protected function _validate(&$data, Opf_Item $errorClass = null)
+	protected function _validate(&$data, AbstractItem $errorClass = null)
 	{
 		$valid = true;
 		$this->invokeEvent('preValidate');
@@ -628,7 +640,7 @@ class Opf_Form extends Opf_Collection
 	 * @param Opt_View $view The view the form is rendered in.
 	 * @internal
 	 */
-	protected function _onRender(Opt_View $view)
+	protected function _onRender(\Opt_View $view)
 	{
 		$this->setInternal('name', $this->_name);
 		foreach($this->_items as $placeholder => &$void)
@@ -646,13 +658,13 @@ class Opf_Form extends Opf_Collection
 	 *
 	 * @internal
 	 * @static
-	 * @param Opf_Form $form The form pushed to the stack.
+	 * @param Opf\Form\Form $form The form pushed to the stack.
 	 */
-	static public function pushToStack(Opf_Form $form)
+	static public function pushToStack(Form $form)
 	{
 		if(self::$_stack === null)
 		{
-			self::$_stack = new SplStack();
+			self::$_stack = new \SplStack();
 		}
 		self::$_stack->push($form);
 	} // end pushToStack();
@@ -663,19 +675,20 @@ class Opf_Form extends Opf_Collection
 	 *
 	 * @internal
 	 * @static
-	 * @param Opf_Form $form The form to be popped.
-	 * @return Opf_Form
+	 * @param Opf\Form\Form $form The form to be popped.
+	 * @return Opf\Form\Form
+	 * @throws Opf\Exception
 	 */
-	static public function popFromStack(Opf_Form $form)
+	static public function popFromStack(Form $form)
 	{
 		if(self::$_stack === null)
 		{
-			self::$_stack = new SplStack();
+			self::$_stack = new \SplStack();
 		}
 		$element = self::$_stack->pop();
 		if($element !== $form)
 		{
-			throw new Opf_Exception('Invalid form ' . $form -> getName() . ' on stack ' . $element->getName());
+			throw new Exception('Invalid form '.$form->getName().' on stack '.$element->getName());
 		}
 		return $element;
 	} // end popFromStack();
@@ -686,13 +699,13 @@ class Opf_Form extends Opf_Collection
 	 *
 	 * @internal
 	 * @static
-	 * @return Opf_Form
+	 * @return Opf\Form\Form
 	 */
 	static public function topOfStack()
 	{
 		if(self::$_stack === null)
 		{
-			self::$_stack = new SplStack();
+			self::$_stack = new \SplStack();
 		}
 		if(self::$_stack->count() == 0)
 		{
@@ -700,4 +713,5 @@ class Opf_Form extends Opf_Collection
 		}
 		return self::$_stack->top();
 	} // end topOfStack();
-} // end Opf_Form;
+} // end Form;
+

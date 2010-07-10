@@ -11,11 +11,15 @@
  * and other contributors. See website for details.
  */
 
+namespace Opf\Validator;
+
+use Opf\Item\AbstractItem;
+
 /**
  * The class represents valid URL.
  * @package Validators
  */
-class Opf_Validator_URL implements Opf_Validator_Interface
+class URL implements ValidatorInterface
 {
 	/**
 	 * Constructs the validator object.
@@ -56,10 +60,11 @@ class Opf_Validator_URL implements Opf_Validator_Interface
 	/**
 	 * Validates the value in a specified type.
 	 *
-	 * @param Mixed $value The value to validate.
-	 * @return Boolean
+	 * @param Opf\Item\AbstractItem $item
+	 * @param mixed $value The value to validate.
+	 * @return boolean
 	 */
-	public function validate(Opf_Item $item, $value)
+	public function validate(AbstractItem $item, $value)
 	{
 		if(!is_scalar($value))
 		{
@@ -68,4 +73,4 @@ class Opf_Validator_URL implements Opf_Validator_Interface
 		return (bool)filter_var($value, FILTER_VALIDATE_URL);
 		
 	} // end validate();
-} // end Opf_Validator_URL;
+} // end URL;

@@ -11,11 +11,13 @@
  * and other contributors. See website for details.
  */
 
+namespace Opf\Filter;
+
 /**
  * A sample data filter. It will not be a part of the final
  * release.
  */
-class Opf_Filter_Date implements Opf_Filter_Interface
+class Date implements FilterInterface
 {
 	/**
 	 * Converts the publicly entered value to the internal format.
@@ -25,11 +27,11 @@ class Opf_Filter_Date implements Opf_Filter_Interface
 	 */
 	public function toInternal($value)
 	{
-		return DateTime::createFromFormat('d.m.Y', $value);
+		return \DateTime::createFromFormat('d.m.Y', $value);
 	} // end toInternal();
 
 	public function toPublic($value)
 	{
 		return $value->format('d.m.Y');
 	} // end toPublic();
-} // end Opf_Filter_Date;
+} // end Date;

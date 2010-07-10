@@ -11,10 +11,14 @@
  * and other contributors. See website for details.
  */
 
+namespace Opf\View\Format;
+
+use Opf\View\Instruction;
+
 /**
  * A data format for form sections in OPT templates.
  */
-class Opf_View_Format_Form extends Opt_Format_Abstract
+class Form extends \Opt_Format_Abstract
 {
 	/**
 	 * The supported elements.
@@ -48,8 +52,8 @@ class Opf_View_Format_Form extends Opt_Format_Abstract
 	/**
 	 * Builds a PHP code for the specified hook name.
 	 *
-	 * @param String $hookName The hook name
-	 * @return String The output PHP code
+	 * @param string $hookName The hook name
+	 * @return string The output PHP code
 	 */
 	protected function _build($hookName)
 	{
@@ -60,11 +64,11 @@ class Opf_View_Format_Form extends Opt_Format_Abstract
 				$section = $this->_getVar('section');
 				if($section['parent'] !== null)
 				{
-					$parent = Opt_Instruction_BaseSection::getSection($section['parent']);
+					$parent = \Opt_Instruction_BaseSection::getSection($section['parent']);
 					$parent['format']->assign('item', $section['name']);
 					return '$_sect'.$section['name'].'_vals = '.$parent['format']->get('section:variable').'; ';
 				}
-				$form = Opf_View_Instruction_Form::getProcessedForm();
+				$form = Instruction\Form::getProcessedForm();
 				if($section['order'] == 'desc')
 				{
 					return '$_sect'.$section['name'].'_vals = array_reverse($_form->getItems(\''.$section['name'].'\')); ';
@@ -76,7 +80,8 @@ class Opf_View_Format_Form extends Opt_Format_Abstract
 			// The condition that should test if the section is not empty.
 			case 'section:isNotEmpty':
 				$section = $this->_getVar('section');
-				return 'is_array($_sect'.$section['name'].'_vals) && ($_sect'.$section['name'].'_cnt = sizeof($_sect'.$section['name'].'_vals)) > 0';			// The code block after the condition
+				return 'is_array($_sect'.$section['name'].'_vals) && ($_sect'.$section['name'].'_cnt = sizeof($_sect'.$section['name'].'_vals)) > 0';
+			// The code block after the condition
 			case 'section:started':
 				return '';
 			// The code block before the end of the conditional block.
@@ -164,4 +169,4 @@ class Opf_View_Format_Form extends Opt_Format_Abstract
 				return NULL;
 		}
 	} // end _build();
-} // end Opf_View_Format_Form;
+} // end Form;

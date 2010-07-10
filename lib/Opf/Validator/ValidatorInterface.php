@@ -11,9 +11,11 @@
  * and other contributors. See website for details.
  */
 
-namespace Opf\Form;
+namespace Opf\Validator;
 
-class Group extends Form
+use Opf\Item\Collection;
+
+interface ValidatorInterface
 {
-
-} // end Group;
+	public function validate(Collection $collection);
+} // end ValidatorInterface;

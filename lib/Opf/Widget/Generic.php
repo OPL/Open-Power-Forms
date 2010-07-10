@@ -11,13 +11,15 @@
  * and other contributors. See website for details.
  */
 
+namespace Opf\Widget;
+
 /**
  * The generic widget is used to collect the data about the
  * widget that are later rewritten to the proper widget.
  * It cannot be displayed.
  * @package Widgets
  */
-class Opf_Widget_Generic extends Opf_Widget_Component
+class Generic extends Component
 {
 	/**
 	 * The option list.
@@ -28,7 +30,7 @@ class Opf_Widget_Generic extends Opf_Widget_Component
 	/**
 	 * Allows to set the options. Implements the fluent interface.
 	 * @param array $options The option list.
-	 * @return Opf_Widget_Component
+	 * @return Opf\Widget\Component
 	 */
 	public function setOptions($options)
 	{
@@ -43,6 +45,6 @@ class Opf_Widget_Generic extends Opf_Widget_Component
 	 */
 	public function display($attributes = array())
 	{
-		throw new Opf_Exception('Opf_Widget_Generic cannot be displayed.');
+		throw new \RuntimeException('Generic widget cannot be displayed.');
 	} // end display();
-} // end Opf_Widget_Generic;
+} // end Generic;

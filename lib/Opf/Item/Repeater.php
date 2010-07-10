@@ -10,14 +10,17 @@
  * Copyright (c) Invenzzia Group <http://www.invenzzia.org>
  * and other contributors. See website for details.
  */
-	
+
+namespace Opf\Item;
+
+use Opf\Form\Form;
 
 /**
  * This item type decorates another item and causes it to be repeated
  * several times. The programmer may control the number of repetitions
  * and the number of required instances that must be filled in.
  */
-class Opf_Repeater extends Opf_Item
+class Repeater extends AbstractItem
 {
 	/**
 	 * The number of repetitions.
@@ -40,10 +43,10 @@ class Opf_Repeater extends Opf_Item
 	/**
 	 * Creates the repeater for the specified item.
 	 * 
-	 * @param Opf_Item $item The item to repeat.
+	 * @param Opf\Item\AbstractItem $item The item to repeat.
 	 * @param integer $repetitions The number of repetitions.
 	 */
-	public function __construct(Opf_Item $item, $repetitions = 0)
+	public function __construct(AbstractItem $item, $repetitions = 0)
 	{
 		$this->_repetitions = $repetitions;
 		$this->_name = $item->getName();
@@ -59,7 +62,7 @@ class Opf_Repeater extends Opf_Item
 	{
 		foreach($this->_wrappers as $i => $wrapper)
 		{
-			if($wrapper instanceof Opf_Form || $wrapper instanceof Opf_Repeater)
+			if($wrapper instanceof Form || $wrapper instanceof Repeater)
 			{
 				$wrapper->onInit();
 			}
@@ -131,7 +134,7 @@ class Opf_Repeater extends Opf_Item
 
 	/**
 	 * Returns the repeated items represented by the repeater. The returned
-	 * objects are of type Opf_Wrapper and contain a reference to the wrapped
+	 * objects are of type Opf\View\Format\FormRepeater and contain a reference to the wrapped
 	 * item.
 	 *
 	 * @param string $placeholder Ignored argument - for compliance with collections
@@ -193,7 +196,7 @@ class Opf_Repeater extends Opf_Item
 	 * Validates the field against the registered validators.
 	 * @param mixed $data The data to validate.
 	 */
-	protected function _validate(&$data, Opf_Item $errorClass = null)
+	protected function _validate(&$data, AbstractItem $errorClass = null)
 	{
 		if(!is_array($data))
 		{
@@ -208,7 +211,7 @@ class Opf_Repeater extends Opf_Item
 			{
 				continue;
 			}
-			if(!Opf_Item::isEmpty($data[$id]))
+			if(!Item::isEmpty($data[$id]))
 			{
 				if($item->_validate($data[$id], $item))
 				{
@@ -236,8 +239,8 @@ class Opf_Repeater extends Opf_Item
 	 * @param Opt_View $view The view the form is rendered in
 	 * @internal
 	 */
-	protected function _onRender(Opt_View $view)
+	protected function _onRender(\Opt_View $view)
 	{
 		$view->setFormat($this->_name, 'FormRepeater/Form');
 	} // end _onRender();
-} // end Opf_Repeater;
+} // end Repeater;

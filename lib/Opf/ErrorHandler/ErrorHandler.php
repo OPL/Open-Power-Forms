@@ -11,15 +11,17 @@
  * and other contributors. See website for details.
  */
 
-/**
- * This interface is responsible for transmitting the data
- * between the sub-pages in a multi-step form managed by
- * Opf_Form_Sequence.
- */
-interface Opf_Tracker_Interface
-{
-	public function setSequence(Opf_Form_Sequence $form);
-	public function track(&$data, $step);
-	public function retrieve(&$data, $step);
+namespace Opf\ErrorHandler;
 
-} // end Opf_Tracker_Interface;
+/**
+ * Implements the default error handler for OPF exceptions.
+ */
+class ErrorHandler extends \Opl_ErrorHandler
+{
+	protected $_library = 'Open Power Forms';
+	protected $_context = array(
+		'__UNKNOWN__' => array(
+			'BasicConfiguration' => array()
+		),
+	);
+} // end ErrorHandler;

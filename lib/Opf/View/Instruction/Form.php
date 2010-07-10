@@ -11,7 +11,11 @@
  * and other contributors. See website for details.
  */
 
-class Opf_View_Instruction_Form extends Opt_Instruction_Abstract
+namespace Opf\View\Instruction;
+
+use Opf\Core;
+
+class Form extends \Opt_Instruction_Abstract
 {
 	protected $_name = 'form';
 
@@ -19,6 +23,7 @@ class Opf_View_Instruction_Form extends Opt_Instruction_Abstract
 	 * The nesting level, used to detect nesting.
 	 * @var integer
 	 */
+
 	private $_nesting;
 	/**
 	 * The currently processed form name.
@@ -58,7 +63,7 @@ class Opf_View_Instruction_Form extends Opt_Instruction_Abstract
 	 *
 	 * @param Opt_Xml_Node $node The recognized node.
 	 */
-	public function _processForm(Opt_Xml_Node $node)
+	public function _processForm(\Opt_Xml_Node $node)
 	{
 		$this->_nesting++;
 
@@ -71,26 +76,26 @@ class Opf_View_Instruction_Form extends Opt_Instruction_Abstract
 
 		if((!isset($params['name']) && !isset($params['from'])) || (isset($params['name']) && isset($params['from'])))
 		{
-			throw new Opf_Exception('Attributes "name" or "from" are not defined.');
+			throw new \OutOfBoundsException('Attributes "name" or "from" are not defined.');
 		}
 
 		$attr = 'array(\'method\' => $_form->getMethod(), \'action\' => $_form->getAction(),
-			\'class\' => Opf_Design::getClass(\'form\', $_form->isValid()), ';
+			\'class\' => Opf\Design::getClass(\'form\', $_form->isValid()), ';
 		foreach($extra as $name => $value)
 		{
 			$attr .= ' \''.$name.'\' => '.$value.',';
 		}
 		$attr .= ')';
 
-		$opf = Opl_Registry::get('opf');
+		$opf = \Opl_Registry::get('opf');
 
-		$node->addAfter(Opt_Xml_Buffer::TAG_BEFORE, 'if(($_formy = Opf_Form::topOfStack()) === null)
+		$node->addAfter(\Opt_Xml_Buffer::TAG_BEFORE, 'if(($_formy = Opf\Form\Form::topOfStack()) === null)
 {
-	if(Opf_Class::hasForm('.$params['name'].'))
+	if(Opf\Core::hasForm('.$params['name'].'))
 	{
-		$_formx = Opf_Class::getForm('.$params['name'].');
+		$_formx = Opf\Core::getForm('.$params['name'].');
 		$_form = $_formx->fluent();
-		Opf_Form::pushToStack($_form);
+		Opf\Form\Form::pushToStack($_form);
 		echo \'<form \'.Opt_Function::buildAttributes('.$attr.').\'>\'; 
 	}
 }
@@ -98,11 +103,11 @@ else
 {
 	$_formx = '.(isset($params['from']) ? $params['from'] : '$_formy->getItemDisplay('.$params['name'].')').';
 	$_form = $_formx->fluent();
-	if(!$_form instanceof Opf_Form)
+	if(!$_form instanceof Opf\Form\Form)
 	{
-		throw new Opf_Exception(\'Invalid form object type(\'.get_class($_formx).\'), should be Opf_Form\');
+		throw new RuntimeException(\'Invalid form object type(\'.get_class($_formx).\'), should be Opf\Form\Form\');
 	}
-	Opf_Form::pushToStack($_form);
+	Opf\Form\Form::pushToStack($_form);
 }
 
 if(isset($_form))
@@ -110,8 +115,8 @@ if(isset($_form))
 	foreach($_formx->getInternals() as $n => $v){ echo \'<input type="hidden" name="'.$opf->formInternalId.'[\'.$n.\']" value="\'.htmlspecialchars($v).\'" />\'; }
 	self::$_vars[\'form\'] = $_form;
 ');
-		$node->addBefore(Opt_Xml_Buffer::TAG_AFTER,' Opf_Form::popFromStack($_form);
-	if((self::$_vars[\'form\'] = $_form = Opf_Form::topOfStack()) === null)
+		$node->addBefore(\Opt_Xml_Buffer::TAG_AFTER,' Opf\Form\Form::popFromStack($_form);
+	if((self::$_vars[\'form\'] = $_form = Opf\Form\Form::topOfStack()) === null)
 	{
 		echo \'</form>\';
 	}
@@ -123,7 +128,7 @@ if(isset($_form))
 		$this->_process($node);
 	} // end _processForm();
 
-	public function _postprocessForm(Opt_Xml_Node $node)
+	public function _postprocessForm(\Opt_Xml_Node $node)
 	{
 		$this->_nesting--;
 		self::_setProcessedForm(null);
@@ -134,7 +139,7 @@ if(isset($_form))
 		switch($system[2])
 		{
 			case 'valid':
-				return '($_form->getState() != Opf_Form::ERROR)';
+				return '($_form->getState() != Opf\Form\Form::ERROR)';
 		}
 	} // end processSystemVar();
-} // end Opf_View_Instruction_Form;
+} // end Form;

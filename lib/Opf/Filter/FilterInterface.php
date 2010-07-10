@@ -11,9 +11,13 @@
  * and other contributors. See website for details.
  */
 
-namespace Opf\Form;
+namespace Opf\Filter;
 
-class Group extends Form
+/**
+ * The filter interface
+ */
+interface FilterInterface
 {
-
-} // end Group;
+	public function toInternal($value);
+	public function toPublic($value);
+} // end FilterInterface; 

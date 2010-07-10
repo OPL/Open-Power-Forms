@@ -12,12 +12,16 @@
  *
  */
 
+namespace Opf\Validator;
+
+use Opf\Item\Collection;
+
 /**
  * The class represents maximum string length applied as a rule to a
  * form field.
  * @package Validators
  */
-class Opf_Validator_Type implements Opf_Validator_Interface
+class Type implements ValidatorInterface
 {
 	const INTEGER = 0;
 	const FLOAT = 1;
@@ -58,17 +62,17 @@ class Opf_Validator_Type implements Opf_Validator_Interface
 		}
 		else
 		{
-			throw new Opf_Validator_Exception('Invalid configuration for Opf_Validator_Email.');
+			throw new Exception('Invalid configuration for Type validator.');
 		}
 	} // end __construct();
 
 	/**
 	 * Validates the value in a specified type.
 	 *
-	 * @param Opf_Collection $collection The collection to validate
-	 * @return Boolean
+	 * @param Opf\Item\Collection $collection The collection to validate
+	 * @return boolean
 	 */
-	public function validate(Opf_Collection $collection)
+	public function validate(Collection $collection)
 	{
 		$valid = true;
 		foreach($this->_fields as $field)
@@ -130,7 +134,7 @@ class Opf_Validator_Type implements Opf_Validator_Interface
 				}
 				return false;
 			case self::DATETIME:
-				return $value instanceof DateTime;
+				return $value instanceof \DateTime;
 			case self::CHARACTER:
 				if(strlen($value) == 1 && ctype_alpha($value))
 				{
@@ -139,4 +143,4 @@ class Opf_Validator_Type implements Opf_Validator_Interface
 		}
 		return false;
 	} // end _checkType();
-} // end Opf_Validator_Type;
+} // end Type;

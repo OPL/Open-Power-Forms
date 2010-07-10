@@ -11,7 +11,13 @@
  * and other contributors. See website for details.
  */
 
-class Opf_Form_Sequence extends Opf_Form
+namespace Opf\Form;
+
+use Opf\Item\AbstractItem;
+use Opf\Tracker\TrackerInterface;
+use Opf\Exception;
+ 
+class Sequence extends Form
 {
 	/**
 	 * The placeholder used to retrieve the forms.
@@ -22,13 +28,13 @@ class Opf_Form_Sequence extends Opf_Form
 	/**
 	 * The tracker used to track the data between
 	 * the sequence steps.
-	 * @var Opf_Tracker_Interface
+	 * @var Opf\Tracker\TrackerInterface
 	 */
 	private $_tracker = null;
 
 	/**
 	 * The currently analyzed sub-form
-	 * @var Opf_Form
+	 * @var Opf\Form\Form
 	 */
 	private $_current = null;
 
@@ -41,7 +47,7 @@ class Opf_Form_Sequence extends Opf_Form
 	/**
 	 * Returns the currently processed subform.
 	 *
-	 * @return Opf_Form
+	 * @return Opf\Form\Form
 	 */
 	public function fluent()
 	{
@@ -75,9 +81,9 @@ class Opf_Form_Sequence extends Opf_Form
 
 	/**
 	 * Sets the new data tracker for this sequence.
-	 * @param Opf_Tracker_Interface $tracker The new tracker
+	 * @param Opf\Tracker\TrackerInterface $tracker The new tracker
 	 */
-	public function setTracker(Opf_Tracker_Interface $tracker)
+	public function setTracker(TrackerInterface $tracker)
 	{
 		$this->_tracker = $tracker;
 	} // end setTracker();
@@ -102,19 +108,19 @@ class Opf_Form_Sequence extends Opf_Form
 	/**
 	 * Returns the current tracker. If the tracker is not set yet,
 	 * it attempts to create a new default tracker.
-	 * @return Opf_Tracker_Interface
-	 * @throws Opf_InvalidObjectType_Exception
+	 * @return Opf\Tracker\TrackerInterface
+	 * @throws Opf\InvalidObjectTypeException
 	 */
 	public function getTracker()
 	{
 		if($this->_tracker === null)
 		{
-			$opf = Opl_Registry::get('opf');
+			$opf = \Opl_Registry::get('opf');
 			$className = $opf->defaultTracker;
 			$tracker = new $className;
-			if(!$tracker instanceof Opf_Tracker_Interface)
+			if(!$tracker instanceof TrackerInterface)
 			{
-				throw new Opf_Exception('Invalid object type(' . get_class($tracker) . '), should be Opf_Tracker_Interface');
+				throw new Exception('Invalid object type('.get_class($tracker).'), should be Opf\Tracker\TrackerInterface');
 			}
 			$this->_tracker = $tracker;
 		}
@@ -124,7 +130,7 @@ class Opf_Form_Sequence extends Opf_Form
 	/**
 	 * Returns the current sub-form in a sequence and advances the internal pointer.
 	 *
-	 * @return Opf_Form
+	 * @return Opf\Form\Form
 	 */
 	public function getNextSubform()
 	{
@@ -144,13 +150,13 @@ class Opf_Form_Sequence extends Opf_Form
 	/**
 	 * Recognizes the form types and does not allow to append any other item
 	 * types to it.
-	 * @param Opf_Item $item The item to test.
+	 * @param Opf\Item\AbstractItem $item The item to test.
 	 * @param string $placeholder The optional placeholder.
 	 * @return boolean
 	 */
-	protected function _isItemAllowed(Opf_Item $item, $placeholder = 'default')
+	protected function _isItemAllowed(AbstractItem $item, $placeholder = 'default')
 	{
-		return ($item instanceof Opf_Form);
+		return ($item instanceof Form);
 	} // end _isItemAllowed();
 
 	/**
@@ -158,7 +164,7 @@ class Opf_Form_Sequence extends Opf_Form
 	 */
 	public function execute()
 	{
-		$opf = Opl_Registry::get('opf');
+		$opf = \Opl_Registry::get('opf');
 
 		$this->invokeEvent('preInit');
 		$this->onInit();
@@ -265,12 +271,9 @@ class Opf_Form_Sequence extends Opf_Form
 	 *
 	 * @internal
 	 */
-	protected function _onRender(Opt_View $view)
+	protected function _onRender(\Opt_View $view)
 	{
 		$this->setInternal('name', $this->_name);
 		$this->setInternal('step', $this->_step);
 	} // end _onRender();
-
-
-
-} // end Opf_Form_Sequence;
+} // end Sequence;

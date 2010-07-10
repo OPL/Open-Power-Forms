@@ -10,11 +10,13 @@
  * Copyright (c) Invenzzia Group <http://www.invenzzia.org>
  * and other contributors. See website for details.
  */
+ 
+namespace Opf\View\Format;
 
 /**
- * A data format for Opf_Design.
+ * A data format for Opf\Design.
  */
-class Opf_View_Format_Design extends Opt_Format_Abstract
+class Design extends \Opt_Format_Abstract
 {
 	/**
 	 * The supported elements.
@@ -40,8 +42,8 @@ class Opf_View_Format_Design extends Opt_Format_Abstract
 	/**
 	 * Build a PHP code for the specified hook name.
 	 *
-	 * @param String $hookName The hook name
-	 * @return String The output PHP code
+	 * @param string $hookName The hook name
+	 * @return string The output PHP code
 	 */
 	protected function _build($hookName)
 	{
@@ -61,7 +63,7 @@ class Opf_View_Format_Design extends Opt_Format_Abstract
 					$method = 'getValidClass';
 				}
 				array_shift($ns);
-				return 'Opf_Design::'.$method.'(\''.implode('.', $ns).'\')';
+				return 'Opf\Design::'.$method.'(\''.implode('.', $ns).'\')';
 			// case 'variable:item.assign':
 			case 'variable:capture.assign':
 				$ns = $this -> _getVar('items');
@@ -76,7 +78,7 @@ class Opf_View_Format_Design extends Opt_Format_Abstract
 					$method = 'setValidClass';
 				}
 				array_shift($ns);
-				return 'Opf_Design::'.$method.'(\''.implode('.', $ns).'\', '.$this->_getVar('value') . ')';
+				return 'Opf\Design::'.$method.'(\''.implode('.', $ns).'\', '.$this->_getVar('value').')';
 		}
 	} // end _build();
-} // end Opf_View_Format_Design;
+} // end Design;
