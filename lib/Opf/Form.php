@@ -281,6 +281,7 @@ class Opf_Form extends Opf_Collection
 	 * @throws Opf_Form_Exception
 	 * @param string $name The validator name
 	 * @param Opf_Validator_Interface $validator The validator.
+	 * @return Opf_Form Fluent interface.
 	 */
 	public function addValidator($name, Opf_Validator_Interface $validator)
 	{
@@ -289,6 +290,8 @@ class Opf_Form extends Opf_Collection
 			throw new Opf_Form_Exception('The validator with the specified name already exists.');
 		}
 		$this->_validators[$name] = $validator;
+
+		return $this;
 	} // end addValidator();
 
 	/**
@@ -487,10 +490,11 @@ class Opf_Form extends Opf_Collection
 	 */
 	public function render()
 	{
-		if($this->_state != self::RENDER && $this->_state != self::ERROR)
+	/*	if($this->_state != self::RENDER && $this->_state != self::ERROR)
 		{
 			throw new Opf_Exception('Cannot render the specified view: invalid state.');
 		}
+	 */
 		$this->_onRender($this->_view);
 		$this->invokeEvent('preRender');
 		$this->onRender();
@@ -548,6 +552,23 @@ class Opf_Form extends Opf_Collection
 		{
 			throw new Opf_InvalidItem_Exception($attributes['name']);
 		}*/
+		if($item->hasWidget())
+		{
+			$widget = $item->getWidget();
+
+			if(!$widget instanceof Opf_Widget_Generic)
+			{
+
+				if(!is_a($widget, $className))
+				{
+					throw new Opf_Exception('Widget ' . $className . ' is invalid');
+				}
+
+				$item->setFullyQualifiedName($this->getFullyQualifiedName());
+				return $widget;
+			}
+		}
+
 		$widget = new $className();
 
 		if(!$widget instanceof Opf_Widget_Component)
