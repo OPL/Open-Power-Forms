@@ -474,6 +474,7 @@ class Opf_Form extends Opf_Collection
 				$this->invokeEvent('preAccept');
 				$this->onAccept();
 				$this->invokeEvent('postAccept');
+				$this->clear();
 				return $this->_state;
 			}
 		}
@@ -482,6 +483,17 @@ class Opf_Form extends Opf_Collection
 
 		return $this->_state;
 	} // end execute();
+
+	/**
+	 * Clears populated data.
+	 */
+	public function clear()
+	{
+		foreach($this->_collection as $name => $item)
+		{
+			$item->populate('');
+		}
+	} // end clear();
 
 	/**
 	 * Renders the view.

@@ -217,7 +217,7 @@ abstract class Opf_Widget_Component implements Opt_Component_Interface
 	 */
 	public function defined($name)
 	{
-
+		//
 	} // end defined();
 
 	/**
@@ -250,7 +250,7 @@ abstract class Opf_Widget_Component implements Opt_Component_Interface
 	 */
 	public function setInjection($injection)
 	{
-		;
+		//;
 	}// end setInjection
 
 	/**
