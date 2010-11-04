@@ -299,11 +299,12 @@ class Form extends Collection
 	} // end setState();
 
 	/**
-	 * Adds a new validator to the form.
+	 * Adds a new validator to the form. Implements fluent interface.
 	 *
 	 * @throws Opf\Form\Exception
 	 * @param string $name The validator name
 	 * @param Opf\Validator\ValidatorInterface $validator The validator.
+	 * @return \Opf\Form\Form
 	 */
 	public function addValidator($name, ValidatorInterface $validator)
 	{
@@ -312,6 +313,8 @@ class Form extends Collection
 			throw new FormException('The validator with the specified name already exists.');
 		}
 		$this->_validators[$name] = $validator;
+
+		return $this;
 	} // end addValidator();
 
 	/**
