@@ -31,5 +31,5 @@ class Opf_Filter_Datetime implements Opf_Filter_Interface
 	public function toPublic($value)
 	{
 		return $value->format('d.m.Y, H:i');
-	} // end toInternal();
+	} // end toPublic();
 } // end Opf_Filter_Datetime;
