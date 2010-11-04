@@ -115,8 +115,7 @@ class Sequence extends Form
 	{
 		if($this->_tracker === null)
 		{
-			$opf = \Opl_Registry::get('opf');
-			$className = $opf->defaultTracker;
+			$className = $this->_core->defaultTracker;
 			$tracker = new $className;
 			if(!$tracker instanceof TrackerInterface)
 			{
@@ -164,8 +163,6 @@ class Sequence extends Form
 	 */
 	public function execute()
 	{
-		$opf = \Opl_Registry::get('opf');
-
 		$this->invokeEvent('preInit');
 		$this->onInit();
 		$this->invokeEvent('postInit');
@@ -174,11 +171,11 @@ class Sequence extends Form
 		$data = $this->_retrieveData();
 
 		// Decide, if the form has been sent to us.
-		if($_SERVER['REQUEST_METHOD'] == $this->_method && isset($data[$opf->formInternalId]))
+		if($_SERVER['REQUEST_METHOD'] == $this->_method && isset($data[$this->_core->formInternalId]))
 		{
 			// Get the internal data and remove them from the "official" scope.
-			$internals = $data[$opf->formInternalId];
-			unset($data[$opf->formInternalId]);
+			$internals = $data[$this->_core->formInternalId];
+			unset($data[$this->_core->formInternalId]);
 
 			// The names must match.
 			if(isset($internals['name']) && $internals['name'] == $this->_name)

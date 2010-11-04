@@ -26,6 +26,10 @@ use Opf\Validator\ValidatorInterface;
 /**
  * Represents a form. Because forms are treated as items, they can
  * be parts of other forms.
+ *
+ * @author Tomasz Jędrzejewski
+ * @copyright Invenzzia Group <http://www.invenzzia.org/> and contributors.
+ * @license http://www.invenzzia.org/license/new-bsd New BSD License
  */
 class Form extends Collection
 {
@@ -41,6 +45,12 @@ class Form extends Collection
 	 * @var Opt_View
 	 */
 	protected $_view = null;
+
+	/**
+	 * Open Power Forms core
+	 * @var \Opf\Core
+	 */
+	protected $_core;
 
 	/**
 	 * The sending method
@@ -96,9 +106,10 @@ class Form extends Collection
 	 *
 	 * @param string $name The form name.
 	 */
-	public function __construct($name)
+	public function __construct(Core $core, $name)
 	{
 		$this->_name = $name;
+		$this->_core = $core;
 
 		Core::addForm($this);
 	} // end __construct();
@@ -452,7 +463,6 @@ class Form extends Collection
 	public function execute()
 	{
 		$this->_executed = true;
-		$opf = \Opl_Registry::get('opf');
 
 		$this->invokeEvent('preInit');
 		$this->onInit();
@@ -462,11 +472,11 @@ class Form extends Collection
 		$data = $this->_retrieveData();
 
 		// Decide, if the form has been sent to us.
-		if($_SERVER['REQUEST_METHOD'] == $this->_method && isset($data[$opf->formInternalId]))
+		if($_SERVER['REQUEST_METHOD'] == $this->_method && isset($data[$this->_core->formInternalId]))
 		{
 			// Get the internal data and remove them from the "official" scope.
-			$internals = $data[$opf->formInternalId];
-			unset($data[$opf->formInternalId]);
+			$internals = $data[$this->_core->formInternalId];
+			unset($data[$this->_core->formInternalId]);
 
 			// The names must match.
 			if(isset($internals['name']) && $internals['name'] == $this->_name)
