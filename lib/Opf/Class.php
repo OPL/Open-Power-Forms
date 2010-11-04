@@ -83,6 +83,7 @@ class Opf_Class extends Opl_Class
 		$opt->register(Opt_Class::OPT_FORMAT, 'FormRepeater', 'Opf_View_Format_FormRepeater');
 
 		$opt->register(Opt_Class::OPT_COMPONENT, 'opf:input', 'Opf_Widget_Input');
+		$opt->register(Opt_Class::OPT_COMPONENT, 'opf:textarea', 'Opf_Widget_Textarea');
 		$opt->register(Opt_Class::OPT_COMPONENT, 'opf:password', 'Opf_Widget_Password');
 		$opt->register(Opt_Class::OPT_COMPONENT, 'opf:yesno', 'Opf_Widget_Yesno');
 		$opt->register(Opt_Class::OPT_COMPONENT, 'opf:select', 'Opf_Widget_Select');

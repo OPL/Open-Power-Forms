@@ -17,12 +17,32 @@
  */
 class Opf_Validator_URL implements Opf_Validator_Interface
 {
+
 	/**
-	 * Constructs the validator object.
+	 * The list of fields.
+	 * @var array
 	 */
-	public function __construct()
+	private $_fields;
+
+	/**
+	 * Constructs URL constraint object.
+	 *
+	 * @param String|Array $fields Field(s) name(s).
+	 */
+	public function __construct($fields)
 	{
-	    // null
+		if(is_string($fields))
+		{
+			$this->_fields = array($fields);
+		}
+		elseif(is_array($fields))
+		{
+			$this->_fields = $fields;
+		}
+		else
+		{
+			throw new Opf_Validator_Exception('Invalid configuration for Opf_Validator_URL.');
+		}
 	} // end __construct();
 
 	/**
@@ -32,7 +52,7 @@ class Opf_Validator_URL implements Opf_Validator_Interface
 	 */
 	public function setCustomError($customError)
 	{
-
+		//
 	} // end setCustomError();
 
 	/**
@@ -56,16 +76,24 @@ class Opf_Validator_URL implements Opf_Validator_Interface
 	/**
 	 * Validates the value in a specified type.
 	 *
-	 * @param Mixed $value The value to validate.
+	 * @param Opf_Collection $collection The collection to validate
 	 * @return Boolean
 	 */
-	public function validate(Opf_Item $item, $value)
+	public function validate(Opf_Collection $collection)
 	{
-		if(!is_scalar($value))
+		$valid = true;
+		foreach($this->_fields as $field)
 		{
-			return false;
+			$item = $collection->findItemStrict($field);
+			$value = $item->getValue();
+			if($value === null && $item->getRequired() === false)
+			{
+				continue;
+			}
+			$valid = (bool)filter_var($value, FILTER_VALIDATE_URL);
+			$item->addErrorMessage('Provided URL is not valid.');
+			$item->invalidate();
 		}
-		return (bool)filter_var($value, FILTER_VALIDATE_URL);
-		
+		return $valid;
 	} // end validate();
 } // end Opf_Validator_URL;

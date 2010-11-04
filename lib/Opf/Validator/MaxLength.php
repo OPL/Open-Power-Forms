@@ -50,7 +50,7 @@ class Opf_Validator_MaxLength implements Opf_Validator_Interface
 		}
 		else
 		{
-			throw new Opf_Validator_Exception('Invalid configuration for Opf_Validator_Email.');
+			throw new Opf_Validator_Exception('Invalid configuration for Opf_Validator_MaxLength.');
 		}
 	} // end __construct();
 
