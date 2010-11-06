@@ -512,10 +512,6 @@ class Form extends Collection
 	 */
 	public function render()
 	{
-		if($this->_state != self::RENDER && $this->_state != self::ERROR)
-		{
-			throw new Exception('Cannot render the specified view: invalid state.');
-		}
 		$this->_onRender($this->_view);
 		$this->invokeEvent('preRender');
 		$this->onRender();
@@ -562,22 +558,39 @@ class Form extends Collection
 	{
 		if(!isset($attributes['name']))
 		{
-			throw new Exception('Attribute "name" not defined in '.$tagName);
+			throw new Exception('Attribute "name" not defined in ' . $tagName);
 		}
 		$item = $this->getItem($attributes['name']);
 		if($item === null)
 		{
-			throw new Exception('Item '.$attributes['name'].' not exist.');
+			throw new Exception('Item ' . $attributes['name'] . ' not exist.');
 		}
-		/*if(!$item instanceof Leaf)
+	/*	if(!$item instanceof Opf_Leaf)
 		{
-			throw new Exception($attributes['name']);
+			throw new Opf_InvalidItem_Exception($attributes['name']);
 		}*/
+		if($item->hasWidget())
+		{
+			$widget = $item->getWidget();
+
+			if(!$widget instanceof Widget\Generic)
+			{
+
+				if(!is_a($widget, $className))
+				{
+					throw new Exception('Widget ' . $className . ' is invalid');
+				}
+
+				$item->setFullyQualifiedName($this->getFullyQualifiedName());
+				return $widget;
+			}
+		}
+
 		$widget = new $className();
 
 		if(!$widget instanceof Widget\Component)
 		{
-			throw new Exception('Widget '.$className.' is invalid');
+			throw new Exception('Widget ' . $className . ' is invalid');
 		}
 		$item->setWidget($widget);
 		$item->setFullyQualifiedName($this->getFullyQualifiedName());
@@ -597,6 +610,10 @@ class Form extends Collection
 		foreach($this->_collection as $item)
 		{
 			$name = $item->getName();
+			if(!array_key_exists($name, $data))
+			{
+				throw new Exception('Missing field \''.$name.'\' in the input data.');
+			}
 			if(empty($data[$name]) and (isset($data[$name]) and $data[$name] != '0' and is_scalar($data[$name])))
 			{
 				if($item->getRequired())
