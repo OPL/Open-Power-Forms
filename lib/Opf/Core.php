@@ -63,6 +63,7 @@ class Core extends \Opl_Class
 
 		$opt->register(\Opt_Class::OPT_COMPONENT, 'opf:input', 'Opf\Widget\Input');
 		$opt->register(\Opt_Class::OPT_COMPONENT, 'opf:password', 'Opf\Widget\Password');
+		$opt->register(\Opt_Class::OPT_COMPONENT, 'opf:text', 'Opf\Widget\Text');
 		$opt->register(\Opt_Class::OPT_COMPONENT, 'opf:yesno', 'Opf\Widget\Yesno');
 		$opt->register(\Opt_Class::OPT_COMPONENT, 'opf:select', 'Opf\Widget\Select');
 		$opt->register(\Opt_Class::OPT_COMPONENT, 'opf:collection', 'Opf\Widget\Collection');

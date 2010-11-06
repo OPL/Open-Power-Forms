@@ -39,7 +39,7 @@ class Text extends Component
 	{
 		$attributes = array(
 			'name' => $this->_item->getFullyQualifiedName(),
-			'class' => Opf_Design::getClass('input', $this->_item->isValid()),
+			'class' => Design::getClass('input', $this->_item->isValid()),
 			// TODO: Move to design or something like that.
 			'rows' => 5,
 			'cols' => 50
