@@ -20,7 +20,7 @@ use Opf\Item\Collection;
  * The class represents valid e-mail string.
  * @package Validators
  */
-class Email implements \ValidatorInterface
+class Email implements ValidatorInterface
 {
 	private $_fields;
 
