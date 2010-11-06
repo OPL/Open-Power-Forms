@@ -343,7 +343,7 @@ abstract class AbstractItem
 	 */
 	public function hasWidget()
 	{
-		return ($this->_widget === null);
+		return ($this->_widget !== null);
 	} // end hasWidget();
 
 	/**
