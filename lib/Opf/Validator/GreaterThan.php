@@ -14,7 +14,7 @@ namespace Opf\Validator;
 use Opf\Item\Collection;
 
 /**
- * The class represents a "greather than number" constraint for numerical
+ * The class represents a "greater than number" constraint for numerical
  * values.
  * 
  * @author Tomasz Jędrzejewski
@@ -22,7 +22,7 @@ use Opf\Item\Collection;
  * @license http://www.invenzzia.org/license/new-bsd New BSD License
  * @package Validators
  */
-class GreatherThan implements ValidatorInterface
+class GreaterThan implements ValidatorInterface
 {
 	/**
 	 * The bottom range
@@ -37,7 +37,7 @@ class GreatherThan implements ValidatorInterface
 	private $_fields;
 
 	/**
-	 * Constructs the "greather than" constraint object.
+	 * Constructs the "greater than" constraint object.
 	 *
 	 * @param integer $length Bottom range for the values
 	 */
@@ -85,4 +85,4 @@ class GreatherThan implements ValidatorInterface
 		}
 		return $valid;
 	} // end validate();
-} // end GreatherThan;
+} // end GreaterThan;
