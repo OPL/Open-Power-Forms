@@ -358,6 +358,12 @@ abstract class AbstractItem
 	 */
 	abstract public function getValue();
 
+	/**
+	 * Aborts the valid state. The field is marked as invalid. The method
+	 * itself is useful for some validators who check several fields at
+	 * the same time, and have to invalidate the previously checked, if they
+	 * encounter some problem.
+	 */
 	public function invalidate()
 	{
 		$this->_valid = false;
