@@ -64,11 +64,12 @@ class Matcher implements ValidatorInterface
 			}
 			if($previous !== null && $previous !== $value)
 			{
-				foreach($fields as $onceMore)
+				foreach($this->_fields as $onceMore)
 				{
-					$onceMore->invalidate();
+					$onceMoreItem = $collection->findItemStrict($onceMore);
+					$onceMoreItem->invalidate();
 				}
-				$field->addErrorMessage('The field values do not match.');
+				$item->addErrorMessage('The field values do not match.');
 				return false;
 			}
 			$previous = $value;
