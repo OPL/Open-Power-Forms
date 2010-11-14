@@ -55,10 +55,13 @@ class Core extends \Opl_Class
 	{
 		\Opl_Registry::set('opf', $this);
 
+		$opt->componentFormat = 'OpfComponent';
+
 		$opt->register(\Opt_Class::OPT_NAMESPACE, 'opf');
 		$opt->register(\Opt_Class::OPT_INSTRUCTION, 'Form', 'Opf\View\Instruction\Form');
 		$opt->register(\Opt_Class::OPT_FORMAT, 'Form', 'Opf\View\Format\Form');
 		$opt->register(\Opt_Class::OPT_FORMAT, 'Design', 'Opf\View\Format\Design');
+		$opt->register(\Opt_Class::OPT_FORMAT, 'OpfComponent', 'Opf\View\Format\Component');
 		$opt->register(\Opt_Class::OPT_FORMAT, 'FormRepeater', 'Opf\View\Format\FormRepeater');
 
 		$opt->register(\Opt_Class::OPT_COMPONENT, 'opf:input', 'Opf\Widget\Input');
