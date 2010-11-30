@@ -9,68 +9,71 @@
  *
  * Copyright (c) Invenzzia Group <http://www.invenzzia.org>
  * and other contributors. See website for details.
+ *
  */
 
 namespace Opf\Validator;
 
-use Opf\Item\AbstractItem;
+use Opf\Item\Collection;
 
 /**
- * The class represents valid URL.
+ * The class represents valid URL string.
  * @package Validators
  */
 class URL implements ValidatorInterface
 {
+	private $_fields;
+
 	/**
-	 * Constructs the validator object.
+	 * Creates the validator.
+	 *
+	 * @param string|array $fields The list of fields, where the validator applies.
 	 */
-	public function __construct()
+	public function __construct($fields)
 	{
-	    // null
+		if(is_string($fields))
+		{
+			$this->_fields = array($fields);
+		}
+		elseif(is_array($fields))
+		{
+			$this->_fields = $fields;
+		}
+		else
+		{
+			throw new Exception('Invalid configuration for URL validator.');
+		}
 	} // end __construct();
-
-	/**
-	 * Sets a custom error message for the validator.
-	 * @param string $customError The custom error message.
-	 * @todo implement
-	 */
-	public function setCustomError($customError)
-	{
-
-	} // end setCustomError();
-
-	/**
-	 * Returns the error message used, if the validator fails.
-	 * @return string
-	 */
-	public function getError()
-	{
-		return 'failed_validation_url';
-	} // end getError();
-
-	/**
-	 * Returns the data for the error message.
-	 * @return array
-	 */
-	public function getErrorData()
-	{
-		return array(0 => 'url');
-	} // end getErrorData();
 
 	/**
 	 * Validates the value in a specified type.
 	 *
-	 * @param Opf\Item\AbstractItem $item
-	 * @param mixed $value The value to validate.
+	 * @param Opf\Item\Collection $collection The collection to validate
 	 * @return boolean
 	 */
-	public function validate(AbstractItem $item, $value)
+	public function validate(Collection $collection)
 	{
-		if(!is_scalar($value))
+		$valid = true;
+		foreach($this->_fields as $field)
 		{
-			return false;
+			$item = $collection->findItemStrict($field);
+			$value = $item->getValue();
+			if($value === null && $item->getRequired() === false)
+			{
+				continue;
+			}
+			if(!is_scalar($value))
+			{
+				$valid = false;
+				$item->invalidate();
+			}
+			if((bool)filter_var($value, FILTER_VALIDATE_URL) === false)
+			{
+				$valid = false;
+				$item->addErrorMessage('Not a valid URL.');
+				$item->invalidate();
+			}
 		}
-		return (bool)filter_var($value, FILTER_VALIDATE_URL);
-		
+		return $valid;
 	} // end validate();
-} // end URL;
+} // end Url;
