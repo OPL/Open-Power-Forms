@@ -27,11 +27,19 @@ class Datetime implements FilterInterface
 	 */
 	public function toInternal($value)
 	{
+		if(empty($value))
+		{
+			return null;
+		}
 		return \DateTime::createFromFormat('d.m.Y, H:i', $value);
 	} // end toInternal();
 
 	public function toPublic($value)
 	{
-		return $value->format('d.m.Y, H:i');
+		if(is_object($value))
+		{
+			return $value->format('d.m.Y, H:i');
+		}
+		return '';
 	} // end toInternal();
 } // end Datetime;
