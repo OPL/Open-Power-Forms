@@ -30,6 +30,7 @@ class Type implements ValidatorInterface
 	const BOOLEAN = 4;
 	const DATETIME = 5;
 	const CHARACTER = 6;
+	const UPLOAD = 7;
 
 	/**
 	 * The type to validate.
@@ -139,6 +140,20 @@ class Type implements ValidatorInterface
 				if(strlen($value) == 1 && ctype_alpha($value))
 				{
 					return true;
+				}
+			case self::UPLOAD:
+				if(is_array($value))
+				{
+					if(isset($value['tmp_name']) && isset($value['type']) && isset($value['size']) && isset($value['name']) && isset($value['name']))
+					{
+						if($value['error'] == UPLOAD_ERR_OK)
+						{
+							if(is_uploaded_file($value['tmp_name']))
+							{
+								return true;
+							}
+						}
+					}
 				}
 		}
 		return false;
